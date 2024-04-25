@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemu.API", "API\Gemu.API.csproj", "{5EA99CF8-6761-42FE-8EEB-D528470B475B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemu.Data", "Data\Gemu.Data.csproj", "{1B9AEE27-4C25-4818-B52E-7D9C5A77BA50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemu.Business", "Business\Gemu.Business.csproj", "{58247FB2-0E43-4624-B2AB-3759A857BF0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gemu.Models", "Models\Gemu.Models.csproj", "{E5E3AD64-9AC6-40BD-A5EC-FFD3EC6365FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F25E887-775B-44DF-8596-6A92BF51C8AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F25E887-775B-44DF-8596-6A92BF51C8AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F25E887-775B-44DF-8596-6A92BF51C8AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F25E887-775B-44DF-8596-6A92BF51C8AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EA99CF8-6761-42FE-8EEB-D528470B475B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EA99CF8-6761-42FE-8EEB-D528470B475B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EA99CF8-6761-42FE-8EEB-D528470B475B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EA99CF8-6761-42FE-8EEB-D528470B475B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B9AEE27-4C25-4818-B52E-7D9C5A77BA50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9AEE27-4C25-4818-B52E-7D9C5A77BA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B9AEE27-4C25-4818-B52E-7D9C5A77BA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B9AEE27-4C25-4818-B52E-7D9C5A77BA50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58247FB2-0E43-4624-B2AB-3759A857BF0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58247FB2-0E43-4624-B2AB-3759A857BF0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58247FB2-0E43-4624-B2AB-3759A857BF0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58247FB2-0E43-4624-B2AB-3759A857BF0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5E3AD64-9AC6-40BD-A5EC-FFD3EC6365FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5E3AD64-9AC6-40BD-A5EC-FFD3EC6365FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5E3AD64-9AC6-40BD-A5EC-FFD3EC6365FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5E3AD64-9AC6-40BD-A5EC-FFD3EC6365FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

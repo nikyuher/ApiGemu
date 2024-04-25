@@ -1,4 +1,4 @@
-namespace API;
+namespace Gemu.API;
 
 public class WeatherForecast
 {

@@ -6,9 +6,8 @@ public class Reseña
     public int IdReseña { get; set; }
     [Required]
     public int IdUsuario { get; set; }
-    public Usuario? Usuario { get; set; }
+    [Required]
     public int IdProducto { get; set; }
-    public Juego? Juego { get; set; }
     public string? Estado { get; set; }
     [Required]
     public string? Contenido { get; set; }

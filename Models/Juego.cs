@@ -11,6 +11,12 @@ public class Juego
     public string? Titulo { get; set; }
     [Required]
     public decimal Precio { get; set; }
+    [Required]
+    public string? Plataforma { get; set; }
+    [Required]
+    public List<string>? Categorias = new List<string>();
+    public int? Descuento { get; set; }
+    public string? CodigoJuego { get; set; }
     public List<Reseña> Reseñas { get; set; } = new List<Reseña>();
     public double CalificacionPromedio
     {

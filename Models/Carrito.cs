@@ -6,6 +6,7 @@ public class Carrito
     public int IdCarrito { get; set; }
     [Required]
     public int IdUsuario { get; set; }
+    [Required]
     public int IdProducto { get; set; }
     public Producto? Productos { get; set; }
 

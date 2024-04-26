@@ -13,6 +13,7 @@ public class Producto
     public string? Descripcion { get; set; }
     [Required]
     public string? Estado { get; set; }
+    public int Cantidad { get; set; }
 
 
 }

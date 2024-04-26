@@ -4,24 +4,22 @@ public class Juego
 {
     [Key]
     public int IdJuego { get; set; }
-    [Required]
-    public byte[]? ImgPortada { get; set; }
-    public List<byte[]> ImgsJuego { get; set; } = new List<byte[]>();
+    public List<Imagen> ImgsJuego { get; set; } = new List<Imagen>();
     [Required]
     public string? Titulo { get; set; }
     [Required]
     public decimal Precio { get; set; }
     public decimal PrecioFinal
+{
+    get
     {
-        get
+        if (Descuento.HasValue && Descuento > 0)
         {
-            if (Descuento.HasValue && Descuento > 0)
-            {
-                return Precio * (1 - (Descuento.Value / 100m));
-            }
-            return Precio;
+            return Precio * (1 - (Descuento.Value / 100m));
         }
+        return Precio;
     }
+}
     [Required]
     public string? Plataforma { get; set; }
     [Required]

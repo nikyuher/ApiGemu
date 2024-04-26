@@ -1,9 +1,9 @@
 namespace Gemu.Data;
-public class ProductoRepository : IProductoRepository
+public class ImagenRepository : IImagenRepository
 {
     private readonly GemuContext _context;
 
-    public ProductoRepository(GemuContext context)
+    public ImagenRepository(GemuContext context)
     {
         _context = context;
     }

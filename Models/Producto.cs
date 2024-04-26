@@ -4,9 +4,7 @@ public class Producto
 {
     [Key]
     public int IdProducto { get; set; }
-    [Required]
-    public byte[]? ImgPortada { get; set; }
-    public List<byte[]> ImgsProducto { get; set; } = new List<byte[]>();
+    public List<Imagen> ImgsProducto { get; set; } = new List<Imagen>();
     [Required]
     public decimal Precio { get; set; }
     [Required]

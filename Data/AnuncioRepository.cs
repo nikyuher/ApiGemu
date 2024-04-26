@@ -17,7 +17,7 @@ public class AnuncioRepository : IAnuncioRepository
     }
 
     //Read
-    public Anuncio GetIdCarrito(int idAnuncio)
+    public Anuncio GetIdAnuncio(int idAnuncio)
     {
         var anuncio = _context.Anuncios.FirstOrDefault(r => r.IdAnuncio == idAnuncio);
 
@@ -52,7 +52,7 @@ public class AnuncioRepository : IAnuncioRepository
     //Delete
     public void DeleteAnuncio(int idAnuncio)
     {
-        var anuncio = GetIdCarrito(idAnuncio);
+        var anuncio = GetIdAnuncio(idAnuncio);
 
         if (anuncio is null)
         {

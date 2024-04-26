@@ -11,6 +11,17 @@ public class Juego
     public string? Titulo { get; set; }
     [Required]
     public decimal Precio { get; set; }
+    public decimal PrecioFinal
+    {
+        get
+        {
+            if (Descuento.HasValue && Descuento > 0)
+            {
+                return Precio * (1 - (Descuento.Value / 100m));
+            }
+            return Precio;
+        }
+    }
     [Required]
     public string? Plataforma { get; set; }
     [Required]

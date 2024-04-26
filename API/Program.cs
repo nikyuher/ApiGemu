@@ -18,8 +18,8 @@ var configuration = builder.Configuration;
 var environment = configuration["Environment"];
 
 var connectionString = environment == "Docker" ?
-    configuration.GetConnectionString("TeatroDBDocker") :
-    configuration.GetConnectionString("TeatroDBLocal");
+    configuration.GetConnectionString("GemuDBDocker") :
+    configuration.GetConnectionString("GemuDBLocal");
     
 // Configuración de la base de datos
 builder.Services.AddDbContext<GemuContext>(options =>

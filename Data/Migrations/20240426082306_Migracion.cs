@@ -15,7 +15,6 @@ namespace Gemu.Data.Migrations
                 {
                     IdJuego = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ImgPortada = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Plataforma = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -33,7 +32,6 @@ namespace Gemu.Data.Migrations
                 {
                     IdProducto = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ImgPortada = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -60,6 +58,32 @@ namespace Gemu.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuarios", x => x.IdUsuario);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Imagenes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Datos = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    EsPortada = table.Column<bool>(type: "bit", nullable: false),
+                    JuegoId = table.Column<int>(type: "int", nullable: true),
+                    ProductoId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Imagenes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Imagenes_Juegos_JuegoId",
+                        column: x => x.JuegoId,
+                        principalTable: "Juegos",
+                        principalColumn: "IdJuego");
+                    table.ForeignKey(
+                        name: "FK_Imagenes_Productos_ProductoId",
+                        column: x => x.ProductoId,
+                        principalTable: "Productos",
+                        principalColumn: "IdProducto");
                 });
 
             migrationBuilder.CreateTable(
@@ -222,6 +246,16 @@ namespace Gemu.Data.Migrations
                 column: "UsuarioIdUsuario");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Imagenes_JuegoId",
+                table: "Imagenes",
+                column: "JuegoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Imagenes_ProductoId",
+                table: "Imagenes",
+                column: "ProductoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reseñas_JuegoIdJuego",
                 table: "Reseñas",
                 column: "JuegoIdJuego");
@@ -247,6 +281,9 @@ namespace Gemu.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Carritos");
+
+            migrationBuilder.DropTable(
+                name: "Imagenes");
 
             migrationBuilder.DropTable(
                 name: "Reseñas");

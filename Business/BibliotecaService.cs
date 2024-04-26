@@ -1,7 +1,7 @@
 using Gemu.Data;
 
 namespace Gemu.Business;
-public class BibliotecaServices : IBibliotecaServices
+public class BibliotecaService : IBibliotecaService
 {
 
 }

@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IUsuarioServices, UsuarioServices>();
-builder.Services.AddScoped<IJuegoServices, JuegoServices>();
-builder.Services.AddScoped<IProductoServices, ProductoServices>();
-builder.Services.AddScoped<IAnuncioServices, AnuncioServices>();
-builder.Services.AddScoped<ITransaccionServices, TransaccionServices>();
-builder.Services.AddScoped<IReseñaServices, ReseñaServices>();
-builder.Services.AddScoped<IBibliotecaServices, BibliotecaServices>();
-builder.Services.AddScoped<ICarritoServices, CarritoServices>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IJuegoService, JuegoService>();
+builder.Services.AddScoped<IProductoService, ProductoService>();
+builder.Services.AddScoped<IAnuncioService, AnuncioService>();
+builder.Services.AddScoped<ITransaccionService, TransaccionService>();
+builder.Services.AddScoped<IReseñaService, ReseñaService>();
+builder.Services.AddScoped<IBibliotecaService, BibliotecaService>();
+builder.Services.AddScoped<ICarritoService, CarritoService>();
+builder.Services.AddScoped<IImagenService, ImagenService>();
 
 // Add services to the container.
 var configuration = builder.Configuration;
@@ -34,6 +35,7 @@ builder.Services.AddScoped<IReseñaRepository, ReseñaRepository>();
 builder.Services.AddScoped<IAnuncioRepository, AnuncioRepository>();
 builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
 builder.Services.AddScoped<IBibliotecaRepository, BibliotecaRepository>();
+builder.Services.AddScoped<IImagenRepository, ImagenRepository>();
 
 
 builder.Services.AddControllers();

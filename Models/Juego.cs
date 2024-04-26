@@ -1,14 +1,10 @@
 namespace Gemu.Models;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 public class Juego
 {
     [Key]
     public int IdJuego { get; set; }
-    [Required]
-    public byte[]? ImgPortada { get; set; }
-    [NotMapped]
-    public List<byte[]> ImgsJuego { get; set; } = new List<byte[]>();
+    public List<Imagen> ImgsJuego { get; set; } = new List<Imagen>();
     [Required]
     public string? Titulo { get; set; }
     [Required]

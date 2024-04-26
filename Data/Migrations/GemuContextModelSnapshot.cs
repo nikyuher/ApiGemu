@@ -109,6 +109,36 @@ namespace Gemu.Data.Migrations
                     b.ToTable("Carritos");
                 });
 
+            modelBuilder.Entity("Gemu.Models.Imagen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<byte[]>("Datos")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<bool>("EsPortada")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("JuegoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JuegoId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("Imagenes");
+                });
+
             modelBuilder.Entity("Gemu.Models.Juego", b =>
                 {
                     b.Property<int>("IdJuego")
@@ -122,10 +152,6 @@ namespace Gemu.Data.Migrations
 
                     b.Property<int?>("Descuento")
                         .HasColumnType("int");
-
-                    b.Property<byte[]>("ImgPortada")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Plataforma")
                         .IsRequired()
@@ -161,10 +187,6 @@ namespace Gemu.Data.Migrations
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("ImgPortada")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("decimal(18,2)");
@@ -316,6 +338,21 @@ namespace Gemu.Data.Migrations
                     b.Navigation("Productos");
                 });
 
+            modelBuilder.Entity("Gemu.Models.Imagen", b =>
+                {
+                    b.HasOne("Gemu.Models.Juego", "Juego")
+                        .WithMany("ImgsJuego")
+                        .HasForeignKey("JuegoId");
+
+                    b.HasOne("Gemu.Models.Producto", "Producto")
+                        .WithMany("ImgsProducto")
+                        .HasForeignKey("ProductoId");
+
+                    b.Navigation("Juego");
+
+                    b.Navigation("Producto");
+                });
+
             modelBuilder.Entity("Gemu.Models.Reseña", b =>
                 {
                     b.HasOne("Gemu.Models.Juego", null)
@@ -336,7 +373,14 @@ namespace Gemu.Data.Migrations
 
             modelBuilder.Entity("Gemu.Models.Juego", b =>
                 {
+                    b.Navigation("ImgsJuego");
+
                     b.Navigation("Reseñas");
+                });
+
+            modelBuilder.Entity("Gemu.Models.Producto", b =>
+                {
+                    b.Navigation("ImgsProducto");
                 });
 
             modelBuilder.Entity("Gemu.Models.Usuario", b =>

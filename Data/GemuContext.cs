@@ -1,4 +1,4 @@
-﻿namespace Gemu.Data;
+namespace Gemu.Data;
 
 using Microsoft.EntityFrameworkCore;
 using Gemu.Models;
@@ -24,4 +24,5 @@ public class GemuContext : DbContext
     public DbSet<Carrito> Carritos { get; set; }
     public DbSet<Biblioteca> Bibliotecas { get; set; }
     public DbSet<Anuncio> Anuncios { get; set; }
+    public DbSet<Imagen> Imagenes { get; set; }
 }

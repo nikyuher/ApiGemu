@@ -10,7 +10,7 @@ public class Reseña
     public int IdProducto { get; set; }
     public string? Solicitud { get; set; }
     [Required]
-    public string? Contenido { get; set; }
+    public string? Comentario { get; set; }
     [Required]
     public int Calificacion { get; set; }
 

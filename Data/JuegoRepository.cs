@@ -1,5 +1,5 @@
 namespace Gemu.Data;
-public class JuegoRepository
+public class JuegoRepository : IJuegoRepository
 {
 
 }

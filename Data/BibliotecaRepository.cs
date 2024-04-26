@@ -1,5 +1,5 @@
 namespace Gemu.Data;
-public class BibliotecaRepository
+public class BibliotecaRepository : IBibliotecaRepository
 {
 
 }

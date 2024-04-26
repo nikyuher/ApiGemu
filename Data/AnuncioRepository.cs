@@ -1,5 +1,5 @@
 namespace Gemu.Data;
-public class AnuncioRepository
+public class AnuncioRepository : IAnuncioRepository
 {
 
 }

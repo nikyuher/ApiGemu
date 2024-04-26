@@ -1,5 +1,5 @@
 ﻿namespace Gemu.Data;
-public class UsuarioRepository
+public class UsuarioRepository : IUsuarioRepository
 {
 
 }

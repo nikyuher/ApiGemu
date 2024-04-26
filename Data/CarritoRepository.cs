@@ -1,5 +1,5 @@
 namespace Gemu.Data;
-public class CarritoRepository
+public class CarritoRepository : ICarritoRepository
 {
 
 }

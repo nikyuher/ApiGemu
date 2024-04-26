@@ -1,5 +1,5 @@
 namespace Gemu.Data;
-public class ProductoRepository
+public class ProductoRepository : IProductoRepository
 {
 
 }

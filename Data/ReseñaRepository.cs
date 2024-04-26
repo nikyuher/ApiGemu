@@ -1,5 +1,5 @@
 namespace Gemu.Data;
-public class ReseñaRepository
+public class ReseñaRepository : IReseñaRepository
 {
 
 }

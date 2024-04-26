@@ -1,5 +1,5 @@
 namespace Gemu.Data;
-public class TransaccionRepository
+public class TransaccionRepository : ITransaccionRepository
 {
 
 }

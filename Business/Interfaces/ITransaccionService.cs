@@ -5,7 +5,7 @@ public interface ITransaccionService
 {
     public List<Transaccion> GetAllTransacciones();
     public Transaccion GetIdTransaccion(int idTransaccion);
-    void CreateTransaccion(Transaccion Transaccio);
-    void UpdateTransaccion(Transaccion Transaccio);
-    void DeleteTransaccion(int idTransaccio);
+    void CreateTransaccion(Transaccion transaccion);
+    void UpdateTransaccion(Transaccion transaccion);
+    void DeleteTransaccion(int idTransaccion);
 }   

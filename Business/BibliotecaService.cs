@@ -1,4 +1,5 @@
 using Gemu.Data;
+using Gemu.Models;
 
 namespace Gemu.Business;
 public class BibliotecaService : IBibliotecaService
@@ -8,5 +9,26 @@ public class BibliotecaService : IBibliotecaService
     public BibliotecaService(IBibliotecaRepository repository)
     {
         _bibliotecaRepository = repository;
+    }
+
+    public List<Biblioteca> GetAllBibliotecas()
+    {
+        return _bibliotecaRepository.GetAllBibliotecas();
+    }
+    public Biblioteca GetIdBiblioteca(int idBiblioteca)
+    {
+        return _bibliotecaRepository.GetIdBiblioteca(idBiblioteca);
+    }
+    public void CreateBiblioteca(Biblioteca biblioteca)
+    {
+        _bibliotecaRepository.CreateBiblioteca(biblioteca);
+    }
+    public void UpdateBiblioteca(Biblioteca biblioteca)
+    {
+        _bibliotecaRepository.UpdateBiblioteca(biblioteca);
+    }
+    public void DeleteBiblioteca(int idBiblioteca)
+    {
+        _bibliotecaRepository.DeleteBiblioteca(idBiblioteca);
     }
 }

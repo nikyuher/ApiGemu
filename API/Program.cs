@@ -4,8 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
+builder.Services.AddScoped<IUsuarioServices, UsuarioServices>();
+builder.Services.AddScoped<IJuegoServices, JuegoServices>();
+builder.Services.AddScoped<IProductoServices, ProductoServices>();
+builder.Services.AddScoped<IAnuncioServices, AnuncioServices>();
+builder.Services.AddScoped<ITransaccionServices, TransaccionServices>();
+builder.Services.AddScoped<IReseñaServices, ReseñaServices>();
+builder.Services.AddScoped<IBibliotecaServices, BibliotecaServices>();
+builder.Services.AddScoped<ICarritoServices, CarritoServices>();
 
 // Add services to the container.
 var configuration = builder.Configuration;

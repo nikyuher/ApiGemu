@@ -8,9 +8,9 @@ public class Reseña
     public int IdUsuario { get; set; }
     [Required]
     public int IdProducto { get; set; }
-    public string? Solicitud { get; set; }
+    public string? EstadoSolicitud { get; set; }
     [Required]
-    public string? Contenido { get; set; }
+    public string? Comentario { get; set; }
     [Required]
     public int Calificacion { get; set; }
 

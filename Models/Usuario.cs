@@ -23,5 +23,7 @@ public class Usuario
     public List<Transaccion> Transacciones { get; set; } = new List<Transaccion>();
     public List<Anuncio> Anuncios { get; set; } = new List<Anuncio>();
     public List<Reseña> Reseñas { get; set; } = new List<Reseña>();
+    public List<Carrito> Carrito { get; set; } = new List<Carrito>();
+    public List<Biblioteca> Biblioteca { get; set; } = new List<Biblioteca>();
 
 }

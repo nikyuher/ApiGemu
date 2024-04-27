@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
+using Gemu.Models;
 
 namespace Gemu.API.Controllers;
 
@@ -14,5 +15,120 @@ public class CarritoController : ControllerBase
     {
         _logger = logger;
         _carritoService = carritoService;
+    }
+
+    
+    [HttpGet()]
+    public ActionResult<List<Carrito>> GetAllCarritos()
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener todos los carritos.");
+            return _carritoService.GetAllCarritos();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos los carritos: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<Carrito> GetCarritoId(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener el carrito con ID: {id}.");
+
+            var carrito = _carritoService.GetIdCarrito(id);
+
+            if (carrito == null)
+            {
+                _logger.LogWarning($"No se encontró ningún carrito con ID: {id}.");
+                return NotFound();
+            }
+
+            return carrito;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener el carrito con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpPost("crear")]
+    public IActionResult CreateCarrito([FromBody] Carrito carrito)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de creación de carrito.");
+
+            _carritoService.CreateCarrito(carrito);
+            return Ok(carrito);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar crear carrito: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult UpdateCarrito(int id, [FromBody] Carrito carrito)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización del carrito con ID: {id}.");
+
+            if (id != carrito.IdCarrito)
+            {
+                _logger.LogError("El ID del carrito en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
+
+            var existingCarrito = _carritoService.GetIdCarrito(id);
+
+            if (existingCarrito is null)
+            {
+                _logger.LogWarning($"No se encontró ningún carrito con ID: {id}.");
+                return NotFound();
+            }
+
+            _carritoService.UpdateCarrito(carrito);
+
+            return Ok(carrito);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar actualizar carrito con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCarrito(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar el carrito con ID: {id}.");
+
+            var carrito = _carritoService.GetIdCarrito(id);
+
+            if (carrito is null)
+            {
+                _logger.LogWarning($"No se encontró ningún carrito con ID: {id}.");
+                return NotFound();
+            }
+
+            _carritoService.DeleteCarrito(id);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar eliminar carrito con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
     }
 }

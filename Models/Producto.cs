@@ -1,17 +1,47 @@
 namespace Gemu.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 public class Producto
 {
     [Key]
     public int IdProducto { get; set; }
-    public List<Imagen> ImgsProducto { get; set; } = new List<Imagen>();
+    [Required]
+    public string? Nombre { get; set; }
     [Required]
     public decimal Precio { get; set; }
     [Required]
     public string? Descripcion { get; set; }
     [Required]
     public string? Estado { get; set; }
+    [Required]
     public int Cantidad { get; set; }
+    public List<Imagen>? ImgsProducto { get; set; } = new List<Imagen>();
+    public List<Categoria>? Categorias = new List<Categoria>();
+    public List<Reseña>? Reseñas { get; set; } = new List<Reseña>();
 
-
+    // Relación con Biblioteca
+    [JsonIgnore]
+    public int? IdBiblioteca { get; set; }
+    [JsonIgnore]
+    public Biblioteca? Biblioteca { get; set; }
+    // Relación con Carrito
+    [JsonIgnore]
+    public int? IdCarrito { get; set; }
+    [JsonIgnore]
+    public Carrito? Carrito { get; set; }
+    // Relación con Reseña
+    [JsonIgnore]
+    public int? IdReseña { get; set; }
+    [JsonIgnore]
+    public Reseña? Reseña { get; set; }
+    // Relación con Anuncio
+    [JsonIgnore]
+    public int? IdAnuncio { get; set; }
+    [JsonIgnore]
+    public Anuncio? Anuncio { get; set; }
+     // Relación con Categoria
+    [JsonIgnore]
+    public int? IdCategoria { get; set; }
+    [JsonIgnore]
+    public Categoria? Categoria { get; set; }
 }

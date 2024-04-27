@@ -20,10 +20,10 @@ public class Usuario
             return Transacciones?.Sum(t => t.Cantidad) ?? 0;
         }
     }
-    public List<Transaccion> Transacciones { get; set; } = new List<Transaccion>();
-    public List<Anuncio> Anuncios { get; set; } = new List<Anuncio>();
-    public List<Reseña> Reseñas { get; set; } = new List<Reseña>();
-    public List<Carrito> Carrito { get; set; } = new List<Carrito>();
-    public List<Biblioteca> Biblioteca { get; set; } = new List<Biblioteca>();
+    public List<Transaccion>? Transacciones { get; set; } = new List<Transaccion>();
+    public List<Anuncio>? Anuncios { get; set; } = new List<Anuncio>();
+    public List<Reseña>? Reseñas { get; set; } = new List<Reseña>();
+    public Carrito? Carrito { get; set; }
+    public Biblioteca? Biblioteca { get; set; }
 
 }

@@ -16,8 +16,9 @@ public class UsuarioController : ControllerBase
         _logger = logger;
         _usuarioService = usuarioService;
     }
+
     [HttpGet()]
-    public ActionResult<List<Usuario>> GetAllUsuario()
+    public ActionResult<List<Usuario>> GetAllUsuarios()
     {
         try
         {

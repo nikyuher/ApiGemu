@@ -1,4 +1,5 @@
 ﻿using Gemu.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gemu.Data;
 public class UsuarioRepository : IUsuarioRepository
@@ -12,7 +13,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public List<Usuario> GetAllUsuarios()
     {
-        var usuarios = _context.Usuarios.ToList();
+        var usuarios = _context.Usuarios.Include(r => r.Transacciones).ToList();
 
         return usuarios;
     }

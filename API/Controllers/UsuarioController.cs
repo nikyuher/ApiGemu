@@ -18,7 +18,7 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpGet()]
-    public ActionResult<List<Usuario>> GetAllUsuarios()
+    public ActionResult<List<UsuarioGetAllDTO>> GetAllUsuarios()
     {
         try
         {
@@ -56,8 +56,26 @@ public class UsuarioController : ControllerBase
         }
     }
 
+    [HttpPost("login")]
+    public IActionResult Login([FromBody] UsuarioLoginDTO loginRequest)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de inicio de sesión.");
+
+            var usuario = _usuarioService.LoginUsuario(loginRequest);
+
+            return Ok(usuario);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar iniciar sesión: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [HttpPost("crear")]
-    public IActionResult CreateUsuario([FromBody] Usuario user)
+    public IActionResult CreateUsuario([FromBody] UsuarioCreateDTO user)
     {
         try
         {
@@ -73,7 +91,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("")]
     public IActionResult UpdateUsuario(int id, [FromBody] Usuario user)
     {
         try
@@ -105,7 +123,103 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpPut("rol/")]
+    public IActionResult UpdateRolUsuario(int id, [FromBody] UsuarioUpdateDTO user)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización de rol del usuario con ID: {id}.");
+
+            if (id != user.IdUsuario)
+            {
+                _logger.LogError("El ID del usuario en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
+
+            var existingUser = _usuarioService.GetIdUsuario(id);
+
+            if (existingUser is null)
+            {
+                _logger.LogWarning($"No se encontró ningún usuario con ID: {id}.");
+                return NotFound();
+            }
+
+            _usuarioService.UpdateRolUsuario(user);
+
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar actualizar el rol del usuario con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpPut("direccion/")]
+    public IActionResult UpdateDireccionUsuario(int id, [FromBody] UsuarioDireccionDTO user)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización direccion del usuario con ID: {id}.");
+
+            if (id != user.IdUsuario)
+            {
+                _logger.LogError("El ID del usuario en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
+
+            var existingUser = _usuarioService.GetIdUsuario(id);
+
+            if (existingUser is null)
+            {
+                _logger.LogWarning($"No se encontró ningún usuario con ID: {id}.");
+                return NotFound();
+            }
+
+            _usuarioService.UpdateDireccionUsuario(user);
+
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar actualizar la direccion del usuario con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpPut("nombre/")]
+    public IActionResult UpdateInfoUsuario(int id, [FromBody] UsuarioInfoDTO user)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización informacion del usuario con ID: {id}.");
+
+            if (id != user.IdUsuario)
+            {
+                _logger.LogError("El ID del usuario en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
+
+            var existingUser = _usuarioService.GetIdUsuario(id);
+
+            if (existingUser is null)
+            {
+                _logger.LogWarning($"No se encontró ningún usuario con ID: {id}.");
+                return NotFound();
+            }
+
+            _usuarioService.UpdateInfoUsuario(user);
+
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar actualizar la informacion del usuario con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpDelete("")]
     public IActionResult DeleteUsuario(int id)
     {
         try

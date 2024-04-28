@@ -32,6 +32,16 @@ public class TransaccionRepository : ITransaccionRepository
     //Create
     public void CreateTransaccion(Transaccion transaccion)
     {
+
+        var usuario = _context.Usuarios.Find(transaccion.IdUsuario);
+        if (usuario == null)
+        {
+            throw new KeyNotFoundException("No se encontró el usuario asociado con la transacción.");
+        }
+        usuario.SaldoActual += transaccion.Cantidad;
+
+        transaccion.Total = usuario.SaldoActual;
+
         _context.Transacciones.Add(transaccion);
         SaveChanges();
     }

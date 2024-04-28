@@ -4,6 +4,7 @@ using Gemu.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gemu.Data.Migrations
 {
     [DbContext(typeof(GemuContext))]
-    partial class GemuContextModelSnapshot : ModelSnapshot
+    [Migration("20240428111915_ModeloRol")]
+    partial class ModeloRol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,19 +322,7 @@ namespace Gemu.Data.Migrations
 
                     b.HasKey("IdRol");
 
-                    b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            IdRol = 1,
-                            Nombre = "Usuario"
-                        },
-                        new
-                        {
-                            IdRol = 2,
-                            Nombre = "Admin"
-                        });
+                    b.ToTable("Rol");
                 });
 
             modelBuilder.Entity("Gemu.Models.Transaccion", b =>
@@ -354,9 +344,6 @@ namespace Gemu.Data.Migrations
 
                     b.Property<string>("Nota")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("IdTransaccion");
 
@@ -397,26 +384,14 @@ namespace Gemu.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("SaldoActual")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int?>("RolIdRol")
+                        .HasColumnType("int");
 
                     b.HasKey("IdUsuario");
 
-                    b.HasIndex("IdRol");
+                    b.HasIndex("RolIdRol");
 
                     b.ToTable("Usuarios");
-
-                    b.HasData(
-                        new
-                        {
-                            IdUsuario = 1,
-                            CodigoPostal = 0,
-                            Contraseña = "ADMINcontraseña123@",
-                            Correo = "admin@gmail.com",
-                            IdRol = 2,
-                            Nombre = "Admin",
-                            SaldoActual = 0m
-                        });
                 });
 
             modelBuilder.Entity("Gemu.Models.Anuncio", b =>
@@ -586,9 +561,7 @@ namespace Gemu.Data.Migrations
                 {
                     b.HasOne("Gemu.Models.Rol", "Rol")
                         .WithMany("Usuarios")
-                        .HasForeignKey("IdRol")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RolIdRol");
 
                     b.Navigation("Rol");
                 });

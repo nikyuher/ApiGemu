@@ -14,6 +14,7 @@ builder.Services.AddScoped<IBibliotecaService, BibliotecaService>();
 builder.Services.AddScoped<ICarritoService, CarritoService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IRolService, RolService>();
 
 // Add services to the container.
 var configuration = builder.Configuration;
@@ -38,6 +39,7 @@ builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
 builder.Services.AddScoped<IBibliotecaRepository, BibliotecaRepository>();
 builder.Services.AddScoped<IImagenRepository, ImagenRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IRolRepository, RolRepository>();
 
 
 builder.Services.AddControllers();

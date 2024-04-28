@@ -4,6 +4,7 @@ using Gemu.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gemu.Data.Migrations
 {
     [DbContext(typeof(GemuContext))]
-    partial class GemuContextModelSnapshot : ModelSnapshot
+    [Migration("20240428214700_nuevoAtributoTransaccion")]
+    partial class nuevoAtributoTransaccion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -397,9 +399,6 @@ namespace Gemu.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("SaldoActual")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("IdUsuario");
 
                     b.HasIndex("IdRol");
@@ -414,8 +413,7 @@ namespace Gemu.Data.Migrations
                             Contraseña = "ADMINcontraseña123@",
                             Correo = "admin@gmail.com",
                             IdRol = 2,
-                            Nombre = "Admin",
-                            SaldoActual = 0m
+                            Nombre = "Admin"
                         });
                 });
 

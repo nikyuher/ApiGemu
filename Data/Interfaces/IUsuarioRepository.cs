@@ -14,6 +14,7 @@ public interface IUsuarioRepository
     void UpdateRolUsuario(UsuarioUpdateDTO usuario);
     void UpdateDireccionUsuario(UsuarioDireccionDTO usuario);
     void UpdateInfoUsuario(UsuarioInfoDTO usuario);
+    void UpdateFotoUsuario(UsuarioFotoDTO usuario);
     //Delete
     void DeleteUsuario(int idUsuario);
 }

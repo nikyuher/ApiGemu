@@ -11,17 +11,24 @@ public class TransaccionService : ITransaccionService
         _transaccionRepository = repository;
     }
 
-    public List<Transaccion> GetAllTransacciones()
+    public List<TransaccionDTO> GetAllTransacciones()
     {
         return _transaccionRepository.GetAllTransacciones();
+    }
+    public List<Transaccion> GetTransaccionesUsuario (int idUsuario){
+        return _transaccionRepository.GetTransaccionesUsuario(idUsuario);
     }
     public Transaccion GetIdTransaccion(int idTransaccion)
     {
         return _transaccionRepository.GetIdTransaccion(idTransaccion);
     }
-    public void CreateTransaccion(Transaccion transaccion)
+    public void AñadirCantidadTransaccion(Transaccion transaccion)
     {
-        _transaccionRepository.CreateTransaccion(transaccion);
+        _transaccionRepository.AñadirCantidadTransaccion(transaccion);
+    }
+    public void RestarCantidadTransaccion(Transaccion transaccion)
+    {
+        _transaccionRepository.RestarCantidadTransaccion(transaccion);
     }
     public void UpdateTransaccion(Transaccion transaccion)
     {
@@ -31,4 +38,5 @@ public class TransaccionService : ITransaccionService
     {
         _transaccionRepository.DeleteTransaccion(idTransaccion);
     }
+    
 }

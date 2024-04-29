@@ -74,7 +74,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPost("crear",Name ="CreateUsuario")]
+    [HttpPost("registrar",Name ="CreateUsuario")]
     public IActionResult CreateUsuario([FromBody] UsuarioCreateDTO user)
     {
         try
@@ -123,7 +123,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPut("rol/", Name ="PutRolUsuario")]
+    [HttpPut("{id}/rol", Name ="PutRolUsuario")]
     public IActionResult UpdateRolUsuario(int id, [FromBody] UsuarioUpdateDTO user)
     {
         try
@@ -155,7 +155,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPut("direccion/", Name ="PutDireccionUsuario")]
+    [HttpPut("{id}/direccion", Name ="PutDireccionUsuario")]
     public IActionResult UpdateDireccionUsuario(int id, [FromBody] UsuarioDireccionDTO user)
     {
         try
@@ -187,7 +187,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPut("nombre/", Name ="PutNombreUsuario")]
+    [HttpPut("{id}/nombre", Name ="PutNombreUsuario")]
     public IActionResult UpdateInfoUsuario(int id, [FromBody] UsuarioInfoDTO user)
     {
         try
@@ -215,6 +215,38 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar la informacion del usuario con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpPut("{id}/foto-perfil", Name ="PutFotoPerfilUsuario")]
+    public IActionResult UpdateFotoUsuario(int id, [FromBody] UsuarioFotoDTO user)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización la foto del usuario con ID: {id}.");
+
+            if (id != user.IdUsuario)
+            {
+                _logger.LogError("El ID del usuario en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
+
+            var existingUser = _usuarioService.GetIdUsuario(id);
+
+            if (existingUser is null)
+            {
+                _logger.LogWarning($"No se encontró ningún usuario con ID: {id}.");
+                return NotFound();
+            }
+
+            _usuarioService.UpdateFotoUsuario(user);
+
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar actualizar la foto del usuario con ID {id}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

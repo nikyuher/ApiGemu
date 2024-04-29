@@ -46,6 +46,10 @@ public class UsuarioService : IUsuarioService
     {
         _usuarioRepository.UpdateInfoUsuario(usuario);
     }
+    public void UpdateFotoUsuario(UsuarioFotoDTO usuario)
+    {
+        _usuarioRepository.UpdateFotoUsuario(usuario);
+    }
     //Delete
     public void DeleteUsuario(int idUsuario)
     {

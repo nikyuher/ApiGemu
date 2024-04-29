@@ -171,6 +171,20 @@ public class UsuarioRepository : IUsuarioRepository
         SaveChanges();
     }
 
+    public void UpdateFotoUsuario(UsuarioFotoDTO usuario)
+    {
+        var existingUser = _context.Usuarios.Find(usuario.IdUsuario);
+        if (existingUser == null)
+        {
+            throw new KeyNotFoundException("No se encontró el Usuario a actualizar.");
+        }
+
+        existingUser.FotoPerfil = usuario.FotoPerfil;
+
+        _context.Usuarios.Update(existingUser);
+        SaveChanges();
+    }
+
     //Delete
     public void DeleteUsuario(int idUsuario)
     {

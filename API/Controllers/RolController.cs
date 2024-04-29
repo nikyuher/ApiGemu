@@ -19,7 +19,7 @@ public class RolController : ControllerBase
 
 
 
-    [HttpGet()]
+    [HttpGet(Name ="GetAllRoles")]
     public ActionResult<List<RolDTO>> GetAllRoles()
     {
         try
@@ -34,7 +34,7 @@ public class RolController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name ="GetRolId")]
     public ActionResult<RolDTO> GetRolId(int id)
     {
         try
@@ -75,7 +75,7 @@ public class RolController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}", Name ="PutRol")]
     public IActionResult UpdateRol(int id, [FromBody] Rol rol)
     {
         try
@@ -107,7 +107,7 @@ public class RolController : ControllerBase
         }
     }
 
-    [HttpPut("nombre")]
+    [HttpPut("{id}/nombre",Name ="PutNombreRol")]
     public IActionResult UpdateNombreRol(int id, [FromBody] RolUpdateNombreDTO rol)
     {
         try
@@ -139,7 +139,7 @@ public class RolController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}",Name ="DeleteRol")]
     public IActionResult DeleteRol(int id)
     {
         try

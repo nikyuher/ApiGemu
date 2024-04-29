@@ -17,8 +17,8 @@ public class UsuarioController : ControllerBase
         _usuarioService = usuarioService;
     }
 
-    [HttpGet()]
-    public ActionResult<List<UsuarioGetAllDTO>> GetAllUsuarios()
+    [HttpGet(Name = "GetAllUsuarios")]
+    public ActionResult<List<UsuarioDTO>> GetAllUsuarios()
     {
         try
         {
@@ -32,8 +32,8 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public ActionResult<Usuario> GetUsuarioId(int id)
+    [HttpGet("{id}", Name = "GetUsuario")]
+    public ActionResult<UsuarioDTO> GetUsuarioId(int id)
     {
         try
         {
@@ -56,7 +56,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPost("login")]
+    [HttpPost("login", Name = "LoginUsuario")]
     public IActionResult Login([FromBody] UsuarioLoginDTO loginRequest)
     {
         try
@@ -74,7 +74,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPost("crear")]
+    [HttpPost("crear",Name ="CreateUsuario")]
     public IActionResult CreateUsuario([FromBody] UsuarioCreateDTO user)
     {
         try
@@ -91,7 +91,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPut("")]
+    [HttpPut(Name ="PutUsuario")]
     public IActionResult UpdateUsuario(int id, [FromBody] Usuario user)
     {
         try
@@ -123,7 +123,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPut("rol/")]
+    [HttpPut("rol/", Name ="PutRolUsuario")]
     public IActionResult UpdateRolUsuario(int id, [FromBody] UsuarioUpdateDTO user)
     {
         try
@@ -155,7 +155,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPut("direccion/")]
+    [HttpPut("direccion/", Name ="PutDireccionUsuario")]
     public IActionResult UpdateDireccionUsuario(int id, [FromBody] UsuarioDireccionDTO user)
     {
         try
@@ -187,7 +187,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpPut("nombre/")]
+    [HttpPut("nombre/", Name ="PutNombreUsuario")]
     public IActionResult UpdateInfoUsuario(int id, [FromBody] UsuarioInfoDTO user)
     {
         try
@@ -219,7 +219,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpDelete("")]
+    [HttpDelete(Name ="DeleteUsuario")]
     public IActionResult DeleteUsuario(int id)
     {
         try

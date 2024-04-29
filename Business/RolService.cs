@@ -11,11 +11,11 @@ public class RolService : IRolService
         _rolRepository = repository;
     }
 
-    public List<Rol> GetAllRoles()
+    public List<RolDTO> GetAllRoles()
     {
         return _rolRepository.GetAllRoles();
     }
-    public Rol GetIdRol(int idRol)
+    public RolDTO GetIdRol(int idRol)
     {
         return _rolRepository.GetIdRol(idRol);
     }

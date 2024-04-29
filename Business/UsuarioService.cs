@@ -11,12 +11,12 @@ public class UsuarioService : IUsuarioService
         _usuarioRepository = repository;
     }
 
-    public List<UsuarioGetAllDTO> GetAllUsuarios()
+    public List<UsuarioDTO> GetAllUsuarios()
     {
         return _usuarioRepository.GetAllUsuarios();
     }
     //Read
-    public Usuario GetIdUsuario(int idUsuario)
+    public UsuarioDTO GetIdUsuario(int idUsuario)
     {
         return _usuarioRepository.GetIdUsuario(idUsuario);
     }

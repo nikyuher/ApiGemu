@@ -11,11 +11,11 @@ public class UsuarioRepository : IUsuarioRepository
         _context = context;
     }
 
-    public List<UsuarioGetAllDTO> GetAllUsuarios()
+    public List<UsuarioDTO> GetAllUsuarios()
     {
         var usuarios = _context.Usuarios.Include(u => u.Transacciones).ToList();
 
-        var usuarioDTOs = usuarios.Select(u => new UsuarioGetAllDTO
+        var usuarioDTOs = usuarios.Select(u => new UsuarioDTO
         {
             IdUsuario = u.IdUsuario,
             IdRol = u.IdRol,
@@ -24,15 +24,14 @@ public class UsuarioRepository : IUsuarioRepository
             Correo = u.Correo,
             Direccion = u.Direccion,
             CodigoPostal = u.CodigoPostal,
-            SaldoActual = u.SaldoActual,
-            Transacciones = u.Transacciones?.ToList()
+            SaldoActual = u.SaldoActual
         }).ToList();
 
         return usuarioDTOs;
     }
 
     //Read
-    public Usuario GetIdUsuario(int idUsuario)
+    public UsuarioDTO GetIdUsuario(int idUsuario)
     {
         var usuario = _context.Usuarios.FirstOrDefault(r => r.IdUsuario == idUsuario);
 
@@ -41,7 +40,19 @@ public class UsuarioRepository : IUsuarioRepository
             throw new Exception($"No se encontro el Usuario con el ID: {idUsuario}");
         }
 
-        return usuario;
+        var usuarioDTO = new UsuarioDTO
+        {
+            IdUsuario = usuario.IdUsuario,
+            IdRol = usuario.IdRol,
+            FotoPerfil = usuario.FotoPerfil,
+            Nombre = usuario.Nombre,
+            Correo = usuario.Correo,
+            Direccion = usuario.Direccion,
+            CodigoPostal = usuario.CodigoPostal,
+            SaldoActual = usuario.SaldoActual
+        };
+
+        return usuarioDTO;
     }
 
     public Usuario LoginUsuario(UsuarioLoginDTO loginDTO)
@@ -163,7 +174,7 @@ public class UsuarioRepository : IUsuarioRepository
     //Delete
     public void DeleteUsuario(int idUsuario)
     {
-        var usuario = GetIdUsuario(idUsuario);
+        var usuario = _context.Usuarios.FirstOrDefault(r => r.IdUsuario == idUsuario);
 
         if (usuario is null)
         {

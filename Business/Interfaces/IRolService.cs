@@ -3,8 +3,8 @@ using Gemu.Models;
 namespace Gemu.Data;
 public interface IRolService
 {
-    public List<Rol> GetAllRoles();
-    public Rol GetIdRol(int idRol);
+    public List<RolDTO> GetAllRoles();
+    public RolDTO GetIdRol(int idRol);
     void CreateRol(Rol rol);
     void UpdateRol(Rol rol);
     void UpdateNombreRol(RolUpdateNombreDTO rol);

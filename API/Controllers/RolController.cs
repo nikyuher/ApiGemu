@@ -20,7 +20,7 @@ public class RolController : ControllerBase
 
 
     [HttpGet()]
-    public ActionResult<List<Rol>> GetAllRoles()
+    public ActionResult<List<RolDTO>> GetAllRoles()
     {
         try
         {
@@ -35,7 +35,7 @@ public class RolController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Rol> GetRolId(int id)
+    public ActionResult<RolDTO> GetRolId(int id)
     {
         try
         {

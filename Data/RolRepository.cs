@@ -11,24 +11,47 @@ public class RolRepository : IRolRepository
         _context = context;
     }
 
-    public List<Rol> GetAllRoles()
+    public List<RolDTO> GetAllRoles()
     {
-        var reseñas = _context.Roles.Include(r => r.Usuarios).ToList();
+        var roles = _context.Roles.Include(r => r.Usuarios).ToList();
 
-        return reseñas;
+        var rolDTOs = roles.Select(rol => new RolDTO
+        {
+            IdRol = rol.IdRol,
+            Nombre = rol.Nombre,
+            Usuarios = rol.Usuarios.Select(u => new UsuarioInfoDTO
+            {
+                IdUsuario = u.IdUsuario,
+                Nombre = u.Nombre,
+            }).ToList()
+        }).ToList();
+
+        return rolDTOs;
     }
 
     //Read
-    public Rol GetIdRol(int idRol)
+    public RolDTO GetIdRol(int idRol)
     {
-        var rol = _context.Roles.FirstOrDefault(r => r.IdRol == idRol);
+        var rol = _context.Roles.Include(r => r.Usuarios).FirstOrDefault(r => r.IdRol == idRol);
 
         if (rol is null)
         {
             throw new Exception($"No se encontro el Rol con el ID: {idRol}");
         }
 
-        return rol;
+        var rolDTO = new RolDTO
+        {
+            IdRol = rol.IdRol,
+            Nombre = rol.Nombre,
+            Usuarios = rol.Usuarios.Select(u => new UsuarioInfoDTO
+            {
+                IdUsuario = u.IdUsuario,
+                Nombre = u.Nombre,
+            }).ToList()
+        };
+
+        return rolDTO;
+
     }
 
     //Create
@@ -68,7 +91,7 @@ public class RolRepository : IRolRepository
     //Delete
     public void DeleteRol(int IdRol)
     {
-        var rol = GetIdRol(IdRol);
+        var rol = _context.Roles.FirstOrDefault(r => r.IdRol == IdRol);
 
         if (rol is null)
         {

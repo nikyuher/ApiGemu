@@ -3,9 +3,9 @@ using Gemu.Models;
 namespace Gemu.Data;
 public interface IRolRepository
 {
-    public List<Rol> GetAllRoles();
+    public List<RolDTO> GetAllRoles();
     //Read
-    public Rol GetIdRol(int idRol);
+    public RolDTO GetIdRol(int idRol);
     //Create
     void CreateRol(Rol rol);
     //Update

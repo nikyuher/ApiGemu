@@ -10,15 +10,36 @@ public class BibliotecaRepository : IBibliotecaRepository
     {
         _context = context;
     }
-    public List<Biblioteca> GetAllBibliotecas()
+    public List<BibliotecaListaDTO> GetAllBibliotecas()
     {
-        var biblioteca = _context.Bibliotecas.ToList();
+        var biblioteca = _context.Bibliotecas.Include(r => r.Juegos).Include(r => r.Productos).ToList();
 
-        return biblioteca;
+        var newBiblioteca = biblioteca.Select(u => new BibliotecaListaDTO
+        {
+            IdUsuario = u.IdBiblioteca,
+            Productos = u.Productos.Select(p => new ProductoBibliotecaDTO
+            {
+                Nombre = p.Nombre,
+                Precio = p.Precio,
+                Estado = p.Estado,
+                ImgsProducto = p.ImgsProducto,
+                Categorias = p.Categorias
+            }).ToList(),
+            Juegos = u.Juegos.Select(p => new JuegoBiliotecaDTO
+            {
+                Titulo = p.Titulo,
+                Precio = p.Precio,
+                CodigoJuego = p.CodigoJuego,
+                ImgsJuego = p.ImgsJuego,
+                Categorias = p.Categorias
+            }).ToList()
+        }).ToList();
+
+        return newBiblioteca;
     }
 
     //Read
-    public Biblioteca GetIdBiblioteca(int idBiblioteca)
+    public BibliotecaListaDTO GetIdBiblioteca(int idBiblioteca)
     {
         var biblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
 
@@ -27,7 +48,30 @@ public class BibliotecaRepository : IBibliotecaRepository
             throw new Exception($"No se encontro el Biblioteca con el ID: {idBiblioteca}");
         }
 
-        return biblioteca;
+        var newBiblioteca = new BibliotecaListaDTO
+        {
+            IdUsuario = biblioteca.IdUsuario,
+            Productos = biblioteca.Productos.Select(u => new ProductoBibliotecaDTO
+            {
+                IdProducto = u.IdProducto,
+                Nombre = u.Nombre,
+                Precio = u.Precio,
+                Estado = u.Estado,
+                ImgsProducto = u.ImgsProducto,
+                Categorias = u.Categorias
+            }).ToList(),
+            Juegos = biblioteca.Juegos.Select(u => new JuegoBiliotecaDTO
+            {
+                IdJuego = u.IdJuego,
+                Titulo = u.Titulo,
+                Precio = u.Precio,
+                CodigoJuego = u.CodigoJuego,
+                ImgsJuego = u.ImgsJuego,
+                Categorias = u.Categorias
+            }).ToList(),
+        };
+
+        return newBiblioteca;
     }
 
     public BibliotecaListaDTO GetBibliotecaUsuario(int idUsuario)
@@ -76,6 +120,52 @@ public class BibliotecaRepository : IBibliotecaRepository
         SaveChanges();
     }
 
+    public void AñadirJuegoBiblioteca(int idBiblioteca, List<JuegoBiliotecaDTO> juegoDTO)
+    {
+        foreach (var juego in juegoDTO)
+        {
+            var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == juego.IdJuego);
+
+            if (existingJuego is null)
+            {
+                throw new Exception($"No se encontro el juego  con el ID: {juego.IdJuego}");
+            }
+
+            var existingBiblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
+
+            if (existingBiblioteca is null)
+            {
+                throw new Exception($"No se encontro la biblioeca  con el ID: {idBiblioteca}");
+            }
+
+            existingBiblioteca.Juegos.Add(existingJuego);
+        }
+        SaveChanges();
+    }
+
+    public void AñadirProductoBiblioteca(int idBiblioteca, List<ProductoBibliotecaDTO> productoBibliotecaDTO)
+    {
+        foreach (var producto in productoBibliotecaDTO)
+        {
+            var existingProducto = _context.Productos.FirstOrDefault(r => r.IdProducto == producto.IdProducto);
+
+            if (existingProducto is null)
+            {
+                throw new Exception($"No se encontro el producto con el ID: {producto.IdProducto}");
+            }
+
+            var existingBiblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
+
+            if (existingBiblioteca is null)
+            {
+                throw new Exception($"No se encontro la biblioeca  con el ID: {idBiblioteca}");
+            }
+
+            existingBiblioteca.Productos.Add(existingProducto);
+        }
+        SaveChanges();
+    }
+
     //Update
     public void UpdateBiblioteca(Biblioteca biblioteca)
     {
@@ -92,7 +182,7 @@ public class BibliotecaRepository : IBibliotecaRepository
     //Delete
     public void DeleteBiblioteca(int idBiblioteca)
     {
-        var biblioteca = GetIdBiblioteca(idBiblioteca);
+        var biblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
 
         if (biblioteca is null)
         {
@@ -100,6 +190,48 @@ public class BibliotecaRepository : IBibliotecaRepository
         }
 
         _context.Bibliotecas.Remove(biblioteca);
+        SaveChanges();
+    }
+
+    public void EliminarProductoBiblioteca(int idBiblioteca, int idProducto)
+    {
+
+        var existingProducto = _context.Productos.FirstOrDefault(r => r.IdProducto == idProducto);
+
+        if (existingProducto is null)
+        {
+            throw new Exception($"No se encontro el producto con el ID: {idProducto}");
+        }
+
+        var existingBiblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
+
+        if (existingBiblioteca is null)
+        {
+            throw new Exception($"No se encontro la biblioeca  con el ID: {idBiblioteca}");
+        }
+
+        existingBiblioteca.Productos.Remove(existingProducto);
+
+        SaveChanges();
+    }
+
+    public void EliminarJuegoBiblioteca(int idBiblioteca, int idJuego)
+    {
+        var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+
+        if (existingJuego is null)
+        {
+            throw new Exception($"No se encontro el juego  con el ID: {idJuego}");
+        }
+
+        var existingBiblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
+
+        if (existingBiblioteca is null)
+        {
+            throw new Exception($"No se encontro la biblioeca  con el ID: {idBiblioteca}");
+        }
+
+        existingBiblioteca.Juegos.Remove(existingJuego);
         SaveChanges();
     }
 

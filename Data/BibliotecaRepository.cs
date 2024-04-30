@@ -1,4 +1,5 @@
 using Gemu.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gemu.Data;
 public class BibliotecaRepository : IBibliotecaRepository
@@ -29,10 +30,49 @@ public class BibliotecaRepository : IBibliotecaRepository
         return biblioteca;
     }
 
-    //Create
-    public void CreateBiblioteca(Biblioteca biblioteca)
+    public BibliotecaListaDTO GetBibliotecaUsuario(int idUsuario)
     {
-        _context.Bibliotecas.Add(biblioteca);
+        var biblioteca = _context.Bibliotecas.Include(r => r.Juegos).Include(r => r.Productos).FirstOrDefault(r => r.IdUsuario == idUsuario);
+
+        if (biblioteca is null)
+        {
+            throw new Exception($"No se encontro el Biblioteca del usuario con el ID: {idUsuario}");
+        }
+
+        var newBiblioteca = new BibliotecaListaDTO
+        {
+            IdUsuario = biblioteca.IdUsuario,
+            Productos = biblioteca.Productos.Select(u => new ProductoBibliotecaDTO
+            {
+                IdProducto = u.IdProducto,
+                Nombre = u.Nombre,
+                Precio = u.Precio,
+                Estado = u.Estado,
+                ImgsProducto = u.ImgsProducto,
+                Categorias = u.Categorias
+            }).ToList(),
+            Juegos = biblioteca.Juegos.Select(u => new JuegoBiliotecaDTO
+            {
+                IdJuego = u.IdJuego,
+                Titulo = u.Titulo,
+                Precio = u.Precio,
+                CodigoJuego = u.CodigoJuego,
+                ImgsJuego = u.ImgsJuego,
+                Categorias = u.Categorias
+            }).ToList(),
+        };
+
+        return newBiblioteca;
+    }
+
+    //Create
+    public void CreateBibliotecaUsuario(BibliotecaDTO biblioteca)
+    {
+        var newBiblioteca = new Biblioteca
+        {
+            IdUsuario = biblioteca.IdUsuario
+        };
+        _context.Bibliotecas.Add(newBiblioteca);
         SaveChanges();
     }
 

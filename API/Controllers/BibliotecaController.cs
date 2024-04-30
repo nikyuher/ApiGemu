@@ -17,7 +17,7 @@ public class BibliotecaController : ControllerBase
         _bibliotecaService = bibliotecaService;
     }
 
-    
+
     [HttpGet()]
     public ActionResult<List<Biblioteca>> GetAllBibliotecas()
     {
@@ -48,7 +48,7 @@ public class BibliotecaController : ControllerBase
                 return NotFound();
             }
 
-            return biblioteca;
+            return Ok(biblioteca);
         }
         catch (Exception ex)
         {
@@ -57,14 +57,38 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [HttpPost("crear")]
-    public IActionResult CreateBiblioteca([FromBody] Biblioteca biblioteca)
+    [HttpGet("usuario")]
+    public ActionResult<BibliotecaListaDTO> GetBibliotecaUsuario(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener la bibliote con ID: {id}.");
+
+            var biblioteca = _bibliotecaService.GetBibliotecaUsuario(id);
+
+            if (biblioteca == null)
+            {
+                _logger.LogWarning($"No se encontró ningúna biblioteca con ID: {id}.");
+                return NotFound();
+            }
+
+            return Ok(biblioteca);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener la biblioteca con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpPost("asignar-usuario")]
+    public IActionResult CreateBibliotecaUsuario([FromBody] BibliotecaDTO biblioteca)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación una biblioteca.");
 
-            _bibliotecaService.CreateBiblioteca(biblioteca);
+            _bibliotecaService.CreateBibliotecaUsuario(biblioteca);
             return Ok(biblioteca);
         }
         catch (Exception ex)

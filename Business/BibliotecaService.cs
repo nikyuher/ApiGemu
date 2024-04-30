@@ -19,9 +19,13 @@ public class BibliotecaService : IBibliotecaService
     {
         return _bibliotecaRepository.GetIdBiblioteca(idBiblioteca);
     }
-    public void CreateBiblioteca(Biblioteca biblioteca)
+    public BibliotecaListaDTO GetBibliotecaUsuario(int idUsuario)
     {
-        _bibliotecaRepository.CreateBiblioteca(biblioteca);
+        return _bibliotecaRepository.GetBibliotecaUsuario(idUsuario);
+    }
+    public void CreateBibliotecaUsuario(BibliotecaDTO biblioteca)
+    {
+        _bibliotecaRepository.CreateBibliotecaUsuario(biblioteca);
     }
     public void UpdateBiblioteca(Biblioteca biblioteca)
     {

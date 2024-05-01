@@ -29,14 +29,17 @@ public class BibliotecaService : IBibliotecaService
     {
         _bibliotecaRepository.CreateBibliotecaUsuario(biblioteca);
     }
-    public void AñadirProductoBiblioteca(int idBiblioteca, List<ProductoBibliotecaDTO> productoBibliotecaDTO)
+
+    public void AñadirProductoBiblioteca(int idBiblioteca, List<int> ListaIdsProducto)
     {
-        _bibliotecaRepository.AñadirProductoBiblioteca(idBiblioteca, productoBibliotecaDTO);
+        _bibliotecaRepository.AñadirProductoBiblioteca(idBiblioteca, ListaIdsProducto);
     }
-    public void AñadirJuegoBiblioteca(int idBiblioteca, List<JuegoBiliotecaDTO> juegoDTO)
+    
+    public void AñadirJuegoBiblioteca(int idBiblioteca, List<int> ListaIdsJuego)
     {
-        _bibliotecaRepository.AñadirJuegoBiblioteca(idBiblioteca, juegoDTO);
+        _bibliotecaRepository.AñadirJuegoBiblioteca(idBiblioteca, ListaIdsJuego);
     }
+
     //Update
     public void UpdateBiblioteca(Biblioteca biblioteca)
     {

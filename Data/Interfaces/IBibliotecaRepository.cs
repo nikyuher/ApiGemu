@@ -9,8 +9,8 @@ public interface IBibliotecaRepository
     public BibliotecaListaDTO GetBibliotecaUsuario(int idUsuario);
     //Create
     void CreateBibliotecaUsuario(BibliotecaDTO biblioteca);
-    void AñadirProductoBiblioteca(int idBiblioteca, List<ProductoBibliotecaDTO> productoBibliotecaDTO);
-    void AñadirJuegoBiblioteca(int idBiblioteca, List<JuegoBiliotecaDTO> juegoDTO);
+    void AñadirProductoBiblioteca(int idBiblioteca, List<int> productoBibliotecaDTO);
+    void AñadirJuegoBiblioteca(int idBiblioteca, List<int> juegoDTO);
     //Update
     void UpdateBiblioteca(Biblioteca biblioteca);
     //Delete

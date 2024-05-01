@@ -81,7 +81,7 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [HttpPost("asignar-usuario")]
+    [HttpPost("añadir-usuario")]
     public IActionResult CreateBibliotecaUsuario([FromBody] BibliotecaDTO biblioteca)
     {
         try
@@ -98,36 +98,36 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [HttpPost("{id}/asignar-producto")]
-    public IActionResult AñadirProductoBiblioteca(int id, [FromBody] List<ProductoBibliotecaDTO> producto)
+    [HttpPost("{id}/añadir-producto")]
+    public IActionResult AñadirProductoBiblioteca(int id, [FromBody] List<int> producto)
     {
         try
         {
-            _logger.LogInformation("Se ha recibido una solicitud de añadir un producto una biblioteca.");
+            _logger.LogInformation("Se ha recibido una solicitud de añadir un producto a la biblioteca.");
 
             _bibliotecaService.AñadirProductoBiblioteca(id, producto);
             return Ok(producto);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar crear una biblioteca: {ex.Message}");
+            _logger.LogError($"Error al intentar añadir un producto a la biblioteca: {ex.Message}");
             return BadRequest(new { message = ex.Message });
         }
     }
 
         [HttpPost("{id}/asignar-juego")]
-    public IActionResult AñadirJuegoBiblioteca(int id, [FromBody] List<JuegoBiliotecaDTO> juego)
+    public IActionResult AñadirJuegoBiblioteca(int id, [FromBody] List<int> juego)
     {
         try
         {
-            _logger.LogInformation("Se ha recibido una solicitud de añadir un juego una biblioteca.");
+            _logger.LogInformation("Se ha recibido una solicitud de añadir un juego a la biblioteca.");
 
             _bibliotecaService.AñadirJuegoBiblioteca(id, juego);
             return Ok(juego);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar crear una biblioteca: {ex.Message}");
+            _logger.LogError($"Error al intentar añadir un juego a la biblioteca: {ex.Message}");
             return BadRequest(new { message = ex.Message });
         }
     }
@@ -211,7 +211,7 @@ public class BibliotecaController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar eliminar un producto con ID {id}: {ex.Message}");
+            _logger.LogError($"Error al intentar eliminar un producto de biblioteca con ID {id}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }
@@ -227,7 +227,7 @@ public class BibliotecaController : ControllerBase
 
             if (user is null)
             {
-                _logger.LogWarning($"No se encontró ningúna juego con ID: {id}.");
+                _logger.LogWarning($"No se encontró ningúna biblioteca con ID: {id}.");
                 return NotFound();
             }
 
@@ -237,7 +237,7 @@ public class BibliotecaController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar eliminar un juego con ID {id}: {ex.Message}");
+            _logger.LogError($"Error al intentar eliminar un juego de biblioteca con ID {id}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

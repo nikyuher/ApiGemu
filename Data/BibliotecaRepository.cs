@@ -120,15 +120,15 @@ public class BibliotecaRepository : IBibliotecaRepository
         SaveChanges();
     }
 
-    public void AñadirJuegoBiblioteca(int idBiblioteca, List<JuegoBiliotecaDTO> juegoDTO)
+    public void AñadirJuegoBiblioteca(int idBiblioteca, List<int> ListaIdsJuego)
     {
-        foreach (var juego in juegoDTO)
+        foreach (var juego in ListaIdsJuego)
         {
-            var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == juego.IdJuego);
+            var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == juego);
 
             if (existingJuego is null)
             {
-                throw new Exception($"No se encontro el juego  con el ID: {juego.IdJuego}");
+                throw new Exception($"No se encontro el juego  con el ID: {juego}");
             }
 
             var existingBiblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
@@ -143,15 +143,15 @@ public class BibliotecaRepository : IBibliotecaRepository
         SaveChanges();
     }
 
-    public void AñadirProductoBiblioteca(int idBiblioteca, List<ProductoBibliotecaDTO> productoBibliotecaDTO)
+    public void AñadirProductoBiblioteca(int idBiblioteca, List<int> ListaIdsProducto)
     {
-        foreach (var producto in productoBibliotecaDTO)
+        foreach (var producto in ListaIdsProducto)
         {
-            var existingProducto = _context.Productos.FirstOrDefault(r => r.IdProducto == producto.IdProducto);
+            var existingProducto = _context.Productos.FirstOrDefault(r => r.IdProducto == producto);
 
             if (existingProducto is null)
             {
-                throw new Exception($"No se encontro el producto con el ID: {producto.IdProducto}");
+                throw new Exception($"No se encontro el producto con el ID: {producto}");
             }
 
             var existingBiblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);

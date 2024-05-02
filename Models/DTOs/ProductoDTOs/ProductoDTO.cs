@@ -1,6 +1,6 @@
 namespace Gemu.Models;
 using System.ComponentModel.DataAnnotations;
-public class ProductoBibliotecaDTO
+public class ProductoDTO
 {
     [Key]
     public int IdProducto { get; set; }
@@ -9,7 +9,10 @@ public class ProductoBibliotecaDTO
     [Required]
     public decimal Precio { get; set; }
     [Required]
+    public string? Descripcion { get; set; }
+    [Required]
     public string? Estado { get; set; }
-    public List<Imagen>? ImgsProducto { get; set; } = new List<Imagen>();
-    public List<Categoria>? Categorias { get; set; } = new List<Categoria>();
+    [Required]
+    public int Cantidad { get; set; }
+
 }

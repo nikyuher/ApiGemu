@@ -58,7 +58,7 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}/categorias")]
     public ActionResult<JuegoCategoriasDTO> GetCategoriasJuego(int id)
     {
         try
@@ -82,7 +82,7 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}/reseñas")]
     public ActionResult<JuegoReseñaDTO> GetReseñasJuego(int id)
     {
         try

@@ -1,8 +1,7 @@
 namespace Gemu.Models;
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-public class Juego
+public class JuegoDTO
 {
     [Key]
     public int IdJuego { get; set; }
@@ -45,31 +44,5 @@ public class Juego
             return promedio;
         }
     }
-
-    // Relación con Biblioteca
-    [JsonIgnore]
-    public int? IdBiblioteca { get; set; }
-    [JsonIgnore]
-    public Biblioteca? Biblioteca { get; set; }
-    // Relación con Carrito
-    [JsonIgnore]
-    public int? IdCarrito { get; set; }
-    [JsonIgnore]
-    public Carrito? Carrito { get; set; }
-    // Relación con Reseña
-    [JsonIgnore]
-    public int? IdReseña { get; set; }
-    [JsonIgnore]
-    public Reseña? Reseña { get; set; }
-    // Relación con Imagenes
-    [JsonIgnore]
-    public int? IdImagen { get; set; }
-    [JsonIgnore]
-    public Imagen? Imagen { get; set; }
-    // Relación con Categoria
-    [JsonIgnore]
-    public int? IdCategoria { get; set; }
-    [JsonIgnore]
-    public Categoria? Categoria { get; set; }
 
 }

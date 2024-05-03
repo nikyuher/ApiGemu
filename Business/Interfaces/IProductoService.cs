@@ -20,6 +20,5 @@ public interface IProductoService
     //Delete
     void DeleteProducto(int idProducto);
     void EliminarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);
-    void EliminarReseñaProducto(int idProducto, List<int> ListaIdsReseñas);
     void EliminarImgsProducto(int idProducto, List<int> ListaIdsReseñas);
 }

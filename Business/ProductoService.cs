@@ -68,10 +68,6 @@ public class ProductoService : IProductoService
     {
         _productoRepository.EliminarCategoriasProducto(idProducto, ListaIdsCateogira);
     }
-    public void EliminarReseñaProducto(int idProducto, List<int> ListaIdsReseñas)
-    {
-        _productoRepository.EliminarReseñaProducto(idProducto, ListaIdsReseñas);
-    }
     public void EliminarImgsProducto(int idProducto, List<int> ListaIdsImgs)
     {
         _productoRepository.EliminarImgsProducto(idProducto, ListaIdsImgs);

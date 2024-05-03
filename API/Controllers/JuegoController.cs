@@ -17,7 +17,8 @@ public class JuegoController : ControllerBase
         _juegoService = juegoService;
     }
 
-    
+
+    //Read
     [HttpGet()]
     public ActionResult<List<Juego>> GetAllJuegos()
     {
@@ -34,7 +35,7 @@ public class JuegoController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Juego> GetJuegoId(int id)
+    public ActionResult<JuegoDTO> GetJuegoId(int id)
     {
         try
         {
@@ -57,8 +58,57 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [HttpGet("{id}")]
+    public ActionResult<JuegoCategoriasDTO> GetCategoriasJuego(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener las categorias del juego con ID: {id}.");
+
+            var juego = _juegoService.GetCategoriasJuego(id);
+
+            if (juego == null)
+            {
+                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
+                return NotFound();
+            }
+
+            return juego;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener las categorias juego con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<JuegoReseñaDTO> GetReseñasJuego(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener las reseñas juego con ID: {id}.");
+
+            var juego = _juegoService.GetReseñasJuego(id);
+
+            if (juego == null)
+            {
+                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
+                return NotFound();
+            }
+
+            return juego;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener las reseñas del juego con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    //Create
     [HttpPost("crear")]
-    public IActionResult CreateJuego([FromBody] Juego juego)
+    public IActionResult CreateJuego([FromBody] JuegoAddDTO juego)
     {
         try
         {
@@ -74,6 +124,59 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [HttpPost("{id}/asignar-categoria")]
+    public IActionResult AsignarCategoriasJuego(int id, [FromBody] List<int> ListaIdsCateogira)
+    {
+        try
+        {
+
+            _logger.LogInformation("Se ha recibido una solicitud asignar categorias al juego.");
+
+            var juego = _juegoService.GetIdJuego(id);
+
+            if (juego is null)
+            {
+                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
+                return NotFound();
+            }
+
+            _juegoService.AsignarCategoriasJuego(id, ListaIdsCateogira);
+
+            return Ok(juego);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar asignar categoria al juego: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/asignar-reseña")]
+    public IActionResult AsignarReseñaJuego(int id, [FromBody] List<int> ListaIdsReseñas)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de asignar reseñas al juego.");
+
+            var juego = _juegoService.GetIdJuego(id);
+
+            if (juego is null)
+            {
+                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
+                return NotFound();
+            }
+
+            _juegoService.AsignarReseñaJuego(id, ListaIdsReseñas);
+            return Ok(juego);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar asignar reseñas juego: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    //Update
     [HttpPut("{id}")]
     public IActionResult UpdateJuego(int id, [FromBody] Juego juego)
     {
@@ -106,6 +209,59 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [HttpPut("{id}/categorias")]
+    public IActionResult UpdateCategoriasJuego(int id, [FromBody] List<Categoria> ListaCategoria)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización las categorias del juego con ID: {id}.");
+
+            var juego = _juegoService.GetIdJuego(id);
+
+            if (juego is null)
+            {
+                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
+                return NotFound();
+            }
+
+            _juegoService.UpdateCategoriasJuego(id, ListaCategoria);
+
+            return Ok(juego);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar actualizar las categorias del juego con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpPut("{id}/imagenes")]
+    public IActionResult UpdateImgsJuego(int id, [FromBody] List<Imagen> ListaImgs)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización las imagenes del juego con ID: {id}.");
+
+            var juego = _juegoService.GetIdJuego(id);
+
+            if (juego is null)
+            {
+                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
+                return NotFound();
+            }
+
+            _juegoService.UpdateImgsJuego(id, ListaImgs);
+
+            return Ok(juego);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar actualizar las imagenes del juego con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    //Delete
     [HttpDelete("{id}")]
     public IActionResult DeleteJuego(int id)
     {
@@ -131,4 +287,57 @@ public class JuegoController : ControllerBase
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }
+
+    [HttpDelete("{id}/categorias")]
+    public IActionResult EliminarCategoriasJuego(int id, [FromBody] List<int> ListaIdsCateogira)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar categorias del juego con ID: {id}.");
+
+            var juego = _juegoService.GetIdJuego(id);
+
+            if (juego is null)
+            {
+                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
+                return NotFound();
+            }
+
+            _juegoService.EliminarCategoriasJuego(id, ListaIdsCateogira);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar eliminar categorias del juego con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpDelete("{id}/imagenes")]
+    public IActionResult EliminarImgsJuego(int id, [FromBody] List<int> ListaIdsReseñas)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar las imagenes del juego con ID: {id}.");
+
+            var juego = _juegoService.GetIdJuego(id);
+
+            if (juego is null)
+            {
+                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
+                return NotFound();
+            }
+
+            _juegoService.EliminarImgsJuego(id, ListaIdsReseñas);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar eliminar la imagen del juego con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
 }

@@ -118,7 +118,6 @@ public class ProductoRepository : IProductoRepository
 
     public void AsignarReseñaProducto(int idProducto, List<int> ListaIdsReseñas)
     {
-
         foreach (var item in ListaIdsReseñas)
         {
             var reseña = _context.Reseñas.FirstOrDefault(r => r.IdReseña == item);
@@ -138,9 +137,7 @@ public class ProductoRepository : IProductoRepository
             producto.Reseñas.Add(reseña);
 
         }
-
         SaveChanges();
-
     }
 
     //Update
@@ -187,11 +184,11 @@ public class ProductoRepository : IProductoRepository
             throw new Exception($"No se encontro el Producto con el id {idProducto}");
         }
 
-        Categorias.ImgsProducto.Clear();
+        Categorias.Categorias.Clear();
         Categorias.Categorias.AddRange(ListaCategoria);
     }
 
-   public void UpdateReseñaProducto(int idProducto, List<Reseña> ListaCategoria)
+    public void UpdateReseñaProducto(int idProducto, List<Reseña> ListaCategoria)
     {
 
         var Categorias = _context.Productos.FirstOrDefault(r => r.IdProducto == idProducto);
@@ -201,7 +198,7 @@ public class ProductoRepository : IProductoRepository
             throw new Exception($"No se encontro el Producto con el id {idProducto}");
         }
 
-        Categorias.ImgsProducto.Clear();
+        Categorias.Reseñas.Clear();
         Categorias.Reseñas.AddRange(ListaCategoria);
     }
 
@@ -246,34 +243,8 @@ public class ProductoRepository : IProductoRepository
 
     }
 
-    public void EliminarReseñaProducto(int idProducto, List<int> ListaIdsReseñas)
-    {
 
-        foreach (var item in ListaIdsReseñas)
-        {
-            var reseña = _context.Reseñas.FirstOrDefault(r => r.IdReseña == item);
-
-            if (reseña is null)
-            {
-                throw new Exception($"No se encontro la reseña con el ID: {item}");
-            }
-
-            var producto = _context.Productos.FirstOrDefault(p => p.IdProducto == idProducto);
-
-            if (producto is null)
-            {
-                throw new Exception($"No se encontro el producto con el ID: {idProducto}");
-            }
-
-            producto.Reseñas.Remove(reseña);
-
-        }
-
-        SaveChanges();
-
-    }
-
-        public void EliminarImgsProducto(int idProducto, List<int> ListaIdsImagenes)
+    public void EliminarImgsProducto(int idProducto, List<int> ListaIdsImagenes)
     {
 
         foreach (var item in ListaIdsImagenes)

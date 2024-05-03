@@ -261,7 +261,7 @@ public class ProductoController : ControllerBase
         }
     }
 
-        [HttpPut("{id}/reseñas")]
+    [HttpPut("{id}/reseñas")]
     public IActionResult UpdateReseñasProducto(int id, [FromBody] List<Reseña> ListaReseña)
     {
         try
@@ -340,33 +340,7 @@ public class ProductoController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}/reseñas")]
-    public IActionResult EliminarReseñaProducto(int id, List<int> ListaIdsReseñas)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para eliminar el producto con ID: {id}.");
-
-            var producto = _productoService.GetIdProducto(id);
-
-            if (producto is null)
-            {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
-                return NotFound();
-            }
-
-            _productoService.EliminarReseñaProducto(id, ListaIdsReseñas);
-
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar eliminar las reseñas del producto con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
-
-        [HttpDelete("{id}/imagenes")]
+    [HttpDelete("{id}/imagenes")]
     public IActionResult EliminarImgsProducto(int id, List<int> ListaIdsImgs)
     {
         try

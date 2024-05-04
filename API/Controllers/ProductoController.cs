@@ -235,31 +235,6 @@ public class ProductoController : ControllerBase
         }
     }
 
-    [HttpPut("{id}/reseñas")]
-    public IActionResult UpdateReseñasProducto(int id, [FromBody] List<Reseña> ListaReseña)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para actualizar las reseñas");
-
-            var producto = _productoService.GetIdProducto(id);
-
-            if (producto is null)
-            {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
-                return NotFound();
-            }
-
-            _productoService.UpdateReseñaProducto(id, ListaReseña);
-
-            return Ok(producto);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar actualizar las reseñas del producto con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
 
     //Delete
     [HttpDelete("{id}")]

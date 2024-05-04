@@ -172,19 +172,6 @@ public class ProductoRepository : IProductoRepository
         Categorias.Categorias.AddRange(ListaCategoria);
     }
 
-    public void UpdateReseñaProducto(int idProducto, List<Reseña> ListaCategoria)
-    {
-
-        var Categorias = _context.Productos.FirstOrDefault(r => r.IdProducto == idProducto);
-
-        if (Categorias is null)
-        {
-            throw new Exception($"No se encontro el Producto con el id {idProducto}");
-        }
-
-        Categorias.Reseñas.Clear();
-        Categorias.Reseñas.AddRange(ListaCategoria);
-    }
 
     //Delete
     public void DeleteProducto(int idProducto)

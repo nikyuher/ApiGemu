@@ -49,10 +49,7 @@ public class JuegoService : IJuegoService
     {
         _juegoRepository.UpdateJuego(juego);
     }
-    public void UpdateImgsJuego(int idJuego, List<Imagen> ListaImgs)
-    {
-        _juegoRepository.UpdateImgsJuego(idJuego, ListaImgs);
-    }
+
     public void UpdateCategoriasJuego(int idJuego, List<Categoria> ListaCategoria)
     {
         _juegoRepository.UpdateCategoriasJuego(idJuego, ListaCategoria);
@@ -66,9 +63,5 @@ public class JuegoService : IJuegoService
     public void EliminarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira)
     {
         _juegoRepository.EliminarCategoriasJuego(idJuego, ListaIdsCateogira);
-    }
-    public void EliminarImgsJuego(int idJuego, List<int> ListaIdsReseñas)
-    {
-        _juegoRepository.EliminarImgsJuego(idJuego, ListaIdsReseñas);
     }
 }

@@ -52,10 +52,7 @@ public class ProductoService : IProductoService
     {
         _productoRepository.UpdateCategoriasProducto(idProducto, ListaCategoria);
     }
-    public void UpdateReseñaProducto(int idProducto, List<Reseña> ListaReseña)
-    {
-        _productoRepository.UpdateReseñaProducto(idProducto, ListaReseña);
-    }
+
     //Delete
     public void DeleteProducto(int idProducto)
     {

@@ -235,31 +235,6 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [HttpPut("{id}/imagenes")]
-    public IActionResult UpdateImgsJuego(int id, [FromBody] List<Imagen> ListaImgs)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud de actualización las imagenes del juego con ID: {id}.");
-
-            var juego = _juegoService.GetIdJuego(id);
-
-            if (juego is null)
-            {
-                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
-                return NotFound();
-            }
-
-            _juegoService.UpdateImgsJuego(id, ListaImgs);
-
-            return Ok(juego);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar actualizar las imagenes del juego con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
 
     //Delete
     [HttpDelete("{id}")]
@@ -314,30 +289,5 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}/imagenes")]
-    public IActionResult EliminarImgsJuego(int id, [FromBody] List<int> ListaIdsReseñas)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para eliminar las imagenes del juego con ID: {id}.");
-
-            var juego = _juegoService.GetIdJuego(id);
-
-            if (juego is null)
-            {
-                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
-                return NotFound();
-            }
-
-            _juegoService.EliminarImgsJuego(id, ListaIdsReseñas);
-
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar eliminar la imagen del juego con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
 
 }

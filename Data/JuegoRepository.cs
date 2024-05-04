@@ -166,20 +166,6 @@ public class JuegoRepository : IJuegoRepository
         SaveChanges();
     }
 
-    public void UpdateImgsJuego(int idJuego, List<Imagen> ListaImgs)
-    {
-
-        var Imagenes = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
-
-        if (Imagenes is null)
-        {
-            throw new Exception($"No se encontro el Juego con el id {idJuego}");
-        }
-
-
-        Imagenes.ImgsJuego.Clear();
-        Imagenes.ImgsJuego.AddRange(ListaImgs);
-    }
 
     public void UpdateCategoriasJuego(int idJuego, List<Categoria> ListaCategoria)
     {
@@ -235,30 +221,6 @@ public class JuegoRepository : IJuegoRepository
         SaveChanges();
     }
 
-    public void EliminarImgsJuego(int id, List<int> ListaIdsImagenes)
-    {
-
-        foreach (var item in ListaIdsImagenes)
-        {
-            var reseña = _context.Imagenes.FirstOrDefault(r => r.Id == item);
-
-            if (reseña is null)
-            {
-                throw new Exception($"No se encontro la imagen con el ID: {item}");
-            }
-
-            var juego = _context.Juegos.FirstOrDefault(p => p.IdJuego == id);
-
-            if (juego is null)
-            {
-                throw new Exception($"No se encontro el juego con el ID: {id}");
-            }
-
-            juego.ImgsJuego.Remove(reseña);
-
-        }
-        SaveChanges();
-    }
 
     public void SaveChanges()
     {

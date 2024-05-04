@@ -15,7 +15,6 @@ public interface IProductoRepository
     //Update
     void UpdateProducto(ProductoDTO producto);
     void UpdateCategoriasProducto(int idProducto, List<Categoria> ListaCategoria);
-    void UpdateReseñaProducto(int idProducto, List<Reseña> ListaCategoria);
     //Delete
     void DeleteProducto(int idProducto);
     void EliminarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);

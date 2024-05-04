@@ -16,9 +16,9 @@ public class ReseñaController : ControllerBase
         _logger = logger;
         _reseñaService = reseñaService;
     }
-    
 
-    
+
+
     [HttpGet()]
     public ActionResult<List<Reseña>> GetAllReseñas()
     {
@@ -59,7 +59,7 @@ public class ReseñaController : ControllerBase
     }
 
     [HttpPost("crear")]
-    public IActionResult CreateReseña([FromBody] Reseña reseña)
+    public IActionResult CreateReseña([FromBody] ReseñaAddDTO reseña)
     {
         try
         {
@@ -76,23 +76,17 @@ public class ReseñaController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateReseña(int id, [FromBody] Reseña reseña)
+    public IActionResult UpdateReseña([FromBody] AprobarReseñaDTO reseña)
     {
         try
         {
-            _logger.LogInformation($"Se ha recibido una solicitud de actualización de la reseña con ID: {id}.");
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización de la reseña con ID: {reseña.IdReseña}.");
 
-            if (id != reseña.IdReseña)
-            {
-                _logger.LogError("El ID de la reseña en el cuerpo de la solicitud no coincide con el ID en la URL.");
-                return BadRequest();
-            }
-
-            var existingReseña = _reseñaService.GetIdReseña(id);
+            var existingReseña = _reseñaService.GetIdReseña(reseña.IdReseña);
 
             if (existingReseña is null)
             {
-                _logger.LogWarning($"No se encontró ningún reseña con ID: {id}.");
+                _logger.LogWarning($"No se encontró ningún reseña con ID: {reseña.IdReseña}.");
                 return NotFound();
             }
 
@@ -102,7 +96,7 @@ public class ReseñaController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar actualizar la reseña con ID {id}: {ex.Message}");
+            _logger.LogError($"Error al intentar actualizar la reseña con ID {reseña.IdReseña}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

@@ -17,7 +17,7 @@ public class ImagenController : ControllerBase
         _imagenService = imagenService;
     }
 
-    
+
     [HttpGet()]
     public ActionResult<List<Imagen>> GetAllImagenes()
     {
@@ -57,6 +57,55 @@ public class ImagenController : ControllerBase
         }
     }
 
+    [HttpGet("juego")]
+    public ActionResult<List<ImagenJuegoDTO>> GetImagenesJuego(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener el imagen del producto con ID: {id}.");
+
+            var imagen = _imagenService.GetImagenesJuego(id);
+
+            if (imagen == null)
+            {
+                _logger.LogWarning($"No se encontró ningún imagen del producto con ID: {id}.");
+                return NotFound();
+            }
+
+            return imagen;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener el imagen del producto con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpGet("producto")]
+    public ActionResult<List<ImagenProductoDTO>> GetImagenesProducto(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener el imagen del producto con ID: {id}.");
+
+            var imagen = _imagenService.GetImagenesProducto(id);
+
+            if (imagen == null)
+            {
+                _logger.LogWarning($"No se encontró ningún imagen del producto con ID: {id}.");
+                return NotFound();
+            }
+
+            return imagen;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener el imagen del producto con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    //Create
     [HttpPost("crear")]
     public IActionResult CreateImagen([FromBody] Imagen imagen)
     {
@@ -74,60 +123,126 @@ public class ImagenController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public IActionResult UpdateImagen(int id, [FromBody] Imagen imagen)
+    [HttpPost("producto")]
+    public IActionResult CreateImagenProducto([FromBody] List<ImagenProductoDTO> imagen)
     {
         try
         {
-            _logger.LogInformation($"Se ha recibido una solicitud de actualización del imagen con ID: {id}.");
+            _logger.LogInformation("Se ha recibido una solicitud de creación de imagenes.");
 
-            if (id != imagen.Id)
+            _imagenService.CreateImagenProducto(imagen);
+            return Ok(imagen);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar crear imagen: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("juego")]
+    public IActionResult CreateImagenJuego([FromBody] List<ImagenJuegoDTO> imagen)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de creación de imagenes.");
+
+            _imagenService.CreateImagenJuego(imagen);
+            return Ok(imagen);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar crear imagen: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+
+    //Update
+    [HttpPut("producto")]
+    public IActionResult UpdateImagenProducto([FromBody] List<ImagenProductoDTO> imagen)
+    {
+        try
+        {
+            foreach (var item in imagen)
             {
-                _logger.LogError("El ID del imagen en el cuerpo de la solicitud no coincide con el ID en la URL.");
-                return BadRequest();
+                _logger.LogInformation($"Se ha recibido una solicitud actualizar imagene con ID: {item.Id}.");
+
+                var existingImagen = _imagenService.GetIdImagen(item.Id);
+
+                if (existingImagen is null)
+                {
+                    _logger.LogWarning($"No se encontró ningún imagen con ID: {item.Id}.");
+                    return NotFound();
+                }
             }
 
-            var existingImagen = _imagenService.GetIdImagen(id);
-
-            if (existingImagen is null)
-            {
-                _logger.LogWarning($"No se encontró ningún imagen con ID: {id}.");
-                return NotFound();
-            }
-
-            _imagenService.UpdateImagen(imagen);
+            _imagenService.UpdateImagenProducto(imagen);
 
             return Ok(imagen);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar actualizar imagen con ID {id}: {ex.Message}");
+            _logger.LogError($"Error al intentar actualizar imagenes : {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteImagen(int id)
+    [HttpPut("juego")]
+    public IActionResult UpdateImagenJuego([FromBody] List<ImagenJuegoDTO> imagen)
     {
         try
         {
-            _logger.LogInformation($"Se ha recibido una solicitud para eliminar el imagen con ID: {id}.");
-
-            var imagen = _imagenService.GetIdImagen(id);
-
-            if (imagen is null)
+            foreach (var item in imagen)
             {
-                _logger.LogWarning($"No se encontró ningún imagen con ID: {id}.");
-                return NotFound();
+                _logger.LogInformation($"Se ha recibido una solicitud actualizar imagene con ID: {item.Id}.");
+
+                var existingImagen = _imagenService.GetIdImagen(item.Id);
+
+                if (existingImagen is null)
+                {
+                    _logger.LogWarning($"No se encontró ningún imagen con ID: {item.Id}.");
+                    return NotFound();
+                }
             }
 
-            _imagenService.DeleteImagen(id);
+            _imagenService.UpdateImagenJuego(imagen);
+
+            return Ok(imagen);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar actualizar imagenes : {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    //Delete
+    [HttpDelete("{id}")]
+    public IActionResult DeleteImagen([FromBody] List<int> ids)
+    {
+        try
+        {
+
+            foreach (var item in ids)
+            {
+                _logger.LogInformation($"Se ha recibido una solicitud para eliminar el imagen con ID: {ids}.");
+                var imagen = _imagenService.GetIdImagen(item);
+
+                if (imagen is null)
+                {
+                    _logger.LogWarning($"No se encontró ningún imagen con ID: {item}.");
+                    return NotFound();
+                }
+            }
+
+            _imagenService.DeleteImagen(ids);
 
             return Ok();
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar eliminar imagen con ID {id}: {ex.Message}");
+            _logger.LogError($"Error al intentar eliminar imagenes: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

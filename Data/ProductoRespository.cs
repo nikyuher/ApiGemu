@@ -111,9 +111,7 @@ public class ProductoRepository : IProductoRepository
             producto.Categorias.Add(categoria);
 
         }
-
         SaveChanges();
-
     }
 
     public void AsignarReseñaProducto(int idProducto, List<int> ListaIdsReseñas)
@@ -159,20 +157,6 @@ public class ProductoRepository : IProductoRepository
         SaveChanges();
     }
 
-    public void UpdateImgsProducto(int idProducto, List<Imagen> ListaImgs)
-    {
-
-        var Imagenes = _context.Productos.FirstOrDefault(r => r.IdProducto == idProducto);
-
-        if (Imagenes is null)
-        {
-            throw new Exception($"No se encontro el Producto con el id {idProducto}");
-        }
-
-
-        Imagenes.ImgsProducto.Clear();
-        Imagenes.ImgsProducto.AddRange(ListaImgs);
-    }
 
     public void UpdateCategoriasProducto(int idProducto, List<Categoria> ListaCategoria)
     {
@@ -238,35 +222,6 @@ public class ProductoRepository : IProductoRepository
             producto.Categorias.Remove(categoria);
 
         }
-
-        SaveChanges();
-
-    }
-
-
-    public void EliminarImgsProducto(int idProducto, List<int> ListaIdsImagenes)
-    {
-
-        foreach (var item in ListaIdsImagenes)
-        {
-            var reseña = _context.Imagenes.FirstOrDefault(r => r.Id == item);
-
-            if (reseña is null)
-            {
-                throw new Exception($"No se encontro la imagen con el ID: {item}");
-            }
-
-            var producto = _context.Productos.FirstOrDefault(p => p.IdProducto == idProducto);
-
-            if (producto is null)
-            {
-                throw new Exception($"No se encontro el producto con el ID: {idProducto}");
-            }
-
-            producto.ImgsProducto.Remove(reseña);
-
-        }
-
         SaveChanges();
 
     }

@@ -209,32 +209,6 @@ public class ProductoController : ControllerBase
         }
     }
 
-    [HttpPut("{id}/imagenes")]
-    public IActionResult UpdateImgsProducto(int id, [FromBody] List<Imagen> ListaImgs)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para actualizar las imagenes");
-
-            var producto = _productoService.GetIdProducto(id);
-
-            if (producto is null)
-            {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
-                return NotFound();
-            }
-
-            _productoService.UpdateImgsProducto(id, ListaImgs);
-
-            return Ok(producto);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar actualizar las imagenes de producto con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
-
     [HttpPut("{id}/categorias")]
     public IActionResult UpdateCategoriasProducto(int id, [FromBody] List<Categoria> ListaCategoria)
     {
@@ -340,29 +314,4 @@ public class ProductoController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}/imagenes")]
-    public IActionResult EliminarImgsProducto(int id, List<int> ListaIdsImgs)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para eliminar el producto con ID: {id}.");
-
-            var producto = _productoService.GetIdProducto(id);
-
-            if (producto is null)
-            {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
-                return NotFound();
-            }
-
-            _productoService.EliminarImgsProducto(id, ListaIdsImgs);
-
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar eliminar las imagenes del producto con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
 }

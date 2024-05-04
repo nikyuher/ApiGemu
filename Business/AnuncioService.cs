@@ -11,10 +11,16 @@ public class AnuncioService : IAnuncioService
         _anuncioRepository = repository;
     }
 
-    public List<Anuncio> GetAllAnuncios(){
+    public List<Anuncio> GetAllAnuncios()
+    {
         return _anuncioRepository.GetAllAnuncios();
     }
-    public Anuncio GetIdAnuncio(int idAnuncio){
+    public List<AnuncioDTO> GetAnunciosUsuario(int idUsuario)
+    {
+        return _anuncioRepository.GetAnunciosUsuario(idUsuario);
+    }
+    public Anuncio GetIdAnuncio(int idAnuncio)
+    {
         return _anuncioRepository.GetIdAnuncio(idAnuncio);
     }
     public void CreateAnuncio(Anuncio anuncio)

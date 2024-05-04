@@ -11,22 +11,46 @@ public class UsuarioService : IUsuarioService
         _usuarioRepository = repository;
     }
 
-    public List<Usuario> GetAllUsuarios()
+    public List<UsuarioDTO> GetAllUsuarios()
     {
         return _usuarioRepository.GetAllUsuarios();
     }
-    public Usuario GetIdUsuario(int idUsuario)
+    //Read
+    public UsuarioDTO GetIdUsuario(int idUsuario)
     {
         return _usuarioRepository.GetIdUsuario(idUsuario);
     }
-    public void CreateUsuario(Usuario usuario)
+    public Usuario LoginUsuario(UsuarioLoginDTO usuario)
+    {
+       return _usuarioRepository.LoginUsuario(usuario);
+    }
+    //Create
+    public void CreateUsuario(UsuarioCreateDTO usuario)
     {
         _usuarioRepository.CreateUsuario(usuario);
     }
+    //Update
     public void UpdateUsuario(Usuario usuario)
     {
         _usuarioRepository.UpdateUsuario(usuario);
     }
+    public void UpdateRolUsuario(UsuarioUpdateDTO usuario)
+    {
+        _usuarioRepository.UpdateRolUsuario(usuario);
+    }
+    public void UpdateDireccionUsuario(UsuarioDireccionDTO usuario)
+    {
+        _usuarioRepository.UpdateDireccionUsuario(usuario);
+    }
+    public void UpdateInfoUsuario(UsuarioInfoDTO usuario)
+    {
+        _usuarioRepository.UpdateInfoUsuario(usuario);
+    }
+    public void UpdateFotoUsuario(UsuarioFotoDTO usuario)
+    {
+        _usuarioRepository.UpdateFotoUsuario(usuario);
+    }
+    //Delete
     public void DeleteUsuario(int idUsuario)
     {
         _usuarioRepository.DeleteUsuario(idUsuario);

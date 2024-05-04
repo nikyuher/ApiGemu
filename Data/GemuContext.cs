@@ -12,6 +12,11 @@ public class GemuContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Relación entre Usuario y Rol
+        modelBuilder.Entity<Usuario>()
+            .HasOne(u => u.Rol)
+            .WithMany(r => r.Usuarios)
+            .HasForeignKey(u => u.IdRol);
         // Relación entre Usuario y Transaccion
         modelBuilder.Entity<Usuario>()
             .HasMany(u => u.Transacciones)
@@ -62,15 +67,15 @@ public class GemuContext : DbContext
 
         // Relación entre Producto y Carrito
         modelBuilder.Entity<Producto>()
-            .HasOne(p => p.Carrito) 
-            .WithMany(c => c.Productos) 
+            .HasOne(p => p.Carrito)
+            .WithMany(c => c.Productos)
             .HasForeignKey(p => p.IdCarrito);
 
         // Relación entre Juego y Carrito
         modelBuilder.Entity<Juego>()
-            .HasOne(j => j.Carrito) 
-            .WithMany(c => c.Juegos) 
-            .HasForeignKey(j => j.IdCarrito); 
+            .HasOne(j => j.Carrito)
+            .WithMany(c => c.Juegos)
+            .HasForeignKey(j => j.IdCarrito);
 
         // Relación entre Producto y Reseña
         modelBuilder.Entity<Producto>()
@@ -107,6 +112,16 @@ public class GemuContext : DbContext
             .HasOne(i => i.Producto)
             .WithMany(p => p.ImgsProducto)
             .HasForeignKey(i => i.ProductoId);
+
+        modelBuilder.Entity<Rol>().HasData(
+        new Rol { IdRol = 1, Nombre = "Usuario" },
+        new Rol { IdRol = 2, Nombre = "Admin"}
+        );
+        
+        modelBuilder.Entity<Usuario>().HasData(
+            new Usuario{ IdUsuario = 1, IdRol=2, Nombre= "Admin", Correo ="admin@gmail.com", Contraseña ="ADMINcontraseña123@"}
+        );
+
     }
 
     public DbSet<Usuario> Usuarios { get; set; }
@@ -119,4 +134,5 @@ public class GemuContext : DbContext
     public DbSet<Anuncio> Anuncios { get; set; }
     public DbSet<Imagen> Imagenes { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
+    public DbSet<Rol> Roles { get; set; }
 }

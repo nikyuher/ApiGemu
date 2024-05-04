@@ -163,6 +163,10 @@ namespace Gemu.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("Descuento")
                         .HasColumnType("int");
 
@@ -306,6 +310,35 @@ namespace Gemu.Data.Migrations
                     b.ToTable("Reseñas");
                 });
 
+            modelBuilder.Entity("Gemu.Models.Rol", b =>
+                {
+                    b.Property<int>("IdRol")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRol"), 1L, 1);
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdRol");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            IdRol = 1,
+                            Nombre = "Usuario"
+                        },
+                        new
+                        {
+                            IdRol = 2,
+                            Nombre = "Admin"
+                        });
+                });
+
             modelBuilder.Entity("Gemu.Models.Transaccion", b =>
                 {
                     b.Property<int>("IdTransaccion")
@@ -325,6 +358,9 @@ namespace Gemu.Data.Migrations
 
                     b.Property<string>("Nota")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("IdTransaccion");
 
@@ -358,13 +394,33 @@ namespace Gemu.Data.Migrations
                     b.Property<byte[]>("FotoPerfil")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<int>("IdRol")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("SaldoActual")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("IdUsuario");
 
+                    b.HasIndex("IdRol");
+
                     b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            IdUsuario = 1,
+                            CodigoPostal = 0,
+                            Contraseña = "ADMINcontraseña123@",
+                            Correo = "admin@gmail.com",
+                            IdRol = 2,
+                            Nombre = "Admin",
+                            SaldoActual = 0m
+                        });
                 });
 
             modelBuilder.Entity("Gemu.Models.Anuncio", b =>
@@ -530,6 +586,17 @@ namespace Gemu.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("Gemu.Models.Usuario", b =>
+                {
+                    b.HasOne("Gemu.Models.Rol", "Rol")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("IdRol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rol");
+                });
+
             modelBuilder.Entity("Gemu.Models.Biblioteca", b =>
                 {
                     b.Navigation("Juegos");
@@ -564,6 +631,11 @@ namespace Gemu.Data.Migrations
                     b.Navigation("ImgsProducto");
 
                     b.Navigation("Reseñas");
+                });
+
+            modelBuilder.Entity("Gemu.Models.Rol", b =>
+                {
+                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("Gemu.Models.Usuario", b =>

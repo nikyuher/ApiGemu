@@ -31,22 +31,31 @@ public class ReseñaRepository : IReseñaRepository
     }
 
     //Create
-    public void CreateReseña(Reseña reseña)
+    public void CreateReseña(ReseñaAddDTO reseña)
     {
-        _context.Reseñas.Add(reseña);
+        var newReseña = new Reseña
+        {
+            IdUsuario = reseña.IdUsuario,
+            Comentario = reseña.Comentario,
+            Solicitud = "pendiente",
+            Calificacion = reseña.Calificacion
+        };
+        _context.Reseñas.Add(newReseña);
         SaveChanges();
     }
 
     //Update
-    public void UpdateReseña(Reseña reseña)
+    public void UpdateReseña(AprobarReseñaDTO reseña)
     {
-        var existingReseña = _context.Reseñas.Find(reseña.IdReseña);
-        if (existingReseña == null)
+        var newReseña = _context.Reseñas.FirstOrDefault(r => r.IdReseña == reseña.IdReseña);
+
+        if (newReseña is null)
         {
-            throw new KeyNotFoundException("No se encontró el Reseña a actualizar.");
+            throw new Exception($"No se encontro el Reseña con el ID: {reseña.IdReseña}");
         }
 
-        _context.Entry(existingReseña).CurrentValues.SetValues(reseña);
+        newReseña.Solicitud = reseña.Solicitud;
+        _context.Update(reseña);
         SaveChanges();
     }
 

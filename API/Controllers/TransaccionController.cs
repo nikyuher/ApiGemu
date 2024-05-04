@@ -17,8 +17,8 @@ public class TransaccionController : ControllerBase
         _transaccionService = transaccionService;
     }
 
-        [HttpGet()]
-    public ActionResult<List<Transaccion>> GetAllTransacciones()
+    [HttpGet(Name = "GetAllTransacciones")]
+    public ActionResult<List<TransaccionDTO>> GetAllTransacciones()
     {
         try
         {
@@ -32,7 +32,22 @@ public class TransaccionController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("usuario", Name ="GetTransaccionesUsuario")]
+    public ActionResult<List<Transaccion>> GetTransaccionesUsuario(int idUsuario)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener todas las transacciones del usuario con el ID {idUsuario}.");
+            return _transaccionService.GetTransaccionesUsuario(idUsuario);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todas las transaccion: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpGet("{id}",Name ="GetTransaccionId")]
     public ActionResult<Transaccion> GetTransaccionId(int id)
     {
         try
@@ -56,14 +71,14 @@ public class TransaccionController : ControllerBase
         }
     }
 
-    [HttpPost("crear")]
-    public IActionResult CreateTransaccion([FromBody] Transaccion transaccion)
+    [HttpPost("añadir-fondos", Name = "AñadirFondos")]
+    public IActionResult AñadirCantidadTransaccion([FromBody] Transaccion transaccion)
     {
         try
         {
-            _logger.LogInformation("Se ha recibido una solicitud de creación de una transaccion.");
+            _logger.LogInformation("Se ha recibido una solicitado añadir Saldo.");
 
-            _transaccionService.CreateTransaccion(transaccion);
+            _transaccionService.AñadirCantidadTransaccion(transaccion);
             return Ok(transaccion);
         }
         catch (Exception ex)
@@ -73,7 +88,24 @@ public class TransaccionController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPost("restar-fondos", Name = "RestarFondos")]
+    public IActionResult RestarCantidadTransaccion([FromBody] Transaccion transaccion)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de restar Saldo.");
+
+            _transaccionService.RestarCantidadTransaccion(transaccion);
+            return Ok(transaccion);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar crear una transaccion: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPut(Name="PutTransaccion")]
     public IActionResult UpdateTransaccion(int id, [FromBody] Transaccion transaccion)
     {
         try
@@ -105,7 +137,7 @@ public class TransaccionController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete(Name ="DeleteTransaccion")]
     public IActionResult DeleteTransaccion(int id)
     {
         try

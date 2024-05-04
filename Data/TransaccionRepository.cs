@@ -9,14 +9,24 @@ public class TransaccionRepository : ITransaccionRepository
     {
         _context = context;
     }
-    public List<Transaccion> GetAllTransacciones()
+
+    //Read
+    public List<TransaccionDTO> GetAllTransacciones()
     {
         var transacciones = _context.Transacciones.ToList();
 
-        return transacciones;
-    }
+        var newTransacciones = transacciones.Select(transaccion => new TransaccionDTO
+        {
+            IdTransaccion = transaccion.IdTransaccion,
+            IdUsuario = transaccion.IdUsuario,
+            Total = transaccion.Total,
+            Cantidad = transaccion.Cantidad,
+            Nota = transaccion.Nota,
+            Fecha = transaccion.Fecha
+        }).ToList();
 
-    //Read
+        return newTransacciones;
+    }
     public Transaccion GetIdTransaccion(int idTransaccion)
     {
         var transaccion = _context.Transacciones.FirstOrDefault(r => r.IdTransaccion == idTransaccion);
@@ -29,12 +39,66 @@ public class TransaccionRepository : ITransaccionRepository
         return transaccion;
     }
 
-    //Create
-    public void CreateTransaccion(Transaccion transaccion)
+    public List<Transaccion> GetTransaccionesUsuario(int idUsuario)
     {
+        var transacciones = _context.Transacciones.Where(r => r.IdUsuario == idUsuario).ToList();
+
+        if (transacciones is null)
+        {
+            throw new Exception($"No se encontro el Transaccion del usuario con el ID: {idUsuario}");
+        }
+
+        return transacciones;
+
+    }
+
+    //Create
+    public void AñadirCantidadTransaccion(Transaccion transaccion)
+    {
+
+        var usuario = _context.Usuarios.Find(transaccion.IdUsuario);
+        if (usuario == null)
+        {
+            throw new KeyNotFoundException("No se encontró el usuario asociado con la transacción.");
+        }
+
+        if (transaccion.Cantidad <= 0)
+        {
+            throw new Exception("No se pueden añadir fondos negativos");
+        }
+
+        transaccion.Total = usuario.SaldoActual;
+        usuario.SaldoActual += transaccion.Cantidad;
+
+
         _context.Transacciones.Add(transaccion);
         SaveChanges();
     }
+
+    public void RestarCantidadTransaccion(Transaccion transaccion)
+    {
+
+        var usuario = _context.Usuarios.Find(transaccion.IdUsuario);
+        if (usuario == null)
+        {
+            throw new KeyNotFoundException("No se encontró el usuario asociado con la transacción.");
+        }
+
+        if ((usuario.SaldoActual - transaccion.Cantidad) < 0)
+        {
+            throw new Exception("Se supero el Saldo de tu cuenta");
+        }
+
+        transaccion.Total = usuario.SaldoActual;
+        transaccion.Cantidad = -transaccion.Cantidad;
+
+        usuario.SaldoActual += transaccion.Cantidad;
+
+
+        _context.Transacciones.Add(transaccion);
+        SaveChanges();
+    }
+
 
     //Update
     public void UpdateTransaccion(Transaccion transaccion)

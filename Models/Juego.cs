@@ -1,4 +1,5 @@
 namespace Gemu.Models;
+
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 public class Juego
@@ -7,6 +8,8 @@ public class Juego
     public int IdJuego { get; set; }
     [Required]
     public string? Titulo { get; set; }
+    [Required]
+    public string? Descripcion { get; set; }
     [Required]
     public decimal Precio { get; set; }
     public decimal PrecioFinal
@@ -20,6 +23,7 @@ public class Juego
             return Precio;
         }
     }
+
     [Required]
     public string? Plataforma { get; set; }
     public int? Descuento { get; set; }
@@ -67,4 +71,5 @@ public class Juego
     public int? IdCategoria { get; set; }
     [JsonIgnore]
     public Categoria? Categoria { get; set; }
+
 }

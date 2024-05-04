@@ -11,6 +11,8 @@ public class ImagenService : IImagenService
         _imagenRepository = repository;
     }
 
+
+    //Read
     public List<Imagen> GetAllImagenes()
     {
         return _imagenRepository.GetAllImagenes();
@@ -19,16 +21,41 @@ public class ImagenService : IImagenService
     {
         return _imagenRepository.GetIdImagen(idImagen);
     }
+    public List<ImagenJuegoDTO> GetImagenesJuego(int id)
+    {
+        return _imagenRepository.GetImagenesJuego(id);
+    }
+    public List<ImagenProductoDTO> GetImagenesProducto(int id)
+    {
+        return _imagenRepository.GetImagenesProducto(id);
+    }
+    //Create
     public void CreateImagen(Imagen imagen)
     {
         _imagenRepository.CreateImagen(imagen);
     }
-    public void UpdateImagen(Imagen imagen)
+    public void CreateImagenJuego(List<ImagenJuegoDTO> Listaimagen)
     {
-        _imagenRepository.UpdateImagen(imagen);
+        _imagenRepository.CreateImagenJuego(Listaimagen);
     }
-    public void DeleteImagen(int idImagen)
+    public void CreateImagenProducto(List<ImagenProductoDTO> Listaimagen)
     {
-        _imagenRepository.DeleteImagen(idImagen);
+        _imagenRepository.CreateImagenProducto(Listaimagen);
+    }
+
+    //Update
+    public void UpdateImagenJuego(List<ImagenJuegoDTO> ListaImagen)
+    {
+        _imagenRepository.UpdateImagenJuego(ListaImagen);
+    }
+    public void UpdateImagenProducto(List<ImagenProductoDTO> ListaImagen)
+    {
+        _imagenRepository.UpdateImagenProducto(ListaImagen);
+    }
+
+    //Delete
+    public void DeleteImagen(List<int> ListaIds)
+    {
+        _imagenRepository.DeleteImagen(ListaIds);
     }
 }

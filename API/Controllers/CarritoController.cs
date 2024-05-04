@@ -17,7 +17,7 @@ public class CarritoController : ControllerBase
         _carritoService = carritoService;
     }
 
-    
+
     [HttpGet()]
     public ActionResult<List<Carrito>> GetAllCarritos()
     {
@@ -57,19 +57,77 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [HttpPost("crear")]
-    public IActionResult CreateCarrito([FromBody] Carrito carrito)
+        [HttpGet("usuario")]
+    public ActionResult<CarritoListaDTO> GetBibliotecaUsuario(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener el carrito con ID: {id}.");
+
+            var biblioteca = _carritoService.GetCarritoUsuario(id);
+
+            if (biblioteca == null)
+            {
+                _logger.LogWarning($"No se encontró ningúna carrito con ID: {id}.");
+                return NotFound();
+            }
+
+            return Ok(biblioteca);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener el carrito con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpPost("asignar-usuario")]
+    public IActionResult CreateCarritoUsuario([FromBody] CarritoDTO carrito)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de carrito.");
 
-            _carritoService.CreateCarrito(carrito);
+            _carritoService.CreateCarritoUsuario(carrito);
             return Ok(carrito);
         }
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar crear carrito: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/añadir-producto")]
+    public IActionResult AñadirProductoCarrito(int id, [FromBody] List<int> producto)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de añadir un producto al carrito.");
+
+            _carritoService.AñadirProductoCarrito(id, producto);
+            return Ok(producto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar añadir un producto al carrito: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/añadir-juego")]
+    public IActionResult AñadirJuegoCarrito(int id, [FromBody] List<int> juego)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de añadir un juego al carrito.");
+
+            _carritoService.AñadirJuegoCarrito(id, juego);
+            return Ok(juego);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar añadir un juego al carrito: {ex.Message}");
             return BadRequest(new { message = ex.Message });
         }
     }
@@ -128,6 +186,58 @@ public class CarritoController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar eliminar carrito con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+        [HttpDelete("{id}/producto")]
+    public IActionResult EliminarProductoCarrito(int id, int idProduct)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar un producto con ID: {id}.");
+
+            var user = _carritoService.GetIdCarrito(id);
+
+            if (user is null)
+            {
+                _logger.LogWarning($"No se encontró ningún carrito con ID: {id}.");
+                return NotFound();
+            }
+
+            _carritoService.EliminarProductoCarrito(id, idProduct);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar eliminar un producto del carrito con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpDelete("{id}/juego")]
+    public IActionResult EliminarJuegoCarrito(int id, int idJuego)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar un juego con ID: {id}.");
+
+            var user = _carritoService.GetIdCarrito(id);
+
+            if (user is null)
+            {
+                _logger.LogWarning($"No se encontró ningún carrito con ID: {id}.");
+                return NotFound();
+            }
+
+            _carritoService.EliminarJuegoCarrito(id, idJuego);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar eliminar un juego del carrito con ID {id}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

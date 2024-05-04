@@ -3,9 +3,18 @@ using Gemu.Models;
 namespace Gemu.Data;
 public interface IUsuarioRepository
 {
-    public List<Usuario> GetAllUsuarios();
-    public Usuario GetIdUsuario(int idUsuario);
-    void CreateUsuario(Usuario usuario);
+    public List<UsuarioDTO> GetAllUsuarios();
+    //Read
+    public UsuarioDTO GetIdUsuario(int idUsuario);
+    public Usuario LoginUsuario(UsuarioLoginDTO loginDTO);
+    //Create
+    void CreateUsuario(UsuarioCreateDTO usuario);
+    //Update
     void UpdateUsuario(Usuario usuario);
+    void UpdateRolUsuario(UsuarioUpdateDTO usuario);
+    void UpdateDireccionUsuario(UsuarioDireccionDTO usuario);
+    void UpdateInfoUsuario(UsuarioInfoDTO usuario);
+    void UpdateFotoUsuario(UsuarioFotoDTO usuario);
+    //Delete
     void DeleteUsuario(int idUsuario);
 }

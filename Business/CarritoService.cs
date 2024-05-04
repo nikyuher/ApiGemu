@@ -10,6 +10,8 @@ public class CarritoService : ICarritoService
     {
         _carritoRepository = repository;
     }
+
+    //Read
     public List<Carrito> GetAllCarritos()
     {
         return _carritoRepository.GetAllCarritos();
@@ -18,16 +20,44 @@ public class CarritoService : ICarritoService
     {
         return _carritoRepository.GetIdCarrito(idCarrito);
     }
-    public void CreateCarrito(Carrito carrito)
+    public CarritoListaDTO GetCarritoUsuario(int idUsuario)
     {
-        _carritoRepository.CreateCarrito(carrito);
+        return _carritoRepository.GetCarritoUsuario(idUsuario);
     }
+    //Create
+    public void CreateCarritoUsuario(CarritoDTO carrito)
+    {
+        _carritoRepository.CreateCarritoUsuario(carrito);
+    }
+
+    public void AñadirProductoCarrito(int idBiblioteca, List<int> ListaIdsProducto)
+    {
+        _carritoRepository.AñadirProductoCarrito(idBiblioteca, ListaIdsProducto);
+    }
+
+    public void AñadirJuegoCarrito(int idBiblioteca, List<int> ListaIdsJuego)
+    {
+        _carritoRepository.AñadirJuegoCarrito(idBiblioteca, ListaIdsJuego);
+    }
+
+    //Update
     public void UpdateCarrito(Carrito carrito)
     {
         _carritoRepository.UpdateCarrito(carrito);
     }
+    //Delete
     public void DeleteCarrito(int idCarrito)
     {
         _carritoRepository.DeleteCarrito(idCarrito);
+    }
+
+        public void EliminarProductoCarrito(int idBiblioteca, int idProducto)
+    {
+        _carritoRepository.EliminarProductoCarrito(idBiblioteca, idProducto);
+    }
+
+    public void EliminarJuegoCarrito(int idBiblioteca, int idJuego)
+    {
+        _carritoRepository.EliminarJuegoCarrito(idBiblioteca, idJuego);
     }
 }

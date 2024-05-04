@@ -17,9 +17,9 @@ public class BibliotecaController : ControllerBase
         _bibliotecaService = bibliotecaService;
     }
 
-    
+
     [HttpGet()]
-    public ActionResult<List<Biblioteca>> GetAllBibliotecas()
+    public ActionResult<List<BibliotecaListaDTO>> GetAllBibliotecas()
     {
         try
         {
@@ -34,7 +34,7 @@ public class BibliotecaController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Biblioteca> GetBiblioteId(int id)
+    public ActionResult<BibliotecaListaDTO> GetBiblioteId(int id)
     {
         try
         {
@@ -48,7 +48,7 @@ public class BibliotecaController : ControllerBase
                 return NotFound();
             }
 
-            return biblioteca;
+            return Ok(biblioteca);
         }
         catch (Exception ex)
         {
@@ -57,19 +57,77 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [HttpPost("crear")]
-    public IActionResult CreateBiblioteca([FromBody] Biblioteca biblioteca)
+    [HttpGet("usuario")]
+    public ActionResult<BibliotecaListaDTO> GetBibliotecaUsuario(int id)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener la bibliote con ID: {id}.");
+
+            var biblioteca = _bibliotecaService.GetBibliotecaUsuario(id);
+
+            if (biblioteca == null)
+            {
+                _logger.LogWarning($"No se encontró ningúna biblioteca con ID: {id}.");
+                return NotFound();
+            }
+
+            return Ok(biblioteca);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener la biblioteca con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpPost("añadir-usuario")]
+    public IActionResult CreateBibliotecaUsuario([FromBody] BibliotecaDTO biblioteca)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación una biblioteca.");
 
-            _bibliotecaService.CreateBiblioteca(biblioteca);
+            _bibliotecaService.CreateBibliotecaUsuario(biblioteca);
             return Ok(biblioteca);
         }
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar crear una biblioteca: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/añadir-producto")]
+    public IActionResult AñadirProductoBiblioteca(int id, [FromBody] List<int> producto)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de añadir un producto a la biblioteca.");
+
+            _bibliotecaService.AñadirProductoBiblioteca(id, producto);
+            return Ok(producto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar añadir un producto a la biblioteca: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+        [HttpPost("{id}/asignar-juego")]
+    public IActionResult AñadirJuegoBiblioteca(int id, [FromBody] List<int> juego)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de añadir un juego a la biblioteca.");
+
+            _bibliotecaService.AñadirJuegoBiblioteca(id, juego);
+            return Ok(juego);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar añadir un juego a la biblioteca: {ex.Message}");
             return BadRequest(new { message = ex.Message });
         }
     }
@@ -128,6 +186,58 @@ public class BibliotecaController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar eliminar la biblioteca con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpDelete("{id}/producto")]
+    public IActionResult EliminarProductoBiblioteca(int id, int idProduct)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar un producto con ID: {id}.");
+
+            var user = _bibliotecaService.GetIdBiblioteca(id);
+
+            if (user is null)
+            {
+                _logger.LogWarning($"No se encontró ningúna biblioteca con ID: {id}.");
+                return NotFound();
+            }
+
+            _bibliotecaService.EliminarProductoBiblioteca(id, idProduct);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar eliminar un producto de biblioteca con ID {id}: {ex.Message}");
+            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+        }
+    }
+
+    [HttpDelete("{id}/juego")]
+    public IActionResult EliminarJuegoBiblioteca(int id, int idJuego)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar un juego con ID: {id}.");
+
+            var user = _bibliotecaService.GetIdBiblioteca(id);
+
+            if (user is null)
+            {
+                _logger.LogWarning($"No se encontró ningúna biblioteca con ID: {id}.");
+                return NotFound();
+            }
+
+            _bibliotecaService.EliminarJuegoBiblioteca(id, idJuego);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar eliminar un juego de biblioteca con ID {id}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

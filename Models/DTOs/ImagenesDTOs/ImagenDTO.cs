@@ -1,7 +1,8 @@
 namespace Gemu.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-public class Imagen
+public class ImagenDTO
 {
     [Key]
     public int Id { get; set; }
@@ -10,10 +11,5 @@ public class Imagen
     public byte[]? Datos { get; set; }
     
     public bool EsPortada { get; set; }
-    
-    public int? JuegoId { get; set; }
-    public Juego? Juego { get; set; }
-    
-    public int? ProductoId { get; set; }
-    public Producto? Producto { get; set; }
+
 }

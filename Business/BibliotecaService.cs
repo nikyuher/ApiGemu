@@ -11,24 +11,53 @@ public class BibliotecaService : IBibliotecaService
         _bibliotecaRepository = repository;
     }
 
-    public List<Biblioteca> GetAllBibliotecas()
+    //Read
+    public List<BibliotecaListaDTO> GetAllBibliotecas()
     {
         return _bibliotecaRepository.GetAllBibliotecas();
     }
-    public Biblioteca GetIdBiblioteca(int idBiblioteca)
+    public BibliotecaListaDTO GetIdBiblioteca(int idBiblioteca)
     {
         return _bibliotecaRepository.GetIdBiblioteca(idBiblioteca);
     }
-    public void CreateBiblioteca(Biblioteca biblioteca)
+    public BibliotecaListaDTO GetBibliotecaUsuario(int idUsuario)
     {
-        _bibliotecaRepository.CreateBiblioteca(biblioteca);
+        return _bibliotecaRepository.GetBibliotecaUsuario(idUsuario);
     }
+    //Create
+    public void CreateBibliotecaUsuario(BibliotecaDTO biblioteca)
+    {
+        _bibliotecaRepository.CreateBibliotecaUsuario(biblioteca);
+    }
+
+    public void AñadirProductoBiblioteca(int idBiblioteca, List<int> ListaIdsProducto)
+    {
+        _bibliotecaRepository.AñadirProductoBiblioteca(idBiblioteca, ListaIdsProducto);
+    }
+    
+    public void AñadirJuegoBiblioteca(int idBiblioteca, List<int> ListaIdsJuego)
+    {
+        _bibliotecaRepository.AñadirJuegoBiblioteca(idBiblioteca, ListaIdsJuego);
+    }
+
+    //Update
     public void UpdateBiblioteca(Biblioteca biblioteca)
     {
         _bibliotecaRepository.UpdateBiblioteca(biblioteca);
     }
+    //Delete
     public void DeleteBiblioteca(int idBiblioteca)
     {
         _bibliotecaRepository.DeleteBiblioteca(idBiblioteca);
+    }
+
+    public void EliminarProductoBiblioteca(int idBiblioteca, int idProducto)
+    {
+        _bibliotecaRepository.EliminarProductoBiblioteca(idBiblioteca, idProducto);
+    }
+
+    public void EliminarJuegoBiblioteca(int idBiblioteca, int idJuego)
+    {
+        _bibliotecaRepository.EliminarJuegoBiblioteca(idBiblioteca, idJuego);
     }
 }

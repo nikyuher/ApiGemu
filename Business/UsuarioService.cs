@@ -100,4 +100,40 @@ public class UsuarioService : IUsuarioService
 
         return tokenHandler.WriteToken(token);
     }
+
+    public bool HasAccessToResource(ClaimsPrincipal user, int resourceOwnerId)
+    {
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+
+        // Obtener el ID del usuario desde el claim
+        var userIdClaim = user.FindFirst(JwtRegisteredClaimNames.Sub);
+        if (userIdClaim == null)
+        {
+            return false; // No se encontró el claim del ID del usuario
+        }
+
+        int userId;
+        if (!int.TryParse(userIdClaim.Value, out userId))
+        {
+            return false; // El claim del ID del usuario no es válido
+        }
+
+        // Verifica si el usuario es el propietario del recurso
+        if (userId == resourceOwnerId)
+        {
+            return true; // El usuario es el propietario del recurso
+        }
+
+        // Verifica si el usuario tiene el rol necesario para acceder al recurso
+        var roleClaim = user.FindFirst(ClaimTypes.Role);
+        if (roleClaim != null && (roleClaim.Value == "Admin"))
+        {
+            return true; // El usuario tiene un rol adecuado para acceder al recurso
+        }
+
+        return false;
+    }
 }

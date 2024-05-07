@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
 using Microsoft.AspNetCore.Authorization;
-
+using System.IdentityModel.Tokens.Jwt;
 namespace Gemu.API.Controllers;
 
 [ApiController]
@@ -270,6 +270,16 @@ public class UsuarioController : ControllerBase
         try
         {
             _logger.LogInformation($"Se ha recibido una solicitud para eliminar el usuario con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_usuarioService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
+            }
 
             var user = _usuarioService.GetIdUsuario(id);
 

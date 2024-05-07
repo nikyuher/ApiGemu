@@ -8,7 +8,7 @@ public interface IUsuarioService
     public UsuarioDTO GetIdUsuario(int idUsuario);
     public Usuario LoginUsuario(UsuarioLoginDTO loginDTO);
     //Create
-    void CreateUsuario(UsuarioCreateDTO usuario);
+    public Usuario CreateUsuario(UsuarioCreateDTO usuario);
     //Update
     void UpdateUsuario(Usuario usuario);
     void UpdateRolUsuario(UsuarioUpdateDTO usuario);
@@ -17,4 +17,8 @@ public interface IUsuarioService
     void UpdateFotoUsuario(UsuarioFotoDTO usuario);
     //Delete
     void DeleteUsuario(int idUsuario);
+
+    //Auth
+
+    string GenerateJwtToken(Usuario usuario);
 }

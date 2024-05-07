@@ -18,8 +18,5 @@ public interface IUsuarioService
     //Delete
     void DeleteUsuario(int idUsuario);
 
-    //Auth
 
-    string GenerateJwtToken(Usuario usuario);
-    public bool HasAccessToResource(ClaimsPrincipal user, int resourceOwnerId);
 }

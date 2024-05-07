@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IJuegoService, JuegoService>();
 builder.Services.AddScoped<IProductoService, ProductoService>();

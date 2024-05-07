@@ -11,11 +11,13 @@ public class UsuarioController : ControllerBase
 {
     private readonly ILogger<UsuarioController> _logger;
     private readonly IUsuarioService _usuarioService;
+    private readonly IAuthService _authService;
 
-    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioService usuarioService)
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioService usuarioService, IAuthService authService)
     {
         _logger = logger;
         _usuarioService = usuarioService;
+        _authService = authService;
     }
 
     [Authorize(Roles = "Admin")]
@@ -67,7 +69,7 @@ public class UsuarioController : ControllerBase
 
             var usuario = _usuarioService.LoginUsuario(loginRequest);
 
-            var token = _usuarioService.GenerateJwtToken(usuario);
+            var token = _authService.GenerateJwtToken(usuario);
 
             // Devolver el token al cliente
             return Ok(new { token });
@@ -90,7 +92,7 @@ public class UsuarioController : ControllerBase
 
             var usuario = _usuarioService.CreateUsuario(user);
             // Generar el token JWT para el nuevo usuario
-            var token = _usuarioService.GenerateJwtToken(usuario);
+            var token = _authService.GenerateJwtToken(usuario);
 
             // Devolver el token JWT al cliente
             return Ok(new { token });
@@ -275,7 +277,7 @@ public class UsuarioController : ControllerBase
             var currentUser = HttpContext.User;
 
             // Verificar si el usuario tiene acceso al recurso
-            if (!_usuarioService.HasAccessToResource(currentUser, id))
+            if (!_authService.HasAccessToResource(currentUser, id))
             {
                 _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
                 return Forbid();

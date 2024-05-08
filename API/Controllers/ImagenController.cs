@@ -1,20 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ImagenController : ControllerBase
 {
     private readonly ILogger<ImagenController> _logger;
     private readonly IImagenService _imagenService;
+    private readonly IAuthService _authService;
 
-    public ImagenController(ILogger<ImagenController> logger, IImagenService imagenService)
+    public ImagenController(ILogger<ImagenController> logger, IImagenService imagenService, IAuthService authService)
     {
         _logger = logger;
         _imagenService = imagenService;
+        _authService = authService;
     }
 
 
@@ -140,6 +145,7 @@ public class ImagenController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("juego")]
     public IActionResult CreateImagenJuego([FromBody] List<ImagenJuegoDTO> imagen)
     {
@@ -188,6 +194,7 @@ public class ImagenController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("juego")]
     public IActionResult UpdateImagenJuego([FromBody] List<ImagenJuegoDTO> imagen)
     {

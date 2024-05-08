@@ -1,23 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class CategoriaController : ControllerBase
 {
     private readonly ILogger<CategoriaController> _logger;
     private readonly ICategoriaService _categoriaService;
+    private readonly IAuthService _authService;
 
-    public CategoriaController(ILogger<CategoriaController> logger, ICategoriaService categoriaService)
+    public CategoriaController(ILogger<CategoriaController> logger, ICategoriaService categoriaService, IAuthService authService)
     {
         _logger = logger;
         _categoriaService = categoriaService;
+        _authService = authService;
     }
 
-    
+    [AllowAnonymous]
     [HttpGet()]
     public ActionResult<List<Categoria>> GetAllCategorias()
     {
@@ -33,6 +38,7 @@ public class CategoriaController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public ActionResult<Categoria> GetUsuarioId(int id)
     {
@@ -57,6 +63,7 @@ public class CategoriaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("crear")]
     public IActionResult CreateCategoria([FromBody] Categoria categoria)
     {
@@ -74,6 +81,7 @@ public class CategoriaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public IActionResult UpdateCategoria(int id, [FromBody] Categoria categoria)
     {
@@ -106,6 +114,7 @@ public class CategoriaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public IActionResult DeleteCategoria(int id)
     {

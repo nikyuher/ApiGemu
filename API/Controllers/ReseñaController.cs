@@ -1,24 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ReseñaController : ControllerBase
 {
     private readonly ILogger<ReseñaController> _logger;
     private readonly IReseñaService _reseñaService;
+    private readonly IAuthService _authService;
 
-    public ReseñaController(ILogger<ReseñaController> logger, IReseñaService reseñaService)
+    public ReseñaController(ILogger<ReseñaController> logger, IReseñaService reseñaService, IAuthService authService)
     {
         _logger = logger;
         _reseñaService = reseñaService;
+        _authService = authService;
     }
 
 
-
+    [Authorize(Roles = "Admin")]
     [HttpGet()]
     public ActionResult<List<Reseña>> GetAllReseñas()
     {
@@ -34,6 +39,7 @@ public class ReseñaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public ActionResult<Reseña> GetReseñaId(int id)
     {
@@ -65,6 +71,16 @@ public class ReseñaController : ControllerBase
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de la reseña.");
 
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, reseña.IdUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {reseña.IdUsuario}.");
+                return Forbid();
+            }
+
             _reseñaService.CreateReseña(reseña);
             return Ok(reseña);
         }
@@ -75,6 +91,7 @@ public class ReseñaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public IActionResult UpdateReseña([FromBody] AprobarReseñaDTO reseña)
     {
@@ -107,6 +124,16 @@ public class ReseñaController : ControllerBase
         try
         {
             _logger.LogInformation($"Se ha recibido una solicitud para eliminar la reseña con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
+            }
 
             var reseña = _reseñaService.GetIdReseña(id);
 

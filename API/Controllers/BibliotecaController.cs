@@ -1,23 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class BibliotecaController : ControllerBase
 {
     private readonly ILogger<BibliotecaController> _logger;
     private readonly IBibliotecaService _bibliotecaService;
+    private readonly IAuthService _authService;
 
-    public BibliotecaController(ILogger<BibliotecaController> logger, IBibliotecaService bibliotecaService)
+    public BibliotecaController(ILogger<BibliotecaController> logger, IBibliotecaService bibliotecaService, IAuthService authService)
     {
         _logger = logger;
         _bibliotecaService = bibliotecaService;
+        _authService = authService;
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpGet()]
     public ActionResult<List<BibliotecaListaDTO>> GetAllBibliotecas()
     {
@@ -33,6 +38,7 @@ public class BibliotecaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public ActionResult<BibliotecaListaDTO> GetBiblioteId(int id)
     {
@@ -57,12 +63,23 @@ public class BibliotecaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpGet("usuario")]
     public ActionResult<BibliotecaListaDTO> GetBibliotecaUsuario(int id)
     {
         try
         {
             _logger.LogInformation($"Se ha solicitado obtener la bibliote con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
+            }
 
             var biblioteca = _bibliotecaService.GetBibliotecaUsuario(id);
 
@@ -81,6 +98,7 @@ public class BibliotecaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpPost("añadir-usuario")]
     public IActionResult CreateBibliotecaUsuario([FromBody] BibliotecaDTO biblioteca)
     {
@@ -98,6 +116,7 @@ public class BibliotecaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpPost("{id}/añadir-producto")]
     public IActionResult AñadirProductoBiblioteca(int id, [FromBody] List<int> producto)
     {
@@ -115,7 +134,8 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-        [HttpPost("{id}/asignar-juego")]
+    [Authorize(Roles = "Usuario")]
+    [HttpPost("{id}/asignar-juego")]
     public IActionResult AñadirJuegoBiblioteca(int id, [FromBody] List<int> juego)
     {
         try
@@ -132,6 +152,7 @@ public class BibliotecaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public IActionResult UpdateBiblioteca(int id, [FromBody] Biblioteca biblioteca)
     {
@@ -143,6 +164,16 @@ public class BibliotecaController : ControllerBase
             {
                 _logger.LogError("El ID de la biblioteca en el cuerpo de la solicitud no coincide con el ID en la URL.");
                 return BadRequest();
+            }
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, biblioteca.IdUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {biblioteca.IdUsuario}.");
+                return Forbid();
             }
 
             var existingBiblioteca = _bibliotecaService.GetIdBiblioteca(id);
@@ -164,6 +195,7 @@ public class BibliotecaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public IActionResult DeleteBiblioteca(int id)
     {
@@ -190,6 +222,7 @@ public class BibliotecaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpDelete("{id}/producto")]
     public IActionResult EliminarProductoBiblioteca(int id, int idProduct)
     {
@@ -216,6 +249,7 @@ public class BibliotecaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpDelete("{id}/juego")]
     public IActionResult EliminarJuegoBiblioteca(int id, int idJuego)
     {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class UsuarioController : ControllerBase
@@ -36,6 +37,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}", Name = "GetUsuario")]
     public ActionResult<UsuarioDTO> GetUsuarioId(int id)
     {
@@ -60,6 +62,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpPost("login", Name = "LoginUsuario")]
     public IActionResult Login([FromBody] UsuarioLoginDTO loginRequest)
     {
@@ -83,6 +86,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpPost("registrar", Name = "CreateUsuario")]
     public IActionResult CreateUsuario([FromBody] UsuarioCreateDTO user)
     {
@@ -113,10 +117,21 @@ public class UsuarioController : ControllerBase
         {
             _logger.LogInformation($"Se ha recibido una solicitud de actualización del usuario con ID: {id}.");
 
+
             if (id != user.IdUsuario)
             {
                 _logger.LogError("El ID del usuario en el cuerpo de la solicitud no coincide con el ID en la URL.");
                 return BadRequest();
+            }
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
             }
 
             var existingUser = _usuarioService.GetIdUsuario(id);
@@ -138,6 +153,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}/rol", Name = "PutRolUsuario")]
     public IActionResult UpdateRolUsuario(int id, [FromBody] UsuarioUpdateDTO user)
     {
@@ -151,6 +167,16 @@ public class UsuarioController : ControllerBase
                 return BadRequest();
             }
 
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
+            }
+
             var existingUser = _usuarioService.GetIdUsuario(id);
 
             if (existingUser is null)
@@ -158,6 +184,7 @@ public class UsuarioController : ControllerBase
                 _logger.LogWarning($"No se encontró ningún usuario con ID: {id}.");
                 return NotFound();
             }
+
 
             _usuarioService.UpdateRolUsuario(user);
 
@@ -181,6 +208,16 @@ public class UsuarioController : ControllerBase
             {
                 _logger.LogError("El ID del usuario en el cuerpo de la solicitud no coincide con el ID en la URL.");
                 return BadRequest();
+            }
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
             }
 
             var existingUser = _usuarioService.GetIdUsuario(id);
@@ -215,6 +252,16 @@ public class UsuarioController : ControllerBase
                 return BadRequest();
             }
 
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
+            }
+
             var existingUser = _usuarioService.GetIdUsuario(id);
 
             if (existingUser is null)
@@ -247,6 +294,16 @@ public class UsuarioController : ControllerBase
                 return BadRequest();
             }
 
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
+            }
+
             var existingUser = _usuarioService.GetIdUsuario(id);
 
             if (existingUser is null)
@@ -254,6 +311,7 @@ public class UsuarioController : ControllerBase
                 _logger.LogWarning($"No se encontró ningún usuario con ID: {id}.");
                 return NotFound();
             }
+
 
             _usuarioService.UpdateFotoUsuario(user);
 

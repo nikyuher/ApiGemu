@@ -1,24 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ProductoController : ControllerBase
 {
     private readonly ILogger<ProductoController> _logger;
     private readonly IProductoService _productoService;
+    private readonly IAuthService _authService;
 
-    public ProductoController(ILogger<ProductoController> logger, IProductoService productoService)
+    public ProductoController(ILogger<ProductoController> logger, IProductoService productoService, IAuthService authService)
     {
         _logger = logger;
         _productoService = productoService;
+        _authService = authService;
     }
 
 
     //Read
+    [AllowAnonymous]
     [HttpGet()]
     public ActionResult<List<Producto>> GetAllProductos()
     {
@@ -34,6 +41,7 @@ public class ProductoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public ActionResult<Producto> GetProductoId(int id)
     {
@@ -58,6 +66,7 @@ public class ProductoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}/categorias")]
     public ActionResult<ProductoCategoriasDTO> GetCategoriasProduct(int id)
     {
@@ -82,6 +91,7 @@ public class ProductoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}/reseñas")]
     public ActionResult<ProductoReseñaDTO> GetReseñasProducto(int id)
     {

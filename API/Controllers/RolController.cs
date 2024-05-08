@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Gemu.API.Controllers;
 
@@ -18,8 +19,8 @@ public class RolController : ControllerBase
     }
 
 
-
-    [HttpGet(Name ="GetAllRoles")]
+    [Authorize(Roles = "Admin")]
+    [HttpGet(Name = "GetAllRoles")]
     public ActionResult<List<RolDTO>> GetAllRoles()
     {
         try
@@ -34,7 +35,8 @@ public class RolController : ControllerBase
         }
     }
 
-    [HttpGet("{id}", Name ="GetRolId")]
+    [Authorize(Roles = "Admin")]
+    [HttpGet("{id}", Name = "GetRolId")]
     public ActionResult<RolDTO> GetRolId(int id)
     {
         try
@@ -58,6 +60,7 @@ public class RolController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("crear")]
     public IActionResult CreateRol([FromBody] Rol rol)
     {
@@ -75,7 +78,8 @@ public class RolController : ControllerBase
         }
     }
 
-    [HttpPut("{id}", Name ="PutRol")]
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}", Name = "PutRol")]
     public IActionResult UpdateRol(int id, [FromBody] Rol rol)
     {
         try
@@ -107,7 +111,8 @@ public class RolController : ControllerBase
         }
     }
 
-    [HttpPut("{id}/nombre",Name ="PutNombreRol")]
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}/nombre", Name = "PutNombreRol")]
     public IActionResult UpdateNombreRol(int id, [FromBody] RolUpdateNombreDTO rol)
     {
         try
@@ -139,7 +144,8 @@ public class RolController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}",Name ="DeleteRol")]
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}", Name = "DeleteRol")]
     public IActionResult DeleteRol(int id)
     {
         try

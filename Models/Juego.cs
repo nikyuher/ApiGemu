@@ -26,7 +26,9 @@ public class Juego
 
     [Required]
     public string? Plataforma { get; set; }
-    public int? Descuento { get; set; }
+    public int? Descuento { get; set; } 
+    public DateTime Fecha { get; set; }
+
     [Required]
     public string? CodigoJuego { get; set; }
     public List<Imagen>? ImgsJuego { get; set; } = new List<Imagen>();

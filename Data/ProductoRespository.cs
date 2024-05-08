@@ -82,7 +82,8 @@ public class ProductoRepository : IProductoRepository
             Estado = producto.Estado,
             Cantidad = producto.Cantidad,
             ImgsProducto = producto.ImgsProducto,
-            Categorias = producto.Categorias
+            Categorias = producto.Categorias,
+            Fecha = DateTime.UtcNow
         };
 
         _context.Productos.Add(newProducto);

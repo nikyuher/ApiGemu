@@ -40,6 +40,7 @@ public class JuegoRepository : IJuegoRepository
             CodigoJuego = juego.CodigoJuego,
             ImgsJuego = juego.ImgsJuego,
             Reseñas = juego.Reseñas,
+            Fecha = juego.Fecha,
             Categorias = juego.Categorias
         };
 
@@ -99,7 +100,8 @@ public class JuegoRepository : IJuegoRepository
             Plataforma = juego.Plataforma,
             CodigoJuego = GenerateGameCode(),
             ImgsJuego = juego.ImgsJuego,
-            Categorias = juego.Categorias
+            Categorias = juego.Categorias, 
+            Fecha = DateTime.UtcNow
         };
 
         _context.Juegos.Add(newJuego);

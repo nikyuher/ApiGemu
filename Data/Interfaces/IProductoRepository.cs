@@ -11,7 +11,6 @@ public interface IProductoRepository
     //Create
     void CreateProducto(ProductoAddDTO producto);
     void AsignarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);
-    void AsignarReseñaProducto(int idProducto, List<int> ListaIdsReseñas);
     //Update
     void UpdateProducto(ProductoDTO producto);
     void UpdateCategoriasProducto(int idProducto, List<Categoria> ListaCategoria);

@@ -222,7 +222,6 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpDelete("{id}/producto")]
     public IActionResult EliminarProductoBiblioteca(int id, int idProduct)
     {

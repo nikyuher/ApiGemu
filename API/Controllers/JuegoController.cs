@@ -162,31 +162,6 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [HttpPost("{id}/asignar-reseña")]
-    public IActionResult AsignarReseñaJuego(int id, [FromBody] List<int> ListaIdsReseñas)
-    {
-        try
-        {
-            _logger.LogInformation("Se ha recibido una solicitud de asignar reseñas al juego.");
-
-            var juego = _juegoService.GetIdJuego(id);
-
-            if (juego is null)
-            {
-                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
-                return NotFound();
-            }
-
-            _juegoService.AsignarReseñaJuego(id, ListaIdsReseñas);
-            return Ok(juego);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar asignar reseñas juego: {ex.Message}");
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
     //Update
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]

@@ -38,7 +38,6 @@ public class AnuncioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpGet("usuario")]
     public ActionResult<List<AnuncioDTO>> GetAnunciosUsuario(int id)
     {
@@ -90,7 +89,6 @@ public class AnuncioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpPost("crear")]
     public IActionResult CreateAnuncio([FromBody] Anuncio anuncio)
     {
@@ -118,7 +116,6 @@ public class AnuncioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpPut("{id}")]
     public IActionResult UpdateAnuncio(int id, [FromBody] Anuncio anuncio)
     {
@@ -161,7 +158,6 @@ public class AnuncioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpDelete("{id}")]
     public IActionResult DeleteAnuncio(int id)
     {

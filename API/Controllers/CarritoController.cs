@@ -97,7 +97,6 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpPost("asignar-usuario")]
     public IActionResult CreateCarritoUsuario([FromBody] CarritoDTO carrito)
     {
@@ -125,7 +124,6 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpPost("{id}/añadir-producto")]
     public IActionResult AñadirProductoCarrito(int id, [FromBody] List<int> producto)
     {
@@ -143,7 +141,6 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpPost("{id}/añadir-juego")]
     public IActionResult AñadirJuegoCarrito(int id, [FromBody] List<int> juego)
     {
@@ -221,7 +218,6 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpDelete("{id}/producto")]
     public IActionResult EliminarProductoCarrito(int id, int idProduct)
     {
@@ -248,7 +244,6 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpDelete("{id}/juego")]
     public IActionResult EliminarJuegoCarrito(int id, int idJuego)
     {

@@ -64,8 +64,8 @@ public class ReseñaController : ControllerBase
         }
     }
 
-    [HttpPost("crear")]
-    public IActionResult CreateReseña([FromBody] ReseñaAddDTO reseña)
+    [HttpPost("producto")]
+    public IActionResult CreateReseñaProducto([FromBody] ReseñaAddProducto reseña)
     {
         try
         {
@@ -81,7 +81,34 @@ public class ReseñaController : ControllerBase
                 return Forbid();
             }
 
-            _reseñaService.CreateReseña(reseña);
+            _reseñaService.CreateReseñaProducto(reseña);
+            return Ok(reseña);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar crear la reseña: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+        [HttpPost("juego")]
+    public IActionResult CreateReseñaJuego([FromBody] ReseñaAddJuego reseña)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de creación de la reseña.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, reseña.IdUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {reseña.IdUsuario}.");
+                return Forbid();
+            }
+
+            _reseñaService.CreateReseñaJuego(reseña);
             return Ok(reseña);
         }
         catch (Exception ex)
@@ -92,7 +119,7 @@ public class ReseñaController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPut("{id}")]
+    [HttpPut("gestor-solicitud")]
     public IActionResult UpdateReseña([FromBody] AprobarReseñaDTO reseña)
     {
         try
@@ -118,7 +145,7 @@ public class ReseñaController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete()]
     public IActionResult DeleteReseña(int id)
     {
         try

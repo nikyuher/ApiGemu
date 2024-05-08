@@ -19,14 +19,21 @@ public class ReseñaService : IReseñaService
     {
         return _reseñaRepository.GetIdReseña(idReseña);
     }
-    public void CreateReseña(ReseñaAddDTO reseña)
+    //Create
+    public void CreateReseñaProducto(ReseñaAddProducto reseña)
     {
-        _reseñaRepository.CreateReseña(reseña);
+        _reseñaRepository.CreateReseñaProducto(reseña);
     }
+    public void CreateReseñaJuego(ReseñaAddJuego reseña)
+    {
+        _reseñaRepository.CreateReseñaJuego(reseña);
+    }
+    //Update
     public void UpdateReseña(AprobarReseñaDTO reseña)
     {
         _reseñaRepository.UpdateReseña(reseña);
     }
+    //Delete
     public void DeleteReseña(int idReseña)
     {
         _reseñaRepository.DeleteReseña(idReseña);

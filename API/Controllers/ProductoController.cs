@@ -160,32 +160,6 @@ public class ProductoController : ControllerBase
         }
     }
 
-    [HttpPost("{id}/asignar-reseñas")]
-    public IActionResult AsignarReseñaProducto(int id, [FromBody] List<int> ListaIdsReseñas)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para asignar reseña a usuario");
-
-            var producto = _productoService.GetIdProducto(id);
-
-            if (producto is null)
-            {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
-                return NotFound();
-            }
-
-            _productoService.AsignarReseñaProducto(id, ListaIdsReseñas);
-
-            return Ok(producto);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar asignar una reseña: {ex.Message}");
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
     //Update
     [HttpPut("{id}/datos")]
     public IActionResult UpdateProducto(int id, [FromBody] ProductoDTO producto)

@@ -101,7 +101,7 @@ public class JuegoRepository : IJuegoRepository
             CodigoJuego = GenerateGameCode(),
             ImgsJuego = juego.ImgsJuego,
             Categorias = juego.Categorias, 
-            Fecha = DateTime.UtcNow
+            Fecha = DateTime.Today
         };
 
         _context.Juegos.Add(newJuego);
@@ -127,30 +127,6 @@ public class JuegoRepository : IJuegoRepository
             }
 
             juego.Categorias.Add(categoria);
-        }
-        SaveChanges();
-    }
-
-    public void AsignarReseñaJuego(int idJuego, List<int> ListaIdsReseñas)
-    {
-        foreach (var item in ListaIdsReseñas)
-        {
-            var reseña = _context.Reseñas.FirstOrDefault(r => r.IdReseña == item);
-
-            if (reseña is null)
-            {
-                throw new Exception($"No se encontro la reseña con el ID: {item}");
-            }
-
-            var juego = _context.Juegos.FirstOrDefault(p => p.IdJuego == idJuego);
-
-            if (juego is null)
-            {
-                throw new Exception($"No se encontro el juego con el ID: {idJuego}");
-            }
-
-            juego.Reseñas.Add(reseña);
-
         }
         SaveChanges();
     }

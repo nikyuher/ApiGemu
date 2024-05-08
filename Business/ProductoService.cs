@@ -38,10 +38,6 @@ public class ProductoService : IProductoService
     {
         _productoRepository.AsignarCategoriasProducto(idProducto, ListaIdsCateogira);
     }
-    public void AsignarReseñaProducto(int idProducto, List<int> ListaIdsReseñas)
-    {
-        _productoRepository.AsignarCategoriasProducto(idProducto, ListaIdsReseñas);
-    }
     //Update
     public void UpdateProducto(ProductoDTO producto)
     {

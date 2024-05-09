@@ -125,7 +125,7 @@ public class CarritoController : ControllerBase
     }
 
     [HttpPost("{id}/usuario/{idUsuario}/añadir-producto")]
-    public IActionResult AñadirProductoCarrito(int id, [FromBody] int idUsuario, List<int> producto)
+    public IActionResult AñadirProductoCarrito(int id, int idUsuario, [FromBody] List<int> producto)
     {
         try
         {
@@ -152,7 +152,7 @@ public class CarritoController : ControllerBase
     }
 
     [HttpPost("{id}/usuario/{idUsuario}/añadir-juego")]
-    public IActionResult AñadirJuegoCarrito(int id, [FromBody] int idUsuario, List<int> juego)
+    public IActionResult AñadirJuegoCarrito(int id, int idUsuario, [FromBody] List<int> juego)
     {
         try
         {
@@ -239,7 +239,7 @@ public class CarritoController : ControllerBase
     }
 
     [HttpDelete("{id}/usuario/{idUsuario}/producto")]
-    public IActionResult EliminarProductoCarrito(int id, [FromBody] int idUsuario, int idProduct)
+    public IActionResult EliminarProductoCarrito(int id, int idUsuario, [FromBody] int idProduct)
     {
         try
         {
@@ -275,7 +275,7 @@ public class CarritoController : ControllerBase
     }
 
     [HttpDelete("{id}/usuario/{idUsuario}/juego")]
-    public IActionResult EliminarJuegoCarrito(int id, [FromBody] int idUsuario, int idJuego)
+    public IActionResult EliminarJuegoCarrito(int id, int idUsuario, [FromBody] int idJuego)
     {
         try
         {

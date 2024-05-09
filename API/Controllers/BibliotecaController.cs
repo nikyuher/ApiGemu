@@ -125,7 +125,7 @@ public class BibliotecaController : ControllerBase
     }
 
     [HttpPost("{id}/usuario/{idUsuario}/añadir-producto")]
-    public IActionResult AñadirProductoBiblioteca(int id, [FromBody] int idUsuario, List<int> producto)
+    public IActionResult AñadirProductoBiblioteca(int id, int idUsuario, [FromBody] List<int> producto)
     {
         try
         {
@@ -152,7 +152,7 @@ public class BibliotecaController : ControllerBase
     }
 
     [HttpPost("{id}/usuario/{idUsuario}/añadir-juego")]
-    public IActionResult AñadirJuegoBiblioteca(int id, [FromBody] int idUsuario, List<int> juego)
+    public IActionResult AñadirJuegoBiblioteca(int id, int idUsuario, [FromBody] List<int> juego)
     {
         try
         {
@@ -249,7 +249,7 @@ public class BibliotecaController : ControllerBase
     }
 
     [HttpDelete("{id}/usuario/{idUsuario}/producto")]
-    public IActionResult EliminarProductoBiblioteca(int id, [FromBody] int idUsuario, int idProduct)
+    public IActionResult EliminarProductoBiblioteca(int id, int idUsuario, [FromBody] int idProduct)
     {
         try
         {
@@ -285,7 +285,7 @@ public class BibliotecaController : ControllerBase
     }
 
     [HttpDelete("{id}/usuario/{idUsuario}/juego")]
-    public IActionResult EliminarJuegoBiblioteca(int id, [FromBody] int idUsuario, int idJuego)
+    public IActionResult EliminarJuegoBiblioteca(int id, int idUsuario, [FromBody] int idJuego)
     {
         try
         {

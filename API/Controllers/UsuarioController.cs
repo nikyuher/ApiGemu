@@ -37,13 +37,22 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpGet("{id}", Name = "GetUsuario")]
     public ActionResult<UsuarioDTO> GetUsuarioId(int id)
     {
         try
         {
             _logger.LogInformation($"Se ha solicitado obtener el usuario con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para llamar al usuario con ID: {id}.");
+                return Forbid();
+            }
 
             var user = _usuarioService.GetIdUsuario(id);
 

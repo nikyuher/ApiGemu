@@ -80,7 +80,7 @@ public class BibliotecaRepository : IBibliotecaRepository
 
         if (biblioteca is null)
         {
-            throw new Exception($"No se encontro el Biblioteca del usuario con el ID: {idUsuario}");
+            throw new Exception($"No se encontro la Biblioteca del usuario con el ID: {idUsuario}");
         }
 
         var newBiblioteca = new BibliotecaListaDTO

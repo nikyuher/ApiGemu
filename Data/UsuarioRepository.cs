@@ -103,11 +103,14 @@ public class UsuarioRepository : IUsuarioRepository
             Nombre = usuario.Nombre,
             Correo = usuario.Correo,
             Contraseña = usuario.Contraseña
+
         };
 
         var nombreRol = _context.Roles.FirstOrDefault(r => r.IdRol == newUsuario.IdRol);
 
         newUsuario.Rol = nombreRol;
+        newUsuario.Carrito = new Carrito{ IdUsuario=newUsuario.IdUsuario};
+        newUsuario.Biblioteca = new Biblioteca{ IdUsuario=newUsuario.IdUsuario};
 
         _context.Usuarios.Add(newUsuario);
         SaveChanges();

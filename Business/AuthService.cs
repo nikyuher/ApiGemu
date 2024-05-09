@@ -12,7 +12,7 @@ public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
 
-    public AuthService( IConfiguration configuration)
+    public AuthService(IConfiguration configuration)
     {
         _configuration = configuration;
     }
@@ -30,9 +30,10 @@ public class AuthService : IAuthService
         // Crear claims para el token JWT
         var claims = new[]
         {
-        new Claim(JwtRegisteredClaimNames.Sub, usuario.IdUsuario.ToString()),
-        new Claim(JwtRegisteredClaimNames.Email, usuario.Correo),
-        new Claim("role", usuario.Rol.Nombre) // El rol del usuario
+        new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
+        new Claim(ClaimTypes.Name, usuario.Nombre),
+        new Claim(ClaimTypes.Email, usuario.Correo),
+        new Claim(ClaimTypes.Role, usuario.Rol.Nombre) // El rol del usuario
     };
 
         // Crear credenciales de firma con la clave secreta
@@ -59,35 +60,38 @@ public class AuthService : IAuthService
     {
         if (user == null)
         {
-            throw new ArgumentNullException(nameof(user));
+            throw new ArgumentNullException(nameof(user), "No se proporciono un usuario autenticado.");
         }
 
-        // Obtener el ID del usuario desde el claim
-        var userIdClaim = user.FindFirst(JwtRegisteredClaimNames.Sub);
+        // Obtener el ID del usuario desde el claim 'nameidentifier'
+        var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null)
         {
-            return false; // No se encontró el claim del ID del usuario
+            throw new InvalidOperationException("No se encontro el claim 'nameidentifier' (ID del usuario) en el token JWT.");
         }
 
-        int userId;
-        if (!int.TryParse(userIdClaim.Value, out userId))
+        if (!int.TryParse(userIdClaim.Value, out int userId))
         {
-            return false; // El claim del ID del usuario no es válido
+            throw new InvalidOperationException("El claim 'nameidentifier' (ID del usuario) no es un numero valido.");
         }
 
         // Verifica si el usuario es el propietario del recurso
         if (userId == resourceOwnerId)
         {
-            return true; // El usuario es el propietario del recurso
+            return true; 
         }
 
         // Verifica si el usuario tiene el rol necesario para acceder al recurso
         var roleClaim = user.FindFirst(ClaimTypes.Role);
-        if (roleClaim != null && (roleClaim.Value == "Admin"))
+        if (roleClaim != null && roleClaim.Value == "Admin")
         {
-            return true; // El usuario tiene un rol adecuado para acceder al recurso
+            return true; 
         }
 
-        return false;
+        throw new UnauthorizedAccessException("El usuario no tiene el rol o permisos necesarios para acceder al recurso.");
     }
+
+
+
+
 }

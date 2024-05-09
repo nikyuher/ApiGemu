@@ -25,6 +25,5 @@ public class Usuario
     public int IdRol { get; set; }
 
     // Navegación a Rol
-    [JsonIgnore]
     public Rol? Rol { get; set; } 
 }

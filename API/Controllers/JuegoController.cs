@@ -1,24 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class JuegoController : ControllerBase
 {
     private readonly ILogger<JuegoController> _logger;
     private readonly IJuegoService _juegoService;
+    private readonly IAuthService _authService;
 
-    public JuegoController(ILogger<JuegoController> logger, IJuegoService juegoService)
+    public JuegoController(ILogger<JuegoController> logger, IJuegoService juegoService, IAuthService authService)
     {
         _logger = logger;
         _juegoService = juegoService;
+        _authService = authService;
     }
 
 
     //Read
+    [AllowAnonymous]
     [HttpGet()]
     public ActionResult<List<Juego>> GetAllJuegos()
     {
@@ -34,6 +40,7 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public ActionResult<JuegoDTO> GetJuegoId(int id)
     {
@@ -58,6 +65,7 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}/categorias")]
     public ActionResult<JuegoCategoriasDTO> GetCategoriasJuego(int id)
     {
@@ -82,6 +90,7 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}/reseñas")]
     public ActionResult<JuegoReseñaDTO> GetReseñasJuego(int id)
     {
@@ -107,6 +116,7 @@ public class JuegoController : ControllerBase
     }
 
     //Create
+    [Authorize(Roles = "Admin")]
     [HttpPost("crear")]
     public IActionResult CreateJuego([FromBody] JuegoAddDTO juego)
     {
@@ -124,6 +134,7 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("{id}/asignar-categoria")]
     public IActionResult AsignarCategoriasJuego(int id, [FromBody] List<int> ListaIdsCateogira)
     {
@@ -151,32 +162,8 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [HttpPost("{id}/asignar-reseña")]
-    public IActionResult AsignarReseñaJuego(int id, [FromBody] List<int> ListaIdsReseñas)
-    {
-        try
-        {
-            _logger.LogInformation("Se ha recibido una solicitud de asignar reseñas al juego.");
-
-            var juego = _juegoService.GetIdJuego(id);
-
-            if (juego is null)
-            {
-                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
-                return NotFound();
-            }
-
-            _juegoService.AsignarReseñaJuego(id, ListaIdsReseñas);
-            return Ok(juego);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar asignar reseñas juego: {ex.Message}");
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
     //Update
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public IActionResult UpdateJuego(int id, [FromBody] Juego juego)
     {
@@ -209,6 +196,7 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}/categorias")]
     public IActionResult UpdateCategoriasJuego(int id, [FromBody] List<Categoria> ListaCategoria)
     {
@@ -237,6 +225,7 @@ public class JuegoController : ControllerBase
 
 
     //Delete
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public IActionResult DeleteJuego(int id)
     {
@@ -263,6 +252,7 @@ public class JuegoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}/categorias")]
     public IActionResult EliminarCategoriasJuego(int id, [FromBody] List<int> ListaIdsCateogira)
     {

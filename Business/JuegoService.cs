@@ -39,10 +39,6 @@ public class JuegoService : IJuegoService
     {
         _juegoRepository.AsignarCategoriasJuego(idJuego, ListaIdsCateogira);
     }
-    public void AsignarReseñaJuego(int idJuego, List<int> ListaIdsReseñas)
-    {
-        _juegoRepository.AsignarReseñaJuego(idJuego, ListaIdsReseñas);
-    }
 
     //Update
     public void UpdateJuego(Juego juego)

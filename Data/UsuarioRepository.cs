@@ -13,7 +13,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public List<UsuarioDTO> GetAllUsuarios()
     {
-        var usuarios = _context.Usuarios.Include(u => u.Transacciones).ToList();
+        var usuarios = _context.Usuarios.Include(u => u.Transacciones).Include(u => u.Rol).ToList();
 
         var usuarioDTOs = usuarios.Select(u => new UsuarioDTO
         {
@@ -67,7 +67,7 @@ public class UsuarioRepository : IUsuarioRepository
             throw new ArgumentException("La contraseña no puede estar vacía", nameof(loginDTO.Contraseña));
         }
 
-        var usuario = _context.Usuarios.FirstOrDefault(u => u.Correo == loginDTO.Correo && u.Contraseña == loginDTO.Contraseña);
+        var usuario = _context.Usuarios.Include(u => u.Rol).FirstOrDefault(u => u.Correo == loginDTO.Correo && u.Contraseña == loginDTO.Contraseña);
 
         if (usuario is null)
         {
@@ -79,7 +79,7 @@ public class UsuarioRepository : IUsuarioRepository
     }
 
     //Create
-    public void CreateUsuario(UsuarioCreateDTO usuario)
+    public Usuario CreateUsuario(UsuarioCreateDTO usuario)
     {
 
         if (_context.Usuarios.Any(u => u.Nombre == usuario.Nombre))
@@ -105,8 +105,14 @@ public class UsuarioRepository : IUsuarioRepository
             Contraseña = usuario.Contraseña
         };
 
+        var nombreRol = _context.Roles.FirstOrDefault(r => r.IdRol == newUsuario.IdRol);
+
+        newUsuario.Rol = nombreRol;
+
         _context.Usuarios.Add(newUsuario);
         SaveChanges();
+
+        return newUsuario;
     }
 
     //Update
@@ -137,6 +143,7 @@ public class UsuarioRepository : IUsuarioRepository
         }
 
         existingUser.IdRol = usuario.IdRol;
+        existingUser.Rol = existingRol;
 
         _context.Usuarios.Update(existingUser);
         SaveChanges();

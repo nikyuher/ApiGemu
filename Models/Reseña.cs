@@ -12,6 +12,7 @@ public class Reseña
     public string? Comentario { get; set; }
     [Required]
     public int Calificacion { get; set; }
+    public DateTime Fecha { get; set; }
 
     //Relacion Juego
     [JsonIgnore]

@@ -1,14 +1,22 @@
-﻿using Gemu.Data;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using Gemu.Data;
 using Gemu.Models;
 
 namespace Gemu.Business;
 public class UsuarioService : IUsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IConfiguration _configuration;
 
-    public UsuarioService(IUsuarioRepository repository)
+    public UsuarioService(IUsuarioRepository repository, IConfiguration configuration)
     {
         _usuarioRepository = repository;
+        _configuration = configuration;
     }
 
     public List<UsuarioDTO> GetAllUsuarios()
@@ -22,12 +30,12 @@ public class UsuarioService : IUsuarioService
     }
     public Usuario LoginUsuario(UsuarioLoginDTO usuario)
     {
-       return _usuarioRepository.LoginUsuario(usuario);
+        return _usuarioRepository.LoginUsuario(usuario);
     }
     //Create
-    public void CreateUsuario(UsuarioCreateDTO usuario)
+    public Usuario CreateUsuario(UsuarioCreateDTO usuario)
     {
-        _usuarioRepository.CreateUsuario(usuario);
+        return _usuarioRepository.CreateUsuario(usuario);
     }
     //Update
     public void UpdateUsuario(Usuario usuario)
@@ -55,4 +63,5 @@ public class UsuarioService : IUsuarioService
     {
         _usuarioRepository.DeleteUsuario(idUsuario);
     }
+
 }

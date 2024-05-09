@@ -31,14 +31,31 @@ public class ReseñaRepository : IReseñaRepository
     }
 
     //Create
-    public void CreateReseña(ReseñaAddDTO reseña)
+    public void CreateReseñaProducto(ReseñaAddProducto reseña)
     {
         var newReseña = new Reseña
         {
             IdUsuario = reseña.IdUsuario,
+            IdProducto = reseña.IdProducto,
             Comentario = reseña.Comentario,
             Solicitud = "pendiente",
-            Calificacion = reseña.Calificacion
+            Calificacion = reseña.Calificacion,
+            Fecha = DateTime.Today
+        };
+        _context.Reseñas.Add(newReseña);
+        SaveChanges();
+    }
+
+    public void CreateReseñaJuego(ReseñaAddJuego reseña)
+    {
+        var newReseña = new Reseña
+        {
+            IdUsuario = reseña.IdUsuario,
+            IdJuego = reseña.IdJuego,
+            Comentario = reseña.Comentario,
+            Solicitud = "pendiente",
+            Calificacion = reseña.Calificacion,
+            Fecha = DateTime.Today
         };
         _context.Reseñas.Add(newReseña);
         SaveChanges();

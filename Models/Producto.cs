@@ -11,6 +11,7 @@ public class Producto
     public decimal Precio { get; set; }
     [Required]
     public string? Descripcion { get; set; }
+    public DateTime Fecha { get; set; }
     [Required]
     public string? Estado { get; set; }
     [Required]

@@ -82,7 +82,8 @@ public class ProductoRepository : IProductoRepository
             Estado = producto.Estado,
             Cantidad = producto.Cantidad,
             ImgsProducto = producto.ImgsProducto,
-            Categorias = producto.Categorias
+            Categorias = producto.Categorias,
+            Fecha = DateTime.Today
         };
 
         _context.Productos.Add(newProducto);
@@ -114,29 +115,6 @@ public class ProductoRepository : IProductoRepository
         SaveChanges();
     }
 
-    public void AsignarReseñaProducto(int idProducto, List<int> ListaIdsReseñas)
-    {
-        foreach (var item in ListaIdsReseñas)
-        {
-            var reseña = _context.Reseñas.FirstOrDefault(r => r.IdReseña == item);
-
-            if (reseña is null)
-            {
-                throw new Exception($"No se encontro la reseña con el ID: {item}");
-            }
-
-            var producto = _context.Productos.FirstOrDefault(p => p.IdProducto == idProducto);
-
-            if (producto is null)
-            {
-                throw new Exception($"No se encontro el producto con el ID: {idProducto}");
-            }
-
-            producto.Reseñas.Add(reseña);
-
-        }
-        SaveChanges();
-    }
 
     //Update
     public void UpdateProducto(ProductoDTO producto)

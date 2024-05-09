@@ -1,24 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ReseñaController : ControllerBase
 {
     private readonly ILogger<ReseñaController> _logger;
     private readonly IReseñaService _reseñaService;
+    private readonly IAuthService _authService;
 
-    public ReseñaController(ILogger<ReseñaController> logger, IReseñaService reseñaService)
+    public ReseñaController(ILogger<ReseñaController> logger, IReseñaService reseñaService, IAuthService authService)
     {
         _logger = logger;
         _reseñaService = reseñaService;
+        _authService = authService;
     }
 
 
-
+    [Authorize(Roles = "Admin")]
     [HttpGet()]
     public ActionResult<List<Reseña>> GetAllReseñas()
     {
@@ -34,6 +39,7 @@ public class ReseñaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public ActionResult<Reseña> GetReseñaId(int id)
     {
@@ -58,14 +64,30 @@ public class ReseñaController : ControllerBase
         }
     }
 
-    [HttpPost("crear")]
-    public IActionResult CreateReseña([FromBody] ReseñaAddDTO reseña)
+    [HttpPost("producto")]
+    public IActionResult CreateReseñaProducto(int idProducto, [FromBody] ReseñaAddProducto reseña)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de la reseña.");
 
-            _reseñaService.CreateReseña(reseña);
+            if (idProducto != reseña.IdProducto)
+            {
+                _logger.LogError("El ID del rol en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, reseña.IdUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {reseña.IdUsuario}.");
+                return Forbid();
+            }
+
+            _reseñaService.CreateReseñaProducto(reseña);
             return Ok(reseña);
         }
         catch (Exception ex)
@@ -75,7 +97,41 @@ public class ReseñaController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPost("juego")]
+    public IActionResult CreateReseñaJuego(int idJuego, [FromBody] ReseñaAddJuego reseña)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha recibido una solicitud de creación de la reseña.");
+
+            if (idJuego != reseña.IdJuego)
+            {
+                _logger.LogError("El ID del rol en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, reseña.IdUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {reseña.IdUsuario}.");
+                return Forbid();
+            }
+
+            _reseñaService.CreateReseñaJuego(reseña);
+            return Ok(reseña);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar crear la reseña: {ex.Message}");
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("gestor-solicitud")]
     public IActionResult UpdateReseña([FromBody] AprobarReseñaDTO reseña)
     {
         try
@@ -101,12 +157,22 @@ public class ReseñaController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteReseña(int id)
+    [HttpDelete("{id}/usuario")]
+    public IActionResult DeleteReseña(int id, [FromBody] int idUsuario)
     {
         try
         {
             _logger.LogInformation($"Se ha recibido una solicitud para eliminar la reseña con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar la reseña del usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             var reseña = _reseñaService.GetIdReseña(id);
 

@@ -1,24 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ProductoController : ControllerBase
 {
     private readonly ILogger<ProductoController> _logger;
     private readonly IProductoService _productoService;
+    private readonly IAuthService _authService;
 
-    public ProductoController(ILogger<ProductoController> logger, IProductoService productoService)
+    public ProductoController(ILogger<ProductoController> logger, IProductoService productoService, IAuthService authService)
     {
         _logger = logger;
         _productoService = productoService;
+        _authService = authService;
     }
 
 
     //Read
+    [AllowAnonymous]
     [HttpGet()]
     public ActionResult<List<Producto>> GetAllProductos()
     {
@@ -34,6 +41,7 @@ public class ProductoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public ActionResult<Producto> GetProductoId(int id)
     {
@@ -58,6 +66,7 @@ public class ProductoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}/categorias")]
     public ActionResult<ProductoCategoriasDTO> GetCategoriasProduct(int id)
     {
@@ -82,6 +91,7 @@ public class ProductoController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}/reseñas")]
     public ActionResult<ProductoReseñaDTO> GetReseñasProducto(int id)
     {
@@ -124,12 +134,12 @@ public class ProductoController : ControllerBase
         }
     }
 
-    [HttpPost("{id}/asignar-categorias")]
+    [HttpPost("{id}/añadir-categorias")]
     public IActionResult AsignarCategoriasProducto(int id, [FromBody] List<int> ListaIdsCateogira)
     {
         try
         {
-            _logger.LogInformation($"Se ha recibido una solicitud para asignar categoria a usuario");
+            _logger.LogInformation($"Se ha recibido una solicitud para añadir categoria a usuario");
 
             var producto = _productoService.GetIdProducto(id);
 
@@ -145,56 +155,30 @@ public class ProductoController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar asignar una categoria : {ex.Message}");
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
-    [HttpPost("{id}/asignar-reseñas")]
-    public IActionResult AsignarReseñaProducto(int id, [FromBody] List<int> ListaIdsReseñas)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para asignar reseña a usuario");
-
-            var producto = _productoService.GetIdProducto(id);
-
-            if (producto is null)
-            {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
-                return NotFound();
-            }
-
-            _productoService.AsignarReseñaProducto(id, ListaIdsReseñas);
-
-            return Ok(producto);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar asignar una reseña: {ex.Message}");
+            _logger.LogError($"Error al intentar añadir una categoria : {ex.Message}");
             return BadRequest(new { message = ex.Message });
         }
     }
 
     //Update
-    [HttpPut("{id}/datos")]
-    public IActionResult UpdateProducto(int id, [FromBody] ProductoDTO producto)
+    [HttpPut("{idProducto}/datos")]
+    public IActionResult UpdateProducto(int idProducto, [FromBody] ProductoDTO producto)
     {
         try
         {
-            _logger.LogInformation($"Se ha recibido una solicitud de actualización del producto con ID: {id}.");
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización del producto con ID: {idProducto}.");
 
-            if (id != producto.IdProducto)
+            if (idProducto != producto.IdProducto)
             {
                 _logger.LogError("El ID del producto en el cuerpo de la solicitud no coincide con el ID en la URL.");
                 return BadRequest();
             }
 
-            var existingProducto = _productoService.GetIdProducto(id);
+            var existingProducto = _productoService.GetIdProducto(idProducto);
 
             if (existingProducto is null)
             {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
+                _logger.LogWarning($"No se encontró ningún producto con ID: {idProducto}.");
                 return NotFound();
             }
 
@@ -204,7 +188,7 @@ public class ProductoController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar actualizar producto con ID {id}: {ex.Message}");
+            _logger.LogError($"Error al intentar actualizar producto con ID {idProducto}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

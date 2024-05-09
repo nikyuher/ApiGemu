@@ -4,6 +4,7 @@ using Gemu.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gemu.Data.Migrations
 {
     [DbContext(typeof(GemuContext))]
-    partial class GemuContextModelSnapshot : ModelSnapshot
+    [Migration("20240507191821_PruebaJWT1")]
+    partial class PruebaJWT1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,9 +172,6 @@ namespace Gemu.Data.Migrations
                     b.Property<int?>("Descuento")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("IdBiblioteca")
                         .HasColumnType("int");
 
@@ -236,9 +235,6 @@ namespace Gemu.Data.Migrations
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
 
                     b.Property<int?>("IdAnuncio")
                         .HasColumnType("int");

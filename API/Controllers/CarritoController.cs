@@ -1,23 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 using Gemu.Data;
 using Gemu.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Gemu.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class CarritoController : ControllerBase
 {
     private readonly ILogger<CarritoController> _logger;
     private readonly ICarritoService _carritoService;
+    private readonly IAuthService _authService;
 
-    public CarritoController(ILogger<CarritoController> logger, ICarritoService carritoService)
+    public CarritoController(ILogger<CarritoController> logger, ICarritoService carritoService, IAuthService authService)
     {
         _logger = logger;
         _carritoService = carritoService;
+        _authService = authService;
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpGet()]
     public ActionResult<List<Carrito>> GetAllCarritos()
     {
@@ -33,6 +38,7 @@ public class CarritoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public ActionResult<Carrito> GetCarritoId(int id)
     {
@@ -57,12 +63,22 @@ public class CarritoController : ControllerBase
         }
     }
 
-        [HttpGet("usuario")]
-    public ActionResult<CarritoListaDTO> GetBibliotecaUsuario(int id)
+    [HttpGet("usuario")]
+    public ActionResult<CarritoListaDTO> GetCarritoUsuario(int id)
     {
         try
         {
             _logger.LogInformation($"Se ha solicitado obtener el carrito con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                return Forbid();
+            }
 
             var biblioteca = _carritoService.GetCarritoUsuario(id);
 
@@ -81,12 +97,22 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [HttpPost("asignar-usuario")]
+    [HttpPost("crear")]
     public IActionResult CreateCarritoUsuario([FromBody] CarritoDTO carrito)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de carrito.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, carrito.IdUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {carrito.IdUsuario}.");
+                return Forbid();
+            }
 
             _carritoService.CreateCarritoUsuario(carrito);
             return Ok(carrito);
@@ -98,12 +124,22 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [HttpPost("{id}/añadir-producto")]
-    public IActionResult AñadirProductoCarrito(int id, [FromBody] List<int> producto)
+    [HttpPost("{id}/usuario/{idUsuario}/añadir-producto")]
+    public IActionResult AñadirProductoCarrito(int id, [FromBody] int idUsuario, List<int> producto)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de añadir un producto al carrito.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para añadir un juego al usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             _carritoService.AñadirProductoCarrito(id, producto);
             return Ok(producto);
@@ -115,12 +151,22 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [HttpPost("{id}/añadir-juego")]
-    public IActionResult AñadirJuegoCarrito(int id, [FromBody] List<int> juego)
+    [HttpPost("{id}/usuario/{idUsuario}/añadir-juego")]
+    public IActionResult AñadirJuegoCarrito(int id, [FromBody] int idUsuario, List<int> juego)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de añadir un juego al carrito.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para añadir un juego al usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             _carritoService.AñadirJuegoCarrito(id, juego);
             return Ok(juego);
@@ -132,6 +178,7 @@ public class CarritoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public IActionResult UpdateCarrito(int id, [FromBody] Carrito carrito)
     {
@@ -164,6 +211,7 @@ public class CarritoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public IActionResult DeleteCarrito(int id)
     {
@@ -190,12 +238,22 @@ public class CarritoController : ControllerBase
         }
     }
 
-        [HttpDelete("{id}/producto")]
-    public IActionResult EliminarProductoCarrito(int id, int idProduct)
+    [HttpDelete("{id}/usuario/{idUsuario}/producto")]
+    public IActionResult EliminarProductoCarrito(int id, [FromBody] int idUsuario, int idProduct)
     {
         try
         {
             _logger.LogInformation($"Se ha recibido una solicitud para eliminar un producto con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el producto del usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             var user = _carritoService.GetIdCarrito(id);
 
@@ -216,12 +274,22 @@ public class CarritoController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}/juego")]
-    public IActionResult EliminarJuegoCarrito(int id, int idJuego)
+    [HttpDelete("{id}/usuario/{idUsuario}/juego")]
+    public IActionResult EliminarJuegoCarrito(int id, [FromBody] int idUsuario, int idJuego)
     {
         try
         {
             _logger.LogInformation($"Se ha recibido una solicitud para eliminar un juego con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el juego del usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             var user = _carritoService.GetIdCarrito(id);
 

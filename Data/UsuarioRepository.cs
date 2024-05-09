@@ -19,6 +19,7 @@ public class UsuarioRepository : IUsuarioRepository
         {
             IdUsuario = u.IdUsuario,
             IdRol = u.IdRol,
+            Rol = u.Rol.Nombre,
             FotoPerfil = u.FotoPerfil,
             Nombre = u.Nombre,
             Correo = u.Correo,
@@ -33,7 +34,7 @@ public class UsuarioRepository : IUsuarioRepository
     //Read
     public UsuarioDTO GetIdUsuario(int idUsuario)
     {
-        var usuario = _context.Usuarios.FirstOrDefault(r => r.IdUsuario == idUsuario);
+        var usuario = _context.Usuarios.Include(u => u.Rol).FirstOrDefault(r => r.IdUsuario == idUsuario);
 
         if (usuario is null)
         {
@@ -44,6 +45,7 @@ public class UsuarioRepository : IUsuarioRepository
         {
             IdUsuario = usuario.IdUsuario,
             IdRol = usuario.IdRol,
+            Rol = usuario.Rol.Nombre,
             FotoPerfil = usuario.FotoPerfil,
             Nombre = usuario.Nombre,
             Correo = usuario.Correo,

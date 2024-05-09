@@ -7,6 +7,7 @@ public class UsuarioDTO
     public int IdUsuario { get; set; }
     [Required]
     public int IdRol { get; set; }
+    public string? Rol {get; set; }
     public byte[]? FotoPerfil { get; set; }
     [Required]
     public string? Nombre { get; set; }

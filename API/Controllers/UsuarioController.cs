@@ -50,7 +50,7 @@ public class UsuarioController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, id))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para llamar al usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.NameId)?.Value} no tiene acceso para llamar al usuario con ID: {id}.");
                 return Forbid();
             }
 

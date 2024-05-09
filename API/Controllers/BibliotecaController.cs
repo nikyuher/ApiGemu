@@ -63,7 +63,6 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
     [HttpGet("usuario")]
     public ActionResult<BibliotecaListaDTO> GetBibliotecaUsuario(int id)
     {
@@ -77,7 +76,7 @@ public class BibliotecaController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, id))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para llamar la biblioteca del usuario con ID: {id}.");
                 return Forbid();
             }
 
@@ -98,13 +97,22 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
-    [HttpPost("añadir-usuario")]
+    [HttpPost("crear")]
     public IActionResult CreateBibliotecaUsuario([FromBody] BibliotecaDTO biblioteca)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación una biblioteca.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, biblioteca.IdUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para crear una bibliteca al usuario con ID: {biblioteca.IdUsuario}.");
+                return Forbid();
+            }
 
             _bibliotecaService.CreateBibliotecaUsuario(biblioteca);
             return Ok(biblioteca);
@@ -116,13 +124,22 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
-    [HttpPost("{id}/añadir-producto")]
-    public IActionResult AñadirProductoBiblioteca(int id, [FromBody] List<int> producto)
+    [HttpPost("{id}/usuario/{idUsuario}/añadir-producto")]
+    public IActionResult AñadirProductoBiblioteca(int id, [FromBody] int idUsuario, List<int> producto)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de añadir un producto a la biblioteca.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para añadir un juego al usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             _bibliotecaService.AñadirProductoBiblioteca(id, producto);
             return Ok(producto);
@@ -134,13 +151,22 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
-    [HttpPost("{id}/asignar-juego")]
-    public IActionResult AñadirJuegoBiblioteca(int id, [FromBody] List<int> juego)
+    [HttpPost("{id}/usuario/{idUsuario}/añadir-juego")]
+    public IActionResult AñadirJuegoBiblioteca(int id, [FromBody] int idUsuario, List<int> juego)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de añadir un juego a la biblioteca.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para añadir un juego al usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             _bibliotecaService.AñadirJuegoBiblioteca(id, juego);
             return Ok(juego);
@@ -172,7 +198,7 @@ public class BibliotecaController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, biblioteca.IdUsuario))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {biblioteca.IdUsuario}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar la bibliteca del usuario con ID: {biblioteca.IdUsuario}.");
                 return Forbid();
             }
 
@@ -222,12 +248,22 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}/producto")]
-    public IActionResult EliminarProductoBiblioteca(int id, int idProduct)
+    [HttpDelete("{id}/usuario/{idUsuario}/producto")]
+    public IActionResult EliminarProductoBiblioteca(int id, [FromBody] int idUsuario, int idProduct)
     {
         try
         {
             _logger.LogInformation($"Se ha recibido una solicitud para eliminar un producto con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el producto del usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             var user = _bibliotecaService.GetIdBiblioteca(id);
 
@@ -248,13 +284,22 @@ public class BibliotecaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Usuario")]
-    [HttpDelete("{id}/juego")]
-    public IActionResult EliminarJuegoBiblioteca(int id, int idJuego)
+    [HttpDelete("{id}/usuario/{idUsuario}/juego")]
+    public IActionResult EliminarJuegoBiblioteca(int id, [FromBody] int idUsuario, int idJuego)
     {
         try
         {
             _logger.LogInformation($"Se ha recibido una solicitud para eliminar un juego con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el juedo del usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             var user = _bibliotecaService.GetIdBiblioteca(id);
 

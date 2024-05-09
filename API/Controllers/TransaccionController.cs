@@ -52,7 +52,7 @@ public class TransaccionController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, idUsuario))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {idUsuario}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para llamar las transacciones del usuario con ID: {idUsuario}.");
                 return Forbid();
             }
 
@@ -79,7 +79,7 @@ public class TransaccionController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, id))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para llamar la transaccion del usuario con ID: {id}.");
                 return Forbid();
             }
 
@@ -131,7 +131,7 @@ public class TransaccionController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, transaccion.IdUsuario))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {transaccion.IdUsuario}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {transaccion.IdUsuario}.");
                 return Forbid();
             }
 
@@ -162,9 +162,9 @@ public class TransaccionController : ControllerBase
             var currentUser = HttpContext.User;
 
             // Verificar si el usuario tiene acceso al recurso
-            if (!_authService.HasAccessToResource(currentUser, id))
+            if (!_authService.HasAccessToResource(currentUser, transaccion.IdUsuario))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {transaccion.IdUsuario}.");
                 return Forbid();
             }
 
@@ -187,38 +187,38 @@ public class TransaccionController : ControllerBase
         }
     }
 
-    [HttpDelete(Name = "DeleteTransaccion")]
-    public IActionResult DeleteTransaccion(int id)
+    [HttpDelete("{IdTransaccion}/usuario", Name = "DeleteTransaccion")]
+    public IActionResult DeleteTransaccion(int IdTransaccion, int idUsuario)
     {
         try
         {
-            _logger.LogInformation($"Se ha recibido una solicitud para eliminar la transaccion con ID: {id}.");
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar la transaccion con ID: {IdTransaccion}.");
 
             // Obtener el usuario autenticado
             var currentUser = HttpContext.User;
 
             // Verificar si el usuario tiene acceso al recurso
-            if (!_authService.HasAccessToResource(currentUser, id))
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {idUsuario}.");
                 return Forbid();
             }
 
-            var user = _transaccionService.GetIdTransaccion(id);
+            var user = _transaccionService.GetIdTransaccion(idUsuario);
 
             if (user is null)
             {
-                _logger.LogWarning($"No se encontró ningúna transaccion con ID: {id}.");
+                _logger.LogWarning($"No se encontró ningúna transaccion con ID: {IdTransaccion}.");
                 return NotFound();
             }
 
-            _transaccionService.DeleteTransaccion(id);
+            _transaccionService.DeleteTransaccion(IdTransaccion);
 
             return Ok();
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar eliminar la transaccion con ID {id}: {ex.Message}");
+            _logger.LogError($"Error al intentar eliminar la transaccion con ID {IdTransaccion}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

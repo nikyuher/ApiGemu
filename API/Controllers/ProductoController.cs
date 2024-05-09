@@ -134,12 +134,12 @@ public class ProductoController : ControllerBase
         }
     }
 
-    [HttpPost("{id}/asignar-categorias")]
+    [HttpPost("{id}/añadir-categorias")]
     public IActionResult AsignarCategoriasProducto(int id, [FromBody] List<int> ListaIdsCateogira)
     {
         try
         {
-            _logger.LogInformation($"Se ha recibido una solicitud para asignar categoria a usuario");
+            _logger.LogInformation($"Se ha recibido una solicitud para añadir categoria a usuario");
 
             var producto = _productoService.GetIdProducto(id);
 
@@ -155,30 +155,30 @@ public class ProductoController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar asignar una categoria : {ex.Message}");
+            _logger.LogError($"Error al intentar añadir una categoria : {ex.Message}");
             return BadRequest(new { message = ex.Message });
         }
     }
 
     //Update
-    [HttpPut("{id}/datos")]
-    public IActionResult UpdateProducto(int id, [FromBody] ProductoDTO producto)
+    [HttpPut("{idProducto}/datos")]
+    public IActionResult UpdateProducto(int idProducto, [FromBody] ProductoDTO producto)
     {
         try
         {
-            _logger.LogInformation($"Se ha recibido una solicitud de actualización del producto con ID: {id}.");
+            _logger.LogInformation($"Se ha recibido una solicitud de actualización del producto con ID: {idProducto}.");
 
-            if (id != producto.IdProducto)
+            if (idProducto != producto.IdProducto)
             {
                 _logger.LogError("El ID del producto en el cuerpo de la solicitud no coincide con el ID en la URL.");
                 return BadRequest();
             }
 
-            var existingProducto = _productoService.GetIdProducto(id);
+            var existingProducto = _productoService.GetIdProducto(idProducto);
 
             if (existingProducto is null)
             {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
+                _logger.LogWarning($"No se encontró ningún producto con ID: {idProducto}.");
                 return NotFound();
             }
 
@@ -188,7 +188,7 @@ public class ProductoController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al intentar actualizar producto con ID {id}: {ex.Message}");
+            _logger.LogError($"Error al intentar actualizar producto con ID {idProducto}: {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

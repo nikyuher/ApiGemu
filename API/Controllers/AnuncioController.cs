@@ -116,7 +116,7 @@ public class AnuncioController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}/usuario")]
     public IActionResult UpdateAnuncio(int id, [FromBody] Anuncio anuncio)
     {
         try
@@ -135,7 +135,7 @@ public class AnuncioController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, anuncio.IdUsuario))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {anuncio.IdUsuario}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar la reseña del usuario con ID: {anuncio.IdUsuario}.");
                 return Forbid();
             }
 
@@ -158,12 +158,22 @@ public class AnuncioController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteAnuncio(int id)
+    [HttpDelete("{id}/usuario")]
+    public IActionResult DeleteAnuncio(int id, [FromBody] int idUsuario)
     {
         try
         {
             _logger.LogInformation($"Se ha recibido una solicitud para eliminar el anuncio con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el anuncio del usuario con ID: {idUsuario}.");
+                return Forbid();
+            }
 
             var anuncio = _anuncioService.GetIdAnuncio(id);
 

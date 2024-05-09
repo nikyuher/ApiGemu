@@ -130,7 +130,7 @@ public class UsuarioController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, id))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {id}.");
                 return Forbid();
             }
 
@@ -173,7 +173,7 @@ public class UsuarioController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, id))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {id}.");
                 return Forbid();
             }
 
@@ -216,7 +216,7 @@ public class UsuarioController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, id))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {id}.");
                 return Forbid();
             }
 
@@ -258,7 +258,7 @@ public class UsuarioController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, id))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {id}.");
                 return Forbid();
             }
 
@@ -300,7 +300,7 @@ public class UsuarioController : ControllerBase
             // Verificar si el usuario tiene acceso al recurso
             if (!_authService.HasAccessToResource(currentUser, id))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para modificar el usuario con ID: {id}.");
                 return Forbid();
             }
 

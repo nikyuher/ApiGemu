@@ -65,11 +65,17 @@ public class ReseñaController : ControllerBase
     }
 
     [HttpPost("producto")]
-    public IActionResult CreateReseñaProducto([FromBody] ReseñaAddProducto reseña)
+    public IActionResult CreateReseñaProducto(int idProducto, [FromBody] ReseñaAddProducto reseña)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de la reseña.");
+
+            if (idProducto != reseña.IdProducto)
+            {
+                _logger.LogError("El ID del rol en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
 
             // Obtener el usuario autenticado
             var currentUser = HttpContext.User;
@@ -91,12 +97,18 @@ public class ReseñaController : ControllerBase
         }
     }
 
-        [HttpPost("juego")]
-    public IActionResult CreateReseñaJuego([FromBody] ReseñaAddJuego reseña)
+    [HttpPost("juego")]
+    public IActionResult CreateReseñaJuego(int idJuego, [FromBody] ReseñaAddJuego reseña)
     {
         try
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de la reseña.");
+
+            if (idJuego != reseña.IdJuego)
+            {
+                _logger.LogError("El ID del rol en el cuerpo de la solicitud no coincide con el ID en la URL.");
+                return BadRequest();
+            }
 
             // Obtener el usuario autenticado
             var currentUser = HttpContext.User;
@@ -145,8 +157,8 @@ public class ReseñaController : ControllerBase
         }
     }
 
-    [HttpDelete()]
-    public IActionResult DeleteReseña(int id)
+    [HttpDelete("{id}/usuario")]
+    public IActionResult DeleteReseña(int id, [FromBody] int idUsuario)
     {
         try
         {
@@ -156,9 +168,9 @@ public class ReseñaController : ControllerBase
             var currentUser = HttpContext.User;
 
             // Verificar si el usuario tiene acceso al recurso
-            if (!_authService.HasAccessToResource(currentUser, id))
+            if (!_authService.HasAccessToResource(currentUser, idUsuario))
             {
-                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar el usuario con ID: {id}.");
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value} no tiene acceso para eliminar la reseña del usuario con ID: {idUsuario}.");
                 return Forbid();
             }
 

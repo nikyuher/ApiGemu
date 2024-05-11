@@ -70,7 +70,6 @@ public class TransaccionRepository : ITransaccionRepository
         transaccion.Total = usuario.SaldoActual;
         usuario.SaldoActual += transaccion.Cantidad;
 
-
         _context.Transacciones.Add(transaccion);
         SaveChanges();
     }

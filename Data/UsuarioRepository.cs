@@ -84,11 +84,6 @@ public class UsuarioRepository : IUsuarioRepository
     public Usuario CreateUsuario(UsuarioCreateDTO usuario)
     {
 
-        if (_context.Usuarios.Any(u => u.Nombre == usuario.Nombre))
-        {
-            throw new ArgumentException("El nombre de usuario ya está en uso.");
-        }
-
         if (_context.Usuarios.Any(u => u.Correo == usuario.Correo))
         {
             throw new ArgumentException("El correo electrónico ya está en uso.");
@@ -111,8 +106,8 @@ public class UsuarioRepository : IUsuarioRepository
         var nombreRol = _context.Roles.FirstOrDefault(r => r.IdRol == newUsuario.IdRol);
 
         newUsuario.Rol = nombreRol;
-        newUsuario.Carrito = new Carrito{ IdUsuario=newUsuario.IdUsuario};
-        newUsuario.Biblioteca = new Biblioteca{ IdUsuario=newUsuario.IdUsuario};
+        newUsuario.Carrito = new Carrito { IdUsuario = newUsuario.IdUsuario };
+        newUsuario.Biblioteca = new Biblioteca { IdUsuario = newUsuario.IdUsuario };
 
         _context.Usuarios.Add(newUsuario);
         SaveChanges();
@@ -177,7 +172,13 @@ public class UsuarioRepository : IUsuarioRepository
             throw new KeyNotFoundException("No se encontró el Usuario a actualizar.");
         }
 
+        if (_context.Usuarios.Any(u => u.Correo == usuario.Correo && u.IdUsuario != usuario.IdUsuario))
+        {
+            throw new ArgumentException("El correo electrónico ya está en uso.");
+        }
+
         existingUser.Nombre = usuario.Nombre;
+        existingUser.Correo = usuario.Correo;
 
         _context.Usuarios.Update(existingUser);
         SaveChanges();

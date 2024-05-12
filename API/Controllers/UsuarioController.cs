@@ -67,7 +67,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar obtener el usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -202,7 +202,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar el rol del usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -244,11 +244,11 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar la direccion del usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
-    [HttpPut("{id}/nombre", Name = "PutNombreUsuario")]
+    [HttpPut("{id}/datos", Name = "PutDatosUsuario")]
     public IActionResult UpdateInfoUsuario(int id, [FromBody] UsuarioInfoDTO user)
     {
         try
@@ -286,7 +286,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar la informacion del usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -329,7 +329,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar la foto del usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -365,7 +365,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar eliminar usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 }

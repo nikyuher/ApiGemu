@@ -76,7 +76,7 @@ public class BibliotecaRepository : IBibliotecaRepository
 
     public BibliotecaListaDTO GetBibliotecaUsuario(int idUsuario)
     {
-        var biblioteca = _context.Bibliotecas.Include(r => r.Juegos).Include(r => r.Productos).FirstOrDefault(r => r.IdUsuario == idUsuario);
+        var biblioteca = _context.Bibliotecas.Include(r => r.Juegos).ThenInclude(j => j.ImgsJuego).Include(r => r.Productos).ThenInclude(p => p.ImgsProducto).FirstOrDefault(r => r.IdUsuario == idUsuario);
 
         if (biblioteca is null)
         {
@@ -85,6 +85,7 @@ public class BibliotecaRepository : IBibliotecaRepository
 
         var newBiblioteca = new BibliotecaListaDTO
         {
+            IdBiblioteca = biblioteca.IdBiblioteca,
             IdUsuario = biblioteca.IdUsuario,
             Productos = biblioteca.Productos.Select(u => new ProductoBibliotecaDTO
             {

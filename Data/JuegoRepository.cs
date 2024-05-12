@@ -23,7 +23,7 @@ public class JuegoRepository : IJuegoRepository
 
     public JuegoDTO GetIdJuego(int idJuego)
     {
-        var juego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+        var juego = _context.Juegos.Include(r => r.ImgsJuego).FirstOrDefault(r => r.IdJuego == idJuego);
 
         if (juego is null)
         {

@@ -81,8 +81,6 @@ public class ProductoRepository : IProductoRepository
             Descripcion = producto.Descripcion,
             Estado = producto.Estado,
             Cantidad = producto.Cantidad,
-            ImgsProducto = producto.ImgsProducto,
-            Categorias = producto.Categorias,
             Fecha = DateTime.Today
         };
 

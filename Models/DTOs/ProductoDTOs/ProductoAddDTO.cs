@@ -14,7 +14,5 @@ public class ProductoAddDTO
     public string? Estado { get; set; }
     [Required]
     public int Cantidad { get; set; }
-    public List<Imagen>? ImgsProducto { get; set; } = new List<Imagen>();
-    public List<Categoria>? Categorias {get; set; }= new List<Categoria>();
 
 }

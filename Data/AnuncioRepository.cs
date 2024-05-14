@@ -1,4 +1,5 @@
 using Gemu.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gemu.Data;
 public class AnuncioRepository : IAnuncioRepository
@@ -33,7 +34,7 @@ public class AnuncioRepository : IAnuncioRepository
 
     public List<AnuncioDTO> GetAnunciosUsuario(int idUsuario)
     {
-        var anuncios = _context.Anuncios.Where(r => r.IdUsuario == idUsuario).ToList();
+        var anuncios = _context.Anuncios.Include( r  => r.Producto).ThenInclude(r => r.ImgsProducto).Where(r => r.IdUsuario == idUsuario).ToList();
 
         if (anuncios is null)
         {
@@ -43,7 +44,7 @@ public class AnuncioRepository : IAnuncioRepository
         var newAnuncio = anuncios.Select(r => new AnuncioDTO
         {
             IdUsuario = r.IdUsuario,
-            Producto = new ProductoBibliotecaDTO
+            Producto =  new ProductoBibliotecaDTO
             {
                 Nombre = r.Producto.Nombre,
                 Precio = r.Producto.Precio,
@@ -51,16 +52,22 @@ public class AnuncioRepository : IAnuncioRepository
                 ImgsProducto = r.Producto.ImgsProducto,
                 Categorias = r.Producto.Categorias
             }
-
         }).ToList();
 
         return newAnuncio;
     }
 
     //Create
-    public void CreateAnuncio(Anuncio anuncio)
+    public void CreateAnuncio(AnuncioAddDTO anuncio)
     {
-        _context.Anuncios.Add(anuncio);
+
+        var newAnuncio = new Anuncio
+        {
+            IdUsuario = anuncio.IdUsuario,
+            IdProducto = anuncio.IdProducto
+        };
+
+        _context.Anuncios.Add(newAnuncio);
         SaveChanges();
     }
 

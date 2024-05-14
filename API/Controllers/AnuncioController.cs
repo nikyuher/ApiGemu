@@ -60,7 +60,7 @@ public class AnuncioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar obtener todos los anuncios del usuario {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -90,7 +90,7 @@ public class AnuncioController : ControllerBase
     }
 
     [HttpPost("crear")]
-    public IActionResult CreateAnuncio([FromBody] Anuncio anuncio)
+    public IActionResult CreateAnuncio([FromBody] AnuncioAddDTO anuncio)
     {
         try
         {

@@ -23,7 +23,7 @@ public class AnuncioService : IAnuncioService
     {
         return _anuncioRepository.GetIdAnuncio(idAnuncio);
     }
-    public void CreateAnuncio(Anuncio anuncio)
+    public void CreateAnuncio(AnuncioAddDTO anuncio)
     {
         _anuncioRepository.CreateAnuncio(anuncio);
     }

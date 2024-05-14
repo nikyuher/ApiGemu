@@ -65,17 +65,18 @@ public class CategoriaController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("seccion")]
-    public ActionResult<List<Categoria>> GetCategoriasSeccion(string seccion)
+    public ActionResult<List<Categoria>> GetCategoriasSeccion(string nombre)
     {
         try
         {
-            _logger.LogInformation($"Se ha solicitado obtener todas las categorias de la seccion: {seccion}");
+            _logger.LogInformation($"Se ha solicitado obtener todas las categorias de la seccion: {nombre}");
 
-            var categorias = _categoriaService.GetCategoriaSeccion(seccion);
+            var categorias = _categoriaService.GetCategoriaSeccion(nombre);
 
             if (categorias is null)
             {
-                throw new Exception($"No se existe ninguna seccion llamada: {seccion}");
+                _logger.LogWarning($"No se existe ninguna seccion llamada: {nombre}");
+                return NotFound();
             }
 
             return Ok(categorias);

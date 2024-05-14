@@ -45,4 +45,5 @@ public class Producto
     public int? IdCategoria { get; set; }
     [JsonIgnore]
     public Categoria? Categoria { get; set; }
+
 }

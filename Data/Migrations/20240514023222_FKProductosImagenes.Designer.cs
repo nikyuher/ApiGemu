@@ -4,6 +4,7 @@ using Gemu.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gemu.Data.Migrations
 {
     [DbContext(typeof(GemuContext))]
-    partial class GemuContextModelSnapshot : ModelSnapshot
+    [Migration("20240514023222_FKProductosImagenes")]
+    partial class FKProductosImagenes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,6 +140,9 @@ namespace Gemu.Data.Migrations
                     b.Property<int?>("ProductoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductoIdProducto")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("JuegoId");
@@ -147,6 +152,10 @@ namespace Gemu.Data.Migrations
                         .HasFilter("[JuegoIdJuego] IS NOT NULL");
 
                     b.HasIndex("ProductoId");
+
+                    b.HasIndex("ProductoIdProducto")
+                        .IsUnique()
+                        .HasFilter("[ProductoIdProducto] IS NOT NULL");
 
                     b.ToTable("Imagenes");
                 });
@@ -253,6 +262,9 @@ namespace Gemu.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("IdCategoria")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdImagen")
                         .HasColumnType("int");
 
                     b.Property<int?>("IdReseña")
@@ -495,8 +507,7 @@ namespace Gemu.Data.Migrations
                 {
                     b.HasOne("Gemu.Models.Juego", "Juego")
                         .WithMany("ImgsJuego")
-                        .HasForeignKey("JuegoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("JuegoId");
 
                     b.HasOne("Gemu.Models.Juego", null)
                         .WithOne("Imagen")
@@ -504,8 +515,11 @@ namespace Gemu.Data.Migrations
 
                     b.HasOne("Gemu.Models.Producto", "Producto")
                         .WithMany("ImgsProducto")
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProductoId");
+
+                    b.HasOne("Gemu.Models.Producto", null)
+                        .WithOne("Imagen")
+                        .HasForeignKey("Gemu.Models.Imagen", "ProductoIdProducto");
 
                     b.Navigation("Juego");
 
@@ -641,6 +655,8 @@ namespace Gemu.Data.Migrations
                     b.Navigation("Anuncio");
 
                     b.Navigation("Categorias");
+
+                    b.Navigation("Imagen");
 
                     b.Navigation("ImgsProducto");
 

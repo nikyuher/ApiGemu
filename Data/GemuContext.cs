@@ -101,25 +101,36 @@ public class GemuContext : DbContext
             .WithOne(c => c.Juego)
             .HasForeignKey(c => c.IdJuego);
 
-        // Relación entre Imagen y Juego
-        modelBuilder.Entity<Imagen>()
-            .HasOne(i => i.Juego)
-            .WithMany(j => j.ImgsJuego)
-            .HasForeignKey(i => i.JuegoId);
+        modelBuilder.Entity<Juego>()
+                .HasMany(p => p.ImgsJuego)
+                .WithOne(i => i.Juego)
+                .HasForeignKey(i => i.JuegoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Producto>()
+            .HasMany(p => p.ImgsProducto)
+            .WithOne(i => i.Producto)
+            .HasForeignKey(i => i.ProductoId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // Relación entre Imagen y Producto
         modelBuilder.Entity<Imagen>()
             .HasOne(i => i.Producto)
             .WithMany(p => p.ImgsProducto)
             .HasForeignKey(i => i.ProductoId);
+            // Relación entre Imagen y Juego
+        modelBuilder.Entity<Imagen>()
+            .HasOne(i => i.Juego)
+            .WithMany(p => p.ImgsJuego)
+            .HasForeignKey(i => i.JuegoId);
 
         modelBuilder.Entity<Rol>().HasData(
         new Rol { IdRol = 1, Nombre = "Usuario" },
-        new Rol { IdRol = 2, Nombre = "Admin"}
+        new Rol { IdRol = 2, Nombre = "Admin" }
         );
-        
+
         modelBuilder.Entity<Usuario>().HasData(
-            new Usuario{ IdUsuario = 1, IdRol=2, Nombre= "Admin", Correo ="admin@gmail.com", Contraseña ="ADMINcontraseña123@"}
+            new Usuario { IdUsuario = 1, IdRol = 2, Nombre = "Admin", Correo = "admin@gmail.com", Contraseña = "ADMINcontraseña123@" }
         );
 
     }

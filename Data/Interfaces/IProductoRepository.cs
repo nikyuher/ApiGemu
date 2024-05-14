@@ -9,7 +9,7 @@ public interface IProductoRepository
     public ProductoCategoriasDTO GetCategoriasProduct(int idProducto);
     public ProductoReseñaDTO GetReseñasProducto(int idProducto);
     //Create
-    void CreateProducto(ProductoAddDTO producto);
+    public Producto CreateProducto(ProductoAddDTO producto);
     void AsignarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);
     //Update
     void UpdateProducto(ProductoDTO producto);

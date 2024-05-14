@@ -124,8 +124,8 @@ public class ProductoController : ControllerBase
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de producto.");
 
-            _productoService.CreateProducto(producto);
-            return Ok(producto);
+            var newProducto = _productoService.CreateProducto(producto);
+            return Ok(newProducto);
         }
         catch (Exception ex)
         {

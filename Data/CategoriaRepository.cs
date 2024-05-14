@@ -9,7 +9,8 @@ public class CategoriaRepository : ICategoriaRepository
     {
         _context = context;
     }
-    
+
+    //Read
     public List<Categoria> GetAllCategorias()
     {
         var categoria = _context.Categorias.ToList();
@@ -17,7 +18,6 @@ public class CategoriaRepository : ICategoriaRepository
         return categoria;
     }
 
-    //Read
     public Categoria GetIdCategoria(int idCategoria)
     {
         var categoria = _context.Categorias.FirstOrDefault(r => r.IdCategoria == idCategoria);
@@ -29,6 +29,19 @@ public class CategoriaRepository : ICategoriaRepository
 
         return categoria;
     }
+
+    public List<Categoria> GetCategoriaSeccion(string seccion)
+    {
+        var categorias = _context.Categorias.Where(s => s.Seccion == seccion);
+
+        if (categorias is null)
+        {
+            throw new Exception($"No se existe ninguna seccion llamada: {seccion}");
+        }
+
+        return categorias.ToList();
+    }
+
 
     //Create
     public void CreateCategoria(Categoria categoria)

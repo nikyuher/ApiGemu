@@ -19,6 +19,9 @@ public class CategoriaService : ICategoriaService
     {
         return _categoriaRepository.GetIdCategoria(idCategoria);
     }
+    public List<Categoria> GetCategoriaSeccion(string seccion){
+        return _categoriaRepository.GetCategoriaSeccion(seccion);
+    }
     public void CreateCategoria(Categoria categoria)
     {
         _categoriaRepository.CreateCategoria(categoria);

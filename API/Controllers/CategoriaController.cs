@@ -59,7 +59,31 @@ public class CategoriaController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar obtener el categoria con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("seccion")]
+    public ActionResult<List<Categoria>> GetCategoriasSeccion(string seccion)
+    {
+        try
+        {
+            _logger.LogInformation($"Se ha solicitado obtener todas las categorias de la seccion: {seccion}");
+
+            var categorias = _categoriaService.GetCategoriaSeccion(seccion);
+
+            if (categorias is null)
+            {
+                throw new Exception($"No se existe ninguna seccion llamada: {seccion}");
+            }
+
+            return Ok(categorias);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos los categorias: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -110,7 +134,7 @@ public class CategoriaController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar categoria con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -137,7 +161,7 @@ public class CategoriaController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar eliminar categoria con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 }

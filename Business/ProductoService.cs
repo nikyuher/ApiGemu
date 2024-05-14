@@ -30,9 +30,9 @@ public class ProductoService : IProductoService
         return _productoRepository.GetReseñasProducto(idProducto);
     }
     //Create
-    public void CreateProducto(ProductoAddDTO producto)
+    public Producto CreateProducto(ProductoAddDTO producto)
     {
-        _productoRepository.CreateProducto(producto);
+       return _productoRepository.CreateProducto(producto);
     }
     public void AsignarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira)
     {

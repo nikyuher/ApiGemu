@@ -72,7 +72,7 @@ public class ProductoRepository : IProductoRepository
     }
 
     //Create
-    public void CreateProducto(ProductoAddDTO producto)
+    public Producto CreateProducto(ProductoAddDTO producto)
     {
         var newProducto = new Producto
         {
@@ -86,6 +86,8 @@ public class ProductoRepository : IProductoRepository
 
         _context.Productos.Add(newProducto);
         SaveChanges();
+        
+        return newProducto;
     }
 
     public void AsignarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira)

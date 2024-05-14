@@ -7,5 +7,6 @@ public class AnuncioDTO
     public int IdAnuncio { get; set; }
     [Required]
     public int IdUsuario { get; set; }
+    public DateTime Fecha { get; set; }
     public ProductoBibliotecaDTO? Producto { get; set; }
 }

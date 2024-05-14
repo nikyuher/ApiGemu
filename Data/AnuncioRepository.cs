@@ -44,6 +44,7 @@ public class AnuncioRepository : IAnuncioRepository
         var newAnuncio = anuncios.Select(r => new AnuncioDTO
         {
             IdUsuario = r.IdUsuario,
+            Fecha = r.Fecha,
             Producto =  new ProductoBibliotecaDTO
             {
                 Nombre = r.Producto.Nombre,
@@ -64,7 +65,8 @@ public class AnuncioRepository : IAnuncioRepository
         var newAnuncio = new Anuncio
         {
             IdUsuario = anuncio.IdUsuario,
-            IdProducto = anuncio.IdProducto
+            IdProducto = anuncio.IdProducto,
+            Fecha = DateTime.Today
         };
 
         _context.Anuncios.Add(newAnuncio);

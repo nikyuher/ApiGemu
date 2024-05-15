@@ -90,17 +90,34 @@ public class GemuContext : DbContext
             .HasForeignKey(r => r.IdJuego);
 
         // Relación entre Producto y Categoria
-        modelBuilder.Entity<Producto>()
-            .HasMany(p => p.Categorias)
-            .WithOne(c => c.Producto)
-            .HasForeignKey(c => c.IdProducto);
+        modelBuilder.Entity<ProductoCategoria>()
+            .HasKey(pc => new { pc.ProductoId, pc.CategoriaId });
+
+        modelBuilder.Entity<ProductoCategoria>()
+            .HasOne(pc => pc.Producto)
+            .WithMany(p => p.ProductoCategorias)
+            .HasForeignKey(pc => pc.ProductoId);
+
+        modelBuilder.Entity<ProductoCategoria>()
+            .HasOne(pc => pc.Categoria)
+            .WithMany(c => c.ProductoCategorias)
+            .HasForeignKey(pc => pc.CategoriaId);
 
         // Relación entre Juego y Categoria
-        modelBuilder.Entity<Juego>()
-            .HasMany(j => j.Categorias)
-            .WithOne(c => c.Juego)
-            .HasForeignKey(c => c.IdJuego);
+        modelBuilder.Entity<JuegoCategoria>()
+            .HasKey(jc => new { jc.JuegoId, jc.CategoriaId });
 
+        modelBuilder.Entity<JuegoCategoria>()
+            .HasOne(jc => jc.Juego)
+            .WithMany(j => j.JuegoCategorias)
+            .HasForeignKey(jc => jc.JuegoId);
+
+        modelBuilder.Entity<JuegoCategoria>()
+            .HasOne(jc => jc.Categoria)
+            .WithMany(c => c.JuegoCategorias)
+            .HasForeignKey(jc => jc.CategoriaId);
+
+        // Relacion entre juegos. producto e imagenes
         modelBuilder.Entity<Juego>()
                 .HasMany(p => p.ImgsJuego)
                 .WithOne(i => i.Juego)
@@ -118,7 +135,7 @@ public class GemuContext : DbContext
             .HasOne(i => i.Producto)
             .WithMany(p => p.ImgsProducto)
             .HasForeignKey(i => i.ProductoId);
-            // Relación entre Imagen y Juego
+        // Relación entre Imagen y Juego
         modelBuilder.Entity<Imagen>()
             .HasOne(i => i.Juego)
             .WithMany(p => p.ImgsJuego)
@@ -146,4 +163,6 @@ public class GemuContext : DbContext
     public DbSet<Imagen> Imagenes { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
     public DbSet<Rol> Roles { get; set; }
+    public DbSet<JuegoCategoria> juegoCategorias { get; set; }
+    public DbSet<ProductoCategoria> ProductoCategorias { get; set; }
 }

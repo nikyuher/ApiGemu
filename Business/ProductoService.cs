@@ -43,11 +43,6 @@ public class ProductoService : IProductoService
     {
         _productoRepository.UpdateProducto(producto);
     }
-  
-    public void UpdateCategoriasProducto(int idProducto, List<Categoria> ListaCategoria)
-    {
-        _productoRepository.UpdateCategoriasProducto(idProducto, ListaCategoria);
-    }
 
     //Delete
     public void DeleteProducto(int idProducto)

@@ -23,7 +23,7 @@ public class BibliotecaRepository : IBibliotecaRepository
                 Precio = p.Precio,
                 Estado = p.Estado,
                 ImgsProducto = p.ImgsProducto,
-                Categorias = p.Categorias
+                ProductoCategorias = p.ProductoCategorias
             }).ToList(),
             Juegos = u.Juegos.Select(p => new JuegoBiliotecaDTO
             {
@@ -31,7 +31,7 @@ public class BibliotecaRepository : IBibliotecaRepository
                 Precio = p.Precio,
                 CodigoJuego = p.CodigoJuego,
                 ImgsJuego = p.ImgsJuego,
-                Categorias = p.Categorias
+                JuegoCategorias = p.JuegoCategorias
             }).ToList()
         }).ToList();
 
@@ -58,7 +58,7 @@ public class BibliotecaRepository : IBibliotecaRepository
                 Precio = u.Precio,
                 Estado = u.Estado,
                 ImgsProducto = u.ImgsProducto,
-                Categorias = u.Categorias
+                ProductoCategorias = u.ProductoCategorias
             }).ToList(),
             Juegos = biblioteca.Juegos.Select(u => new JuegoBiliotecaDTO
             {
@@ -67,7 +67,7 @@ public class BibliotecaRepository : IBibliotecaRepository
                 Precio = u.Precio,
                 CodigoJuego = u.CodigoJuego,
                 ImgsJuego = u.ImgsJuego,
-                Categorias = u.Categorias
+                JuegoCategorias = u.JuegoCategorias
             }).ToList(),
         };
 
@@ -94,7 +94,7 @@ public class BibliotecaRepository : IBibliotecaRepository
                 Precio = u.Precio,
                 Estado = u.Estado,
                 ImgsProducto = u.ImgsProducto,
-                Categorias = u.Categorias
+                ProductoCategorias = u.ProductoCategorias
             }).ToList(),
             Juegos = biblioteca.Juegos.Select(u => new JuegoBiliotecaDTO
             {
@@ -103,7 +103,7 @@ public class BibliotecaRepository : IBibliotecaRepository
                 Precio = u.Precio,
                 CodigoJuego = u.CodigoJuego,
                 ImgsJuego = u.ImgsJuego,
-                Categorias = u.Categorias
+                JuegoCategorias = u.JuegoCategorias
             }).ToList(),
         };
 

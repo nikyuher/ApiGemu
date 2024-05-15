@@ -15,6 +15,6 @@ public class JuegoAddDTO
     [Required]
     public string? Plataforma { get; set; }
     public List<Imagen>? ImgsJuego { get; set; } = new List<Imagen>();
-    public List<Categoria>? Categorias = new List<Categoria>();
+    public List<JuegoCategoria>? JuegoCategorias { get; set; } = new List<JuegoCategoria>();
 
 }

@@ -41,7 +41,7 @@ public class JuegoRepository : IJuegoRepository
             ImgsJuego = juego.ImgsJuego,
             Reseñas = juego.Reseñas,
             Fecha = juego.Fecha,
-            Categorias = juego.Categorias
+            JuegoCategorias = juego.JuegoCategorias
         };
 
         return newJuego;
@@ -50,7 +50,7 @@ public class JuegoRepository : IJuegoRepository
     public JuegoCategoriasDTO GetCategoriasJuego(int idJuego)
     {
 
-        var juego = _context.Juegos.Include(r => r.Categorias).FirstOrDefault(r => r.IdJuego == idJuego);
+        var juego = _context.Juegos.Include(r => r.JuegoCategorias).FirstOrDefault(r => r.IdJuego == idJuego);
 
         if (juego is null)
         {
@@ -61,7 +61,7 @@ public class JuegoRepository : IJuegoRepository
         {
             IdJuego = juego.IdJuego,
             Titulo = juego.Titulo,
-            Categorias = juego.Categorias
+            JuegoCategorias = juego.JuegoCategorias
         };
 
         return newJuego;
@@ -100,7 +100,7 @@ public class JuegoRepository : IJuegoRepository
             Plataforma = juego.Plataforma,
             CodigoJuego = GenerateGameCode(),
             ImgsJuego = juego.ImgsJuego,
-            Categorias = juego.Categorias, 
+            JuegoCategorias = juego.JuegoCategorias,
             Fecha = DateTime.Today
         };
 
@@ -108,9 +108,20 @@ public class JuegoRepository : IJuegoRepository
         SaveChanges();
     }
 
-    public void AsignarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira)
+    public void AsignarCategoriasJuego(int idJuego, List<int> ListaIdsCategoria)
     {
-        foreach (var item in ListaIdsCateogira)
+
+        var juego = _context.Juegos.Include(j => j.JuegoCategorias).FirstOrDefault(p => p.IdJuego == idJuego);
+
+
+        if (juego is null)
+        {
+            throw new Exception($"No se encontro el juego con el ID: {idJuego}");
+        }
+
+        juego.JuegoCategorias.Clear();
+
+        foreach (var item in ListaIdsCategoria)
         {
             var categoria = _context.Categorias.FirstOrDefault(r => r.IdCategoria == item);
 
@@ -119,14 +130,14 @@ public class JuegoRepository : IJuegoRepository
                 throw new Exception($"No se encontro la categoria con el ID: {item}");
             }
 
-            var juego = _context.Juegos.FirstOrDefault(p => p.IdJuego == idJuego);
 
-            if (juego is null)
+            var newCategoria = new JuegoCategoria
             {
-                throw new Exception($"No se encontro el juego con el ID: {idJuego}");
-            }
+                JuegoId = juego.IdJuego,
+                CategoriaId = categoria.IdCategoria
+            };
 
-            juego.Categorias.Add(categoria);
+            juego.JuegoCategorias.Add(newCategoria);
         }
         SaveChanges();
     }
@@ -145,20 +156,6 @@ public class JuegoRepository : IJuegoRepository
     }
 
 
-    public void UpdateCategoriasJuego(int idJuego, List<Categoria> ListaCategoria)
-    {
-
-        var Categorias = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
-
-        if (Categorias is null)
-        {
-            throw new Exception($"No se encontro el Juego con el id {idJuego}");
-        }
-
-        Categorias.Categorias.Clear();
-        Categorias.Categorias.AddRange(ListaCategoria);
-    }
-
     //Delete
     public void DeleteJuego(int idJuego)
     {
@@ -174,26 +171,27 @@ public class JuegoRepository : IJuegoRepository
     }
 
 
-    public void EliminarCategoriasJuego(int id, List<int> ListaIdsCategoria)
+    public void EliminarCategoriasJuego(int idJuego, List<int> ListaIdsCategoria)
     {
 
-        foreach (var item in ListaIdsCategoria)
+        var juego = _context.Juegos.FirstOrDefault(p => p.IdJuego == idJuego);
+
+        if (juego is null)
         {
-            var categoria = _context.Categorias.FirstOrDefault(r => r.IdCategoria == item);
+            throw new Exception($"No se encontro el juego con el ID: {idJuego}");
+        }
+
+        foreach (var categoriaId in ListaIdsCategoria)
+        {
+            var categoria = _context.juegoCategorias.FirstOrDefault(c => c.JuegoId == idJuego && c.CategoriaId == categoriaId);
 
             if (categoria is null)
             {
-                throw new Exception($"No se encontro la categoria con el ID: {item}");
+                throw new Exception($"No se encontró la categoría con el ID: {categoriaId} asociada al juego con ID: {idJuego}");
             }
 
-            var juego = _context.Juegos.FirstOrDefault(p => p.IdJuego == id);
 
-            if (juego is null)
-            {
-                throw new Exception($"No se encontro el juego con el ID: {id}");
-            }
-
-            juego.Categorias.Remove(categoria);
+            juego.JuegoCategorias.Remove(categoria);
 
         }
         SaveChanges();

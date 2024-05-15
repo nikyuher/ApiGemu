@@ -33,7 +33,7 @@ public class Juego
     public string? CodigoJuego { get; set; }
     public List<Imagen>? ImgsJuego { get; set; } = new List<Imagen>();
     public List<Reseña>? Reseñas { get; set; } = new List<Reseña>();
-    public List<Categoria>? Categorias = new List<Categoria>();
+    public List<JuegoCategoria>? JuegoCategorias { get; set; } = new List<JuegoCategoria>();
     public double CalificacionPromedio
     {
         get
@@ -68,10 +68,6 @@ public class Juego
     public int? IdImagen { get; set; }
     [JsonIgnore]
     public Imagen? Imagen { get; set; }
-    // Relación con Categoria
-    [JsonIgnore]
-    public int? IdCategoria { get; set; }
-    [JsonIgnore]
-    public Categoria? Categoria { get; set; }
+
 
 }

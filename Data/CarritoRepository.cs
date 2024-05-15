@@ -49,7 +49,7 @@ public class CarritoRepository : ICarritoRepository
                 Precio = u.Precio,
                 Estado = u.Estado,
                 ImgsProducto = u.ImgsProducto,
-                Categorias = u.Categorias
+                ProductoCategorias = u.ProductoCategorias
             }).ToList(),
             Juegos = carrito.Juegos.Select(u => new JuegoBiliotecaDTO
             {
@@ -58,7 +58,7 @@ public class CarritoRepository : ICarritoRepository
                 Precio = u.Precio,
                 CodigoJuego = u.CodigoJuego,
                 ImgsJuego = u.ImgsJuego,
-                Categorias = u.Categorias
+                JuegoCategorias = u.JuegoCategorias
             }).ToList(),
         };
 

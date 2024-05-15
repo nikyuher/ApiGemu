@@ -17,7 +17,7 @@ public class Producto
     [Required]
     public int Cantidad { get; set; }
     public List<Imagen>? ImgsProducto { get; set; } = new List<Imagen>();
-    public List<Categoria>? Categorias { get; set; } = new List<Categoria>();
+    public List<ProductoCategoria>? ProductoCategorias { get; set; } = new List<ProductoCategoria>();
     public List<Reseña>? Reseñas { get; set; } = new List<Reseña>();
 
     // Relación con Biblioteca
@@ -40,10 +40,6 @@ public class Producto
     public int? IdAnuncio { get; set; }
     [JsonIgnore]
     public Anuncio? Anuncio { get; set; }
-    // Relación con Categoria
-    [JsonIgnore]
-    public int? IdCategoria { get; set; }
-    [JsonIgnore]
-    public Categoria? Categoria { get; set; }
+
 
 }

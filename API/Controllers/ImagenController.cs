@@ -190,7 +190,7 @@ public class ImagenController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar imagenes : {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -220,37 +220,27 @@ public class ImagenController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar imagenes : {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
     //Delete
-    [HttpDelete("{id}")]
-    public IActionResult DeleteImagen([FromBody] List<int> ids)
+    [HttpDelete("producto")]
+    public IActionResult DeleteImagenesProducto([FromBody] int idProducto)
     {
         try
         {
 
-            foreach (var item in ids)
-            {
-                _logger.LogInformation($"Se ha recibido una solicitud para eliminar el imagen con ID: {ids}.");
-                var imagen = _imagenService.GetIdImagen(item);
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar imagenes del producto con ID: {idProducto}.");
 
-                if (imagen is null)
-                {
-                    _logger.LogWarning($"No se encontró ningún imagen con ID: {item}.");
-                    return NotFound();
-                }
-            }
-
-            _imagenService.DeleteImagen(ids);
+            _imagenService.DeleteImagenesProducto(idProducto);
 
             return Ok();
         }
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar eliminar imagenes: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 }

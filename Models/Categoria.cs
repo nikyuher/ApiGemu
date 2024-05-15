@@ -7,17 +7,10 @@ public class Categoria
     public int IdCategoria { get; set; }
     [Required]
     public string? Nombre { get; set; }
-    public string? Seccion{ get; set; }
-
-    //Relacion Juego
+    public string? Seccion { get; set; }
     [JsonIgnore]
-    public int? IdJuego { get; set; }
+    public List<ProductoCategoria>? ProductoCategorias { get; set; } = new List<ProductoCategoria>();
     [JsonIgnore]
-    public Juego? Juego { get; set; }
-    //Relacion Producto
-    [JsonIgnore]
-    public int? IdProducto { get; set; }
-    [JsonIgnore]
-    public Producto? Producto { get; set; }
+    public List<JuegoCategoria>? JuegoCategorias { get; set; } = new List<JuegoCategoria>();
 
 }

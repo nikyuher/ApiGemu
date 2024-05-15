@@ -196,34 +196,6 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpPut("{id}/categorias")]
-    public IActionResult UpdateCategoriasJuego(int id, [FromBody] List<Categoria> ListaCategoria)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud de actualización las categorias del juego con ID: {id}.");
-
-            var juego = _juegoService.GetIdJuego(id);
-
-            if (juego is null)
-            {
-                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
-                return NotFound();
-            }
-
-            _juegoService.UpdateCategoriasJuego(id, ListaCategoria);
-
-            return Ok(juego);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar actualizar las categorias del juego con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
-
-
     //Delete
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]

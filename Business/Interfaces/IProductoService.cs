@@ -13,7 +13,6 @@ public interface IProductoService
     void AsignarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);
     //Update
     void UpdateProducto(ProductoDTO producto);
-    void UpdateCategoriasProducto(int idProducto, List<Categoria> ListaCategoria);
     //Delete
     void DeleteProducto(int idProducto);
     void EliminarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);

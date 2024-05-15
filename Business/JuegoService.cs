@@ -46,11 +46,6 @@ public class JuegoService : IJuegoService
         _juegoRepository.UpdateJuego(juego);
     }
 
-    public void UpdateCategoriasJuego(int idJuego, List<Categoria> ListaCategoria)
-    {
-        _juegoRepository.UpdateCategoriasJuego(idJuego, ListaCategoria);
-    }
-
     //Delete
     public void DeleteJuego(int idJuego)
     {

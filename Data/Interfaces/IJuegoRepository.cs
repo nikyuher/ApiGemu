@@ -13,7 +13,6 @@ public interface IJuegoRepository
     void AsignarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira);
     //Update
     void UpdateJuego(Juego juego);
-    void UpdateCategoriasJuego(int idJuego, List<Categoria> ListaCategoria);
     //Delte
     void DeleteJuego(int idJuego);
     void EliminarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira);

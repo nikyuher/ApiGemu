@@ -19,7 +19,7 @@ public class ProductoRepository : IProductoRepository
         return productos;
     }
 
-    public Producto GetIdProducto(int idProducto)
+    public ProductoDTO GetIdProducto(int idProducto)
     {
         var producto = _context.Productos.Include(r => r.ProductoCategorias).FirstOrDefault(r => r.IdProducto == idProducto);
 
@@ -28,13 +28,25 @@ public class ProductoRepository : IProductoRepository
             throw new Exception($"No se encontro el Producto con el ID: {idProducto}");
         }
 
-        return producto;
+
+        var newProducto = new ProductoDTO
+        {
+            IdProducto = producto.IdProducto,
+            Nombre = producto.Nombre,
+            Precio = producto.Precio,
+            Descripcion = producto.Descripcion,
+            Fecha = producto.Fecha,
+            Estado = producto.Estado,
+            Cantidad = producto.Cantidad
+        };
+
+        return newProducto;
     }
 
     public ProductoCategoriasDTO GetCategoriasProduct(int idProducto)
     {
 
-        var producto = _context.Productos.Include(r => r.ProductoCategorias).FirstOrDefault(r => r.IdProducto == idProducto);
+        var producto = _context.Productos.Include(r => r.ProductoCategorias).ThenInclude(r => r.Categoria).FirstOrDefault(r => r.IdProducto == idProducto);
 
         if (producto is null)
         {
@@ -148,7 +160,7 @@ public class ProductoRepository : IProductoRepository
     //Delete
     public void DeleteProducto(int idProducto)
     {
-        var producto = GetIdProducto(idProducto);
+        var producto = _context.Productos.FirstOrDefault(p => p.IdProducto == idProducto);
 
         if (producto is null)
         {
@@ -159,32 +171,6 @@ public class ProductoRepository : IProductoRepository
         SaveChanges();
     }
 
-    public void EliminarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira)
-    {
-
-        var producto = _context.Productos.FirstOrDefault(p => p.IdProducto == idProducto);
-
-        if (producto is null)
-        {
-            throw new Exception($"No se encontro el producto con el ID: {idProducto}");
-        }
-
-        foreach (var IdCategoria in ListaIdsCateogira)
-        {
-            var categoria = _context.ProductoCategorias.FirstOrDefault(c => c.ProductoId == idProducto && c.CategoriaId == IdCategoria);
-
-            if (categoria is null)
-            {
-                throw new Exception($"No se encontró la categoría con el ID: {IdCategoria} asociada al producto con ID: {idProducto}");
-            }
-
-
-            producto.ProductoCategorias.Remove(categoria);
-
-        }
-        SaveChanges();
-
-    }
 
     public void SaveChanges()
     {

@@ -5,7 +5,7 @@ public interface IProductoService
 {
     //Read
     public List<Producto> GetAllProductos();
-    public Producto GetIdProducto(int idProducto);
+    public ProductoDTO GetIdProducto(int idProducto);
     public ProductoCategoriasDTO GetCategoriasProduct(int idProducto);
     public ProductoReseñaDTO GetReseñasProducto(int idProducto);
     //Create
@@ -15,5 +15,4 @@ public interface IProductoService
     void UpdateProducto(ProductoDTO producto);
     //Delete
     void DeleteProducto(int idProducto);
-    void EliminarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);
 }

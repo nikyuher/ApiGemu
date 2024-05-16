@@ -17,7 +17,7 @@ public class ProductoService : IProductoService
     {
         return _productoRepository.GetAllProductos();
     }
-    public Producto GetIdProducto(int idProducto)
+    public ProductoDTO GetIdProducto(int idProducto)
     {
         return _productoRepository.GetIdProducto(idProducto);
     }
@@ -48,10 +48,6 @@ public class ProductoService : IProductoService
     public void DeleteProducto(int idProducto)
     {
         _productoRepository.DeleteProducto(idProducto);
-    }
-    public void EliminarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira)
-    {
-        _productoRepository.EliminarCategoriasProducto(idProducto, ListaIdsCateogira);
     }
 
 }

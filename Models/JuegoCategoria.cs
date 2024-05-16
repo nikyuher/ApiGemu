@@ -9,7 +9,6 @@ namespace Gemu.Models
         public Juego? Juego { get; set; }
 
         public int CategoriaId { get; set; }
-        [JsonIgnore]
         public Categoria? Categoria { get; set; }
     }
 }

@@ -99,8 +99,6 @@ public class JuegoRepository : IJuegoRepository
             Descripcion = juego.Descripcion,
             Plataforma = juego.Plataforma,
             CodigoJuego = GenerateGameCode(),
-            ImgsJuego = juego.ImgsJuego,
-            JuegoCategorias = juego.JuegoCategorias,
             Fecha = DateTime.Today
         };
 
@@ -167,33 +165,6 @@ public class JuegoRepository : IJuegoRepository
         }
 
         _context.Juegos.Remove(juego);
-        SaveChanges();
-    }
-
-
-    public void EliminarCategoriasJuego(int idJuego, List<int> ListaIdsCategoria)
-    {
-
-        var juego = _context.Juegos.FirstOrDefault(p => p.IdJuego == idJuego);
-
-        if (juego is null)
-        {
-            throw new Exception($"No se encontro el juego con el ID: {idJuego}");
-        }
-
-        foreach (var categoriaId in ListaIdsCategoria)
-        {
-            var categoria = _context.juegoCategorias.FirstOrDefault(c => c.JuegoId == idJuego && c.CategoriaId == categoriaId);
-
-            if (categoria is null)
-            {
-                throw new Exception($"No se encontró la categoría con el ID: {categoriaId} asociada al juego con ID: {idJuego}");
-            }
-
-
-            juego.JuegoCategorias.Remove(categoria);
-
-        }
         SaveChanges();
     }
 

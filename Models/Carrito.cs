@@ -9,8 +9,8 @@ public class Carrito
     public int IdUsuario { get; set; }
     [JsonIgnore]
     public Usuario? Usuario { get; set; }
-    public List<Producto>? Productos { get; set; } = new List<Producto>();
-    public List<Juego>? Juegos { get; set; } = new List<Juego>();
+    public List<CarritoProducto>? CarritoProductos { get; set; } = new List<CarritoProducto>();
+    public List<CarritoJuego>? CarritoJuegos { get; set; } = new List<CarritoJuego>();
 
 
 }

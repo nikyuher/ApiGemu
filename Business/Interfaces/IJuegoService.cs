@@ -15,5 +15,4 @@ public interface IJuegoService
     void UpdateJuego(Juego juego);
     //Delete
     void DeleteJuego(int idJuego);
-    void EliminarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira);
 }

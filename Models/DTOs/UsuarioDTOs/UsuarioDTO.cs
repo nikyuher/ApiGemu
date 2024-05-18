@@ -17,5 +17,7 @@ public class UsuarioDTO
     public string? Direccion { get; set; }
     public int CodigoPostal { get; set; }
     public decimal SaldoActual {get; set;}
+    public int IdCarrito { get; set; }
+    public int IdBiblioteca { get; set; }
 
 }

@@ -34,7 +34,7 @@ public class UsuarioRepository : IUsuarioRepository
     //Read
     public UsuarioDTO GetIdUsuario(int idUsuario)
     {
-        var usuario = _context.Usuarios.Include(u => u.Rol).FirstOrDefault(r => r.IdUsuario == idUsuario);
+        var usuario = _context.Usuarios.Include(u => u.Rol).Include(c => c.Carrito).Include(b => b.Biblioteca).FirstOrDefault(r => r.IdUsuario == idUsuario);
 
         if (usuario is null)
         {
@@ -51,7 +51,9 @@ public class UsuarioRepository : IUsuarioRepository
             Correo = usuario.Correo,
             Direccion = usuario.Direccion,
             CodigoPostal = usuario.CodigoPostal,
-            SaldoActual = usuario.SaldoActual
+            SaldoActual = usuario.SaldoActual,
+            IdCarrito = usuario.Carrito.IdCarrito,
+            IdBiblioteca = usuario.Biblioteca.IdBiblioteca
         };
 
         return usuarioDTO;

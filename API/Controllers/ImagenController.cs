@@ -62,6 +62,7 @@ public class ImagenController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("juego")]
     public ActionResult<List<ImagenJuegoDTO>> GetImagenesJuego(int id)
     {
@@ -86,6 +87,7 @@ public class ImagenController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpGet("producto")]
     public ActionResult<List<ImagenProductoDTO>> GetImagenesProducto(int id)
     {

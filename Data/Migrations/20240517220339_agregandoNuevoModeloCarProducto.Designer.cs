@@ -4,6 +4,7 @@ using Gemu.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gemu.Data.Migrations
 {
     [DbContext(typeof(GemuContext))]
-    partial class GemuContextModelSnapshot : ModelSnapshot
+    [Migration("20240517220339_agregandoNuevoModeloCarProducto")]
+    partial class agregandoNuevoModeloCarProducto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,21 +91,13 @@ namespace Gemu.Data.Migrations
 
             modelBuilder.Entity("Gemu.Models.CarritoJuego", b =>
                 {
-                    b.Property<int>("CarritoJuegoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarritoJuegoId"), 1L, 1);
-
                     b.Property<int>("CarritoId")
                         .HasColumnType("int");
 
                     b.Property<int>("JuegoId")
                         .HasColumnType("int");
 
-                    b.HasKey("CarritoJuegoId");
-
-                    b.HasIndex("CarritoId");
+                    b.HasKey("CarritoId", "JuegoId");
 
                     b.HasIndex("JuegoId");
 
@@ -112,21 +106,13 @@ namespace Gemu.Data.Migrations
 
             modelBuilder.Entity("Gemu.Models.CarritoProducto", b =>
                 {
-                    b.Property<int>("CarritoProductoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarritoProductoId"), 1L, 1);
-
                     b.Property<int>("CarritoId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductoId")
                         .HasColumnType("int");
 
-                    b.HasKey("CarritoProductoId");
-
-                    b.HasIndex("CarritoId");
+                    b.HasKey("CarritoId", "ProductoId");
 
                     b.HasIndex("ProductoId");
 

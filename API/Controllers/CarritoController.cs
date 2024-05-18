@@ -125,7 +125,7 @@ public class CarritoController : ControllerBase
     }
 
     [HttpPost("{id}/usuario/{idUsuario}/añadir-producto")]
-    public IActionResult AñadirProductoCarrito(int id, int idUsuario, [FromBody] List<int> producto)
+    public IActionResult AñadirProductoCarrito(int id, int idUsuario, [FromBody] int producto)
     {
         try
         {

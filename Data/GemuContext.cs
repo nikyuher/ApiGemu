@@ -66,16 +66,32 @@ public class GemuContext : DbContext
             .HasForeignKey<Anuncio>(a => a.IdProducto);
 
         // Relación entre Producto y Carrito
-        modelBuilder.Entity<Producto>()
-            .HasOne(p => p.Carrito)
-            .WithMany(c => c.Productos)
-            .HasForeignKey(p => p.IdCarrito);
+        modelBuilder.Entity<CarritoProducto>()
+            .HasKey(pc => pc.CarritoProductoId);
 
-        // Relación entre Juego y Carrito
-        modelBuilder.Entity<Juego>()
-            .HasOne(j => j.Carrito)
-            .WithMany(c => c.Juegos)
-            .HasForeignKey(j => j.IdCarrito);
+        modelBuilder.Entity<CarritoProducto>()
+            .HasOne(pc => pc.Carrito)
+            .WithMany(p => p.CarritoProductos)
+            .HasForeignKey(pc => pc.CarritoId);
+
+        modelBuilder.Entity<CarritoProducto>()
+            .HasOne(pc => pc.Producto)
+            .WithMany(c => c.CarritoProductos)
+            .HasForeignKey(pc => pc.ProductoId);
+
+        // Relación entre Carrito y Juego
+        modelBuilder.Entity<CarritoJuego>()
+            .HasKey(cj => cj.CarritoJuegoId);
+
+        modelBuilder.Entity<CarritoJuego>()
+            .HasOne(cj => cj.Carrito)
+            .WithMany(c => c.CarritoJuegos)
+            .HasForeignKey(cj => cj.CarritoId);
+
+        modelBuilder.Entity<CarritoJuego>()
+            .HasOne(cj => cj.Juego)
+            .WithMany(j => j.CarritoJuegos)
+            .HasForeignKey(cj => cj.JuegoId);
 
         // Relación entre Producto y Reseña
         modelBuilder.Entity<Producto>()
@@ -163,6 +179,8 @@ public class GemuContext : DbContext
     public DbSet<Imagen> Imagenes { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
     public DbSet<Rol> Roles { get; set; }
+    public DbSet<CarritoProducto> CarritoProducto { get; set; }
+    public DbSet<CarritoJuego> CarritoJuego { get; set; }
     public DbSet<JuegoCategoria> juegoCategorias { get; set; }
     public DbSet<ProductoCategoria> ProductoCategorias { get; set; }
 }

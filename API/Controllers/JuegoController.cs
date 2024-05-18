@@ -224,32 +224,4 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}/categorias")]
-    public IActionResult EliminarCategoriasJuego(int id, [FromBody] List<int> ListaIdsCateogira)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para eliminar categorias del juego con ID: {id}.");
-
-            var juego = _juegoService.GetIdJuego(id);
-
-            if (juego is null)
-            {
-                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
-                return NotFound();
-            }
-
-            _juegoService.EliminarCategoriasJuego(id, ListaIdsCateogira);
-
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar eliminar categorias del juego con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
-
-
 }

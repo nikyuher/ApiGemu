@@ -27,9 +27,7 @@ public class Producto
     public Biblioteca? Biblioteca { get; set; }
     // Relación con Carrito
     [JsonIgnore]
-    public int? IdCarrito { get; set; }
-    [JsonIgnore]
-    public Carrito? Carrito { get; set; }
+    public List<CarritoProducto>? CarritoProductos { get; set; } = new List<CarritoProducto>();
     // Relación con Reseña
     [JsonIgnore]
     public int? IdReseña { get; set; }

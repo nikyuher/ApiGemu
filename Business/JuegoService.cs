@@ -51,8 +51,4 @@ public class JuegoService : IJuegoService
     {
         _juegoRepository.DeleteJuego(idJuego);
     }
-    public void EliminarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira)
-    {
-        _juegoRepository.EliminarCategoriasJuego(idJuego, ListaIdsCateogira);
-    }
 }

@@ -48,16 +48,32 @@ public class GemuContext : DbContext
             .HasForeignKey<Biblioteca>(b => b.IdUsuario);
 
         // Relación entre Juego y Biblioteca
-        modelBuilder.Entity<Juego>()
-            .HasOne(j => j.Biblioteca)
-            .WithMany(b => b.Juegos)
-            .HasForeignKey(j => j.IdBiblioteca);
+        modelBuilder.Entity<BibliotecaJuego>()
+            .HasKey(pc => pc.BibliotecaJuegoId);
+
+        modelBuilder.Entity<BibliotecaJuego>()
+            .HasOne(pc => pc.Biblioteca)
+            .WithMany(p => p.BibliotecaJuegos)
+            .HasForeignKey(pc => pc.BibliotecaId);
+
+        modelBuilder.Entity<BibliotecaJuego>()
+            .HasOne(pc => pc.Juego)
+            .WithMany(c => c.BibliotecaJuegos)
+            .HasForeignKey(pc => pc.JuegoId);
 
         // Relación entre Producto y Biblioteca
-        modelBuilder.Entity<Producto>()
-            .HasOne(p => p.Biblioteca)
-            .WithMany(b => b.Productos)
-            .HasForeignKey(p => p.IdBiblioteca);
+        modelBuilder.Entity<BibliotecaProducto>()
+            .HasKey(pc => pc.BibliotecaProductoId);
+
+        modelBuilder.Entity<BibliotecaProducto>()
+            .HasOne(pc => pc.Biblioteca)
+            .WithMany(p => p.BibliotecaProductos)
+            .HasForeignKey(pc => pc.BibliotecaId);
+
+        modelBuilder.Entity<BibliotecaProducto>()
+            .HasOne(pc => pc.Producto)
+            .WithMany(c => c.BibliotecaProductos)
+            .HasForeignKey(pc => pc.ProductoId);
 
         // Relación entre Producto y Anuncio
         modelBuilder.Entity<Producto>()
@@ -179,6 +195,8 @@ public class GemuContext : DbContext
     public DbSet<Imagen> Imagenes { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
     public DbSet<Rol> Roles { get; set; }
+    public DbSet<BibliotecaProducto> BibliotecaProductos { get; set; }
+    public DbSet<BibliotecaJuego> BibliotecaJuegos { get; set; }
     public DbSet<CarritoProducto> CarritoProducto { get; set; }
     public DbSet<CarritoJuego> CarritoJuego { get; set; }
     public DbSet<JuegoCategoria> juegoCategorias { get; set; }

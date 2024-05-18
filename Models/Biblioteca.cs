@@ -9,7 +9,7 @@ public class Biblioteca
     public int IdUsuario { get; set; }
     [JsonIgnore]
     public Usuario? Usuario { get; set; }
-    public List<Producto>? Productos { get; set; } = new List<Producto>();
-    public List<Juego>? Juegos { get; set; } = new List<Juego>();
+    public List<BibliotecaProducto>? BibliotecaProductos { get; set; } = new List<BibliotecaProducto>();
+    public List<BibliotecaJuego>? BibliotecaJuegos { get; set; } = new List<BibliotecaJuego>();
 
 }

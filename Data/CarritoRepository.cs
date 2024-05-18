@@ -33,11 +33,13 @@ public class CarritoRepository : ICarritoRepository
 
     public CarritoListaDTO GetCarritoUsuario(int idUsuario)
     {
-        var carrito = _context.Carritos.Include(p => p.CarritoProductos)
+        var carrito = _context.Carritos
+        .Include(p => p.CarritoProductos)
         .ThenInclude(p => p.Producto)
         .ThenInclude(p => p.ImgsProducto)
         .Include(j => j.CarritoJuegos)
-        .ThenInclude(p => p.Juego)
+        .ThenInclude(j => j.Juego)
+        .ThenInclude(j => j.ImgsJuego)
         .FirstOrDefault(r => r.IdUsuario == idUsuario);
 
         if (carrito is null)
@@ -153,7 +155,7 @@ public class CarritoRepository : ICarritoRepository
 
     public void EliminarJuegoCarrito(int idCarrito, int idJuego)
     {
-        var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+        var existingJuego = _context.CarritoJuego.FirstOrDefault(r => r.CarritoJuegoId == idJuego);
 
         if (existingJuego is null)
         {
@@ -167,14 +169,7 @@ public class CarritoRepository : ICarritoRepository
             throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
         }
 
-        var newCarJuego = new CarritoJuego
-        {
-            CarritoId = existingCarrito.IdCarrito,
-            JuegoId = existingJuego.IdJuego
-
-        };
-
-        existingCarrito.CarritoJuegos.Remove(newCarJuego);
+        existingCarrito.CarritoJuegos.Remove(existingJuego);
 
         SaveChanges();
     }

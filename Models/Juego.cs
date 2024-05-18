@@ -50,9 +50,7 @@ public class Juego
 
     // Relación con Biblioteca
     [JsonIgnore]
-    public int? IdBiblioteca { get; set; }
-    [JsonIgnore]
-    public Biblioteca? Biblioteca { get; set; }
+    public List<BibliotecaJuego>? BibliotecaJuegos { get; set; } = new List<BibliotecaJuego>();
     // Relación con Carrito
     [JsonIgnore]
    public List<CarritoJuego>? CarritoJuegos { get; set; } = new List<CarritoJuego>();

@@ -23,7 +23,7 @@ public class JuegoRepository : IJuegoRepository
 
     public JuegoDTO GetIdJuego(int idJuego)
     {
-        var juego = _context.Juegos.Include(r => r.ImgsJuego).FirstOrDefault(r => r.IdJuego == idJuego);
+        var juego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
 
         if (juego is null)
         {
@@ -32,16 +32,15 @@ public class JuegoRepository : IJuegoRepository
 
         var newJuego = new JuegoDTO
         {
+            IdJuego = juego.IdJuego,
             Titulo = juego.Titulo,
             Descripcion = juego.Descripcion,
             Precio = juego.Precio,
             Plataforma = juego.Plataforma,
             Descuento = juego.Descuento,
             CodigoJuego = juego.CodigoJuego,
-            ImgsJuego = juego.ImgsJuego,
             Reseñas = juego.Reseñas,
             Fecha = juego.Fecha,
-            JuegoCategorias = juego.JuegoCategorias
         };
 
         return newJuego;
@@ -50,7 +49,10 @@ public class JuegoRepository : IJuegoRepository
     public JuegoCategoriasDTO GetCategoriasJuego(int idJuego)
     {
 
-        var juego = _context.Juegos.Include(r => r.JuegoCategorias).FirstOrDefault(r => r.IdJuego == idJuego);
+        var juego = _context.Juegos
+                    .Include(r => r.JuegoCategorias)
+                    .ThenInclude(r => r.Categoria)
+                    .FirstOrDefault(r => r.IdJuego == idJuego);
 
         if (juego is null)
         {

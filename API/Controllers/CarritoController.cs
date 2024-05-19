@@ -125,7 +125,7 @@ public class CarritoController : ControllerBase
     }
 
     [HttpPost("{id}/usuario/{idUsuario}/añadir-producto")]
-    public IActionResult AñadirProductoCarrito(int id, int idUsuario, [FromBody] int producto)
+    public IActionResult AñadirProductoCarrito(int id, int idUsuario, [FromBody] int idProducto)
     {
         try
         {
@@ -141,8 +141,8 @@ public class CarritoController : ControllerBase
                 return Forbid();
             }
 
-            _carritoService.AñadirProductoCarrito(id, producto);
-            return Ok(producto);
+            _carritoService.AñadirProductoCarrito(id, idProducto);
+            return Ok(idProducto);
         }
         catch (Exception ex)
         {
@@ -152,7 +152,7 @@ public class CarritoController : ControllerBase
     }
 
     [HttpPost("{id}/usuario/{idUsuario}/añadir-juego")]
-    public IActionResult AñadirJuegoCarrito(int id, int idUsuario, [FromBody] List<int> juego)
+    public IActionResult AñadirJuegoCarrito(int id, int idUsuario, [FromBody] int idJuego)
     {
         try
         {
@@ -168,8 +168,8 @@ public class CarritoController : ControllerBase
                 return Forbid();
             }
 
-            _carritoService.AñadirJuegoCarrito(id, juego);
-            return Ok(juego);
+            _carritoService.AñadirJuegoCarrito(id, idJuego);
+            return Ok(idJuego);
         }
         catch (Exception ex)
         {

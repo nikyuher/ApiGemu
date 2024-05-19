@@ -10,7 +10,7 @@ public interface ICarritoRepository
     //Create
     void CreateCarritoUsuario(CarritoDTO carrito);
     void AñadirProductoCarrito(int idCarrito, int idProducto);
-    void AñadirJuegoCarrito(int idBiblioteca, List<int> juegoDTO);
+    void AñadirJuegoCarrito(int idBiblioteca, int idJuego);
     //Update
     void UpdateCarrito(Carrito carrito);
     //Delete

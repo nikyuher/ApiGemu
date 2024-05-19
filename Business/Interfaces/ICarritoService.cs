@@ -11,7 +11,7 @@ public interface ICarritoService
     //Create
     void CreateCarritoUsuario(CarritoDTO carrito);
     void AñadirProductoCarrito(int idBiblioteca, int idProducto);
-    void AñadirJuegoCarrito(int idBiblioteca, List<int> juegoDTO);
+    void AñadirJuegoCarrito(int idBiblioteca, int idJuego);
     //Update
     void UpdateCarrito(Carrito carrito);
     //Delete

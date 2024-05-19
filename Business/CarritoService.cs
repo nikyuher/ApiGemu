@@ -35,9 +35,9 @@ public class CarritoService : ICarritoService
         _carritoRepository.AñadirProductoCarrito(idBiblioteca, idProducto);
     }
 
-    public void AñadirJuegoCarrito(int idBiblioteca, List<int> ListaIdsJuego)
+    public void AñadirJuegoCarrito(int idBiblioteca, int idJuego)
     {
-        _carritoRepository.AñadirJuegoCarrito(idBiblioteca, ListaIdsJuego);
+        _carritoRepository.AñadirJuegoCarrito(idBiblioteca, idJuego);
     }
 
     //Update

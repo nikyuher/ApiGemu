@@ -21,7 +21,8 @@ public class ProductoRepository : IProductoRepository
 
     public ProductoDTO GetIdProducto(int idProducto)
     {
-        var producto = _context.Productos.Include(r => r.ProductoCategorias).FirstOrDefault(r => r.IdProducto == idProducto);
+        var producto = _context.Productos
+                        .FirstOrDefault(r => r.IdProducto == idProducto);
 
         if (producto is null)
         {
@@ -46,7 +47,10 @@ public class ProductoRepository : IProductoRepository
     public ProductoCategoriasDTO GetCategoriasProduct(int idProducto)
     {
 
-        var producto = _context.Productos.Include(r => r.ProductoCategorias).ThenInclude(r => r.Categoria).FirstOrDefault(r => r.IdProducto == idProducto);
+        var producto = _context.Productos
+                       .Include(r => r.ProductoCategorias)
+                       .ThenInclude(r => r.Categoria)
+                       .FirstOrDefault(r => r.IdProducto == idProducto);
 
         if (producto is null)
         {
@@ -66,7 +70,9 @@ public class ProductoRepository : IProductoRepository
     public ProductoReseñaDTO GetReseñasProducto(int idProducto)
     {
 
-        var producto = _context.Productos.Include(r => r.Reseñas).FirstOrDefault(r => r.IdProducto == idProducto);
+        var producto = _context.Productos
+                        .Include(r => r.Reseñas)
+                        .FirstOrDefault(r => r.IdProducto == idProducto);
 
         if (producto is null)
         {

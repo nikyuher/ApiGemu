@@ -69,33 +69,30 @@ public class CarritoRepository : ICarritoRepository
         SaveChanges();
     }
 
-    public void AñadirJuegoCarrito(int idCarrito, List<int> ListaIdsJuego)
+    public void AñadirJuegoCarrito(int idCarrito, int idJuego)
     {
-        foreach (var juego in ListaIdsJuego)
+        var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+
+        if (existingJuego is null)
         {
-            var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == juego);
-
-            if (existingJuego is null)
-            {
-                throw new Exception($"No se encontro el juego  con el ID: {juego}");
-            }
-
-            var existingCarrito = _context.Carritos.FirstOrDefault(r => r.IdCarrito == idCarrito);
-
-            if (existingCarrito is null)
-            {
-                throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
-            }
-
-            var newCarJuego = new CarritoJuego
-            {
-                CarritoId = existingCarrito.IdCarrito,
-                JuegoId = existingJuego.IdJuego
-
-            };
-
-            existingCarrito.CarritoJuegos.Add(newCarJuego);
+            throw new Exception($"No se encontro el juego  con el ID: {idJuego}");
         }
+
+        var existingCarrito = _context.Carritos.FirstOrDefault(r => r.IdCarrito == idCarrito);
+
+        if (existingCarrito is null)
+        {
+            throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
+        }
+
+        var newCarJuego = new CarritoJuego
+        {
+            CarritoId = existingCarrito.IdCarrito,
+            JuegoId = existingJuego.IdJuego
+
+        };
+
+        existingCarrito.CarritoJuegos.Add(newCarJuego);
         SaveChanges();
     }
 

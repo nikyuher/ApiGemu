@@ -5,6 +5,7 @@ public interface IJuegoRepository
 {
     //Read
     public List<Juego> GetAllJuegos();
+    public List<Juego> GetJuegosPaginados(int pageNumber, int pageSize);
     public JuegoDTO GetIdJuego(int idJuego);
     public JuegoCategoriasDTO GetCategoriasJuego(int idJuego);
     public JuegoReseñaDTO GetReseñasJuego(int idJuego);

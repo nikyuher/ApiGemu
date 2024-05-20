@@ -41,6 +41,23 @@ public class JuegoController : ControllerBase
     }
 
     [AllowAnonymous]
+    [HttpGet("paginados")]
+    public ActionResult<List<Juego>> GetJuegosPaginados(int pageNumber , int pageSize )
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados.");
+            var juegos = _juegoService.GetJuegosPaginados(pageNumber, pageSize);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos los juegos: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public ActionResult<JuegoDTO> GetJuegoId(int id)
     {

@@ -21,6 +21,19 @@ public class JuegoRepository : IJuegoRepository
         return juegos;
     }
 
+    public List<Juego> GetJuegosPaginados(int pageNumber, int pageSize)
+    {
+        var juegos = _context.Juegos
+                             .Include(j => j.ImgsJuego)
+                             .Include(j => j.JuegoCategorias)
+                                 .ThenInclude(jc => jc.Categoria) 
+                             .Skip((pageNumber - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToList();
+
+        return juegos;
+    }
+
     public JuegoDTO GetIdJuego(int idJuego)
     {
         var juego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);

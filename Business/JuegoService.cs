@@ -17,6 +17,9 @@ public class JuegoService : IJuegoService
     {
         return _juegoRepository.GetAllJuegos();
     }
+    public List<Juego> GetJuegosPaginados(int pageNumber, int pageSize){
+        return _juegoRepository.GetJuegosPaginados(pageNumber, pageSize);
+    }
     public JuegoDTO GetIdJuego(int idJuego)
     {
         return _juegoRepository.GetIdJuego(idJuego);

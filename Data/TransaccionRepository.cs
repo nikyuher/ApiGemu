@@ -83,7 +83,7 @@ public class TransaccionRepository : ITransaccionRepository
             throw new KeyNotFoundException("No se encontró el usuario asociado con la transacción.");
         }
 
-        if (transaccion.Cantidad <= 0)
+        if (transaccion.Cantidad < 0)
         {
             throw new Exception("No se permiten numeros negativos");
         }

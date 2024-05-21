@@ -1,5 +1,7 @@
 using Gemu.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Linq.Expressions;
 
 namespace Gemu.Data;
 public class ProductoRepository : IProductoRepository
@@ -17,6 +19,15 @@ public class ProductoRepository : IProductoRepository
         var productos = _context.Productos.Include(r => r.ProductoCategorias).ToList();
 
         return productos;
+    }
+    public List<Producto> GetProductoPaginados(int pageNumber, int pageSize)
+    {
+        return GetFilteredProductos(pageNumber, pageSize).ToList();
+    }
+
+    public List<Producto> GetProductoPaginadosCategoria(int pageNumber, int pageSize, List<int> categoriaIds)
+    {
+        return GetFilteredProductos(pageNumber, pageSize, null, categoriaIds).ToList();
     }
 
     public ProductoDTO GetIdProducto(int idProducto)
@@ -181,5 +192,40 @@ public class ProductoRepository : IProductoRepository
     public void SaveChanges()
     {
         _context.SaveChanges();
+    }
+
+    private IQueryable<Producto> GetFilteredProductos(int pageNumber, int pageSize, Expression<Func<Producto, bool>> filtro = null, List<int> categoriaIds = null)
+    {
+        var query = _context.Productos
+                            .Include(j => j.ImgsProducto)
+                            .Include(j => j.ProductoCategorias)
+                                .ThenInclude(jc => jc.Categoria)
+                            .AsQueryable();
+
+        if (filtro != null)
+        {
+            query = query.Where(filtro);
+        }
+
+        if (categoriaIds != null && categoriaIds.Any())
+        {
+            query = query.Where(j => j.ProductoCategorias.Any(jc => categoriaIds.Contains(jc.CategoriaId)));
+        }
+
+        var pagedProducto = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        var productoConPrimeraImagen = pagedProducto.Select(j => new Producto
+        {
+            IdProducto = j.IdProducto,
+            Nombre = j.Nombre,
+            Descripcion = j.Descripcion,
+            Fecha = j.Fecha,
+            Precio = j.Precio,
+            Estado = j.Estado,
+            ImgsProducto = j.ImgsProducto.Take(1).ToList(),
+            ProductoCategorias = j.ProductoCategorias
+        });
+
+        return productoConPrimeraImagen;
     }
 }

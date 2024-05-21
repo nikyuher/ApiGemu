@@ -42,12 +42,81 @@ public class JuegoController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("paginados")]
-    public ActionResult<List<Juego>> GetJuegosPaginados(int pageNumber , int pageSize )
+    public ActionResult<List<Juego>> GetJuegosPaginados(int pageNumber, int pageSize)
     {
         try
         {
             _logger.LogInformation("Se ha solicitado obtener juegos paginados.");
             var juegos = _juegoService.GetJuegosPaginados(pageNumber, pageSize);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener juegos paginados: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("paginados/ofertas")]
+    public ActionResult<List<Juego>> GetJuegosPaginadosOfertas(int pageNumber, int pageSize)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados con ofertas.");
+            var juegos = _juegoService.GetJuegosPaginadosOfertas(pageNumber, pageSize);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener juegos paginados con ofertas: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("paginados/baratos")]
+    public ActionResult<List<Juego>> GetJuegosPaginadosBaratos(int pageNumber, int pageSize, int precioBarato)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados baratos.");
+            var juegos = _juegoService.GetJuegosPaginadosBaratos(pageNumber, pageSize, precioBarato);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener juegos paginados baratos: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("paginados/gratis")]
+    public ActionResult<List<Juego>> GetJuegosPaginadosGratis(int pageNumber, int pageSize)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados gratis.");
+            var juegos = _juegoService.GetJuegosPaginadosGratis(pageNumber, pageSize);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener juegos paginados gratis: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+
+    [AllowAnonymous]
+    [HttpGet("paginados/categorias")]
+    public ActionResult<List<Juego>> GetJuegosPaginadosCategoria(int pageNumber, int pageSize, [FromQuery] List<int> categoriaIds)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados.");
+            var juegos = _juegoService.GetJuegosPaginadosCategoria(pageNumber, pageSize, categoriaIds);
             return Ok(juegos);
         }
         catch (Exception ex)

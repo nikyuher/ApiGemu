@@ -1,6 +1,7 @@
 using Gemu.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using System.Linq.Expressions;
 
 namespace Gemu.Data;
 public class JuegoRepository : IJuegoRepository
@@ -23,15 +24,27 @@ public class JuegoRepository : IJuegoRepository
 
     public List<Juego> GetJuegosPaginados(int pageNumber, int pageSize)
     {
-        var juegos = _context.Juegos
-                             .Include(j => j.ImgsJuego)
-                             .Include(j => j.JuegoCategorias)
-                                 .ThenInclude(jc => jc.Categoria) 
-                             .Skip((pageNumber - 1) * pageSize)
-                             .Take(pageSize)
-                             .ToList();
+        return GetFilteredJuegos(pageNumber, pageSize).ToList();
+    }
 
-        return juegos;
+    public List<Juego> GetJuegosPaginadosOfertas(int pageNumber, int pageSize)
+    {
+        return GetFilteredJuegos(pageNumber, pageSize, j => j.Descuento > 0).ToList();
+    }
+
+    public List<Juego> GetJuegosPaginadosBaratos(int pageNumber, int pageSize, int precioBarato)
+    {
+        return GetFilteredJuegos(pageNumber, pageSize, j => j.Precio <= precioBarato && j.Precio > 0).ToList();
+    }
+
+    public List<Juego> GetJuegosPaginadosGratis(int pageNumber, int pageSize)
+    {
+        return GetFilteredJuegos(pageNumber, pageSize, j => j.Precio == 0).ToList();
+    }
+
+    public List<Juego> GetJuegosPaginadosCategoria(int pageNumber, int pageSize, List<int> categoriaIds)
+    {
+        return GetFilteredJuegos(pageNumber, pageSize, null, categoriaIds).ToList();
     }
 
     public JuegoDTO GetIdJuego(int idJuego)
@@ -211,4 +224,37 @@ public class JuegoRepository : IJuegoRepository
 
         return codeBuilder.ToString();
     }
+
+private IQueryable<Juego> GetFilteredJuegos(int pageNumber, int pageSize,Expression<Func<Juego, bool>> filtro = null, List<int> categoriaIds = null)
+{
+    var query = _context.Juegos
+                        .Include(j => j.JuegoCategorias)
+                            .ThenInclude(jc => jc.Categoria)
+                        .AsQueryable();
+
+    if (filtro != null)
+    {
+        query = query.Where(filtro);
+    }
+
+    if (categoriaIds != null && categoriaIds.Any())
+    {
+        query = query.Where(j => j.JuegoCategorias.Any(jc => categoriaIds.Contains(jc.CategoriaId)));
+    }
+
+    var pagedJuegos = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+    var juegosConPrimeraImagen = pagedJuegos.Select(j => new Juego
+    {
+        IdJuego = j.IdJuego,
+        Titulo = j.Titulo,
+        Descripcion = j.Descripcion,
+        Precio = j.Precio,
+        Descuento = j.Descuento,
+        ImgsJuego = j.ImgsJuego.Take(1).ToList(),
+        JuegoCategorias = j.JuegoCategorias
+    });
+
+    return juegosConPrimeraImagen;
+}
 }

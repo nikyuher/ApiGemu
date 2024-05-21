@@ -122,7 +122,7 @@ public class ProductoRepository : IProductoRepository
     public void AsignarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira)
     {
 
-        var producto = _context.Productos.FirstOrDefault(p => p.IdProducto == idProducto);
+        var producto = _context.Productos.Include(j => j.ProductoCategorias).FirstOrDefault(p => p.IdProducto == idProducto);
 
         if (producto is null)
         {

@@ -17,6 +17,14 @@ public class ProductoService : IProductoService
     {
         return _productoRepository.GetAllProductos();
     }
+    public List<Producto>  GetProductoPaginados(int pageNumber, int pageSize)
+    {
+        return _productoRepository.GetProductoPaginados(pageNumber, pageSize);
+    }
+    public List<Producto> GetProductoPaginadosCategoria(int pageNumber, int pageSize, List<int> categoriaIds)
+    {
+        return _productoRepository.GetProductoPaginadosCategoria(pageNumber,pageSize,categoriaIds);
+    }
     public ProductoDTO GetIdProducto(int idProducto)
     {
         return _productoRepository.GetIdProducto(idProducto);

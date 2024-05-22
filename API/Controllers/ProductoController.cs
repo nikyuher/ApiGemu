@@ -42,6 +42,40 @@ public class ProductoController : ControllerBase
     }
 
     [AllowAnonymous]
+    [HttpGet("paginados")]
+    public ActionResult<List<Producto>> GetProductoPaginados(int pageNumber, int pageSize)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener productos paginados.");
+            var productos = _productoService.GetProductoPaginados(pageNumber, pageSize);
+            return Ok(productos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos los productos: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("paginados/categorias")]
+    public ActionResult<List<Producto>> GetProductoPaginadosCategoria(int pageNumber, int pageSize, [FromQuery] List<int> categoriaIds)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener productos paginados.");
+            var productos = _productoService.GetProductoPaginadosCategoria(pageNumber, pageSize, categoriaIds);
+            return Ok(productos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos los productos: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public ActionResult<ProductoDTO> GetProductoId(int id)
     {

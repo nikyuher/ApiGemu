@@ -7,6 +7,7 @@ public class Categoria
     public int IdCategoria { get; set; }
     [Required]
     public string? Nombre { get; set; }
+    public string? Icono {get; set; }
     public string? Seccion { get; set; }
     [JsonIgnore]
     public List<ProductoCategoria>? ProductoCategorias { get; set; } = new List<ProductoCategoria>();

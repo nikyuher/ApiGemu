@@ -16,9 +16,28 @@ public class ProductoRepository : IProductoRepository
     //Read
     public List<Producto> GetAllProductos()
     {
-        var productos = _context.Productos.Include(r => r.ProductoCategorias).ToList();
+    var productos = _context.Productos.Include(img => img.ImgsProducto).Include(r => r.ProductoCategorias).ToList();
 
-        return productos;
+    var nuevosProductos = new List<Producto>();
+
+    foreach (var producto in productos)
+    {
+        var nuevoProducto = new Producto
+        {
+            IdProducto = producto.IdProducto,
+            Nombre = producto.Nombre,
+            Descripcion = producto.Descripcion,
+            Fecha = producto.Fecha,
+            Precio = producto.Precio,
+            Estado = producto.Estado,
+            ImgsProducto = producto.ImgsProducto.Take(1).ToList(),
+            ProductoCategorias = producto.ProductoCategorias
+        };
+
+        nuevosProductos.Add(nuevoProducto);
+    }
+
+    return nuevosProductos;
     }
     public List<Producto> GetProductoPaginados(int pageNumber, int pageSize)
     {
@@ -209,7 +228,10 @@ public class ProductoRepository : IProductoRepository
 
         if (categoriaIds != null && categoriaIds.Any())
         {
-            query = query.Where(j => j.ProductoCategorias.Any(jc => categoriaIds.Contains(jc.CategoriaId)));
+            query = query
+                    .Where(j => j.ProductoCategorias
+                    .Count(jc => categoriaIds
+                    .Contains(jc.CategoriaId))==categoriaIds.Count);
         }
 
         var pagedProducto = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);

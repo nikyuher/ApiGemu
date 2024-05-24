@@ -225,36 +225,40 @@ public class JuegoRepository : IJuegoRepository
         return codeBuilder.ToString();
     }
 
-private IQueryable<Juego> GetFilteredJuegos(int pageNumber, int pageSize,Expression<Func<Juego, bool>> filtro = null, List<int> categoriaIds = null)
-{
-    var query = _context.Juegos
-                        .Include(j => j.JuegoCategorias)
-                            .ThenInclude(jc => jc.Categoria)
-                        .AsQueryable();
-
-    if (filtro != null)
+    private IQueryable<Juego> GetFilteredJuegos(int pageNumber, int pageSize, Expression<Func<Juego, bool>> filtro = null, List<int> categoriaIds = null)
     {
-        query = query.Where(filtro);
+        var query = _context.Juegos
+                            .Include(j => j.JuegoCategorias)
+                                .ThenInclude(jc => jc.Categoria)
+                            .AsQueryable();
+
+        if (filtro != null)
+        {
+            query = query.Where(filtro);
+        }
+
+        if (categoriaIds != null && categoriaIds.Any())
+        {
+            query = query
+                    .Where(j => j.JuegoCategorias
+                    .Count(jc => categoriaIds
+                    .Contains(jc.CategoriaId)) == categoriaIds.Count);
+        }
+
+        var pagedJuegos = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        var juegosConPrimeraImagen = pagedJuegos.Select(j => new Juego
+        {
+            IdJuego = j.IdJuego,
+            Titulo = j.Titulo,
+            Descripcion = j.Descripcion,
+            Precio = j.Precio,
+            Plataforma = j.Plataforma,
+            Descuento = j.Descuento,
+            ImgsJuego = j.ImgsJuego.Take(1).ToList(),
+            JuegoCategorias = j.JuegoCategorias
+        });
+
+        return juegosConPrimeraImagen;
     }
-
-    if (categoriaIds != null && categoriaIds.Any())
-    {
-        query = query.Where(j => j.JuegoCategorias.Any(jc => categoriaIds.Contains(jc.CategoriaId)));
-    }
-
-    var pagedJuegos = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
-
-    var juegosConPrimeraImagen = pagedJuegos.Select(j => new Juego
-    {
-        IdJuego = j.IdJuego,
-        Titulo = j.Titulo,
-        Descripcion = j.Descripcion,
-        Precio = j.Precio,
-        Descuento = j.Descuento,
-        ImgsJuego = j.ImgsJuego.Take(1).ToList(),
-        JuegoCategorias = j.JuegoCategorias
-    });
-
-    return juegosConPrimeraImagen;
-}
 }

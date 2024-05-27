@@ -19,6 +19,19 @@ public class Producto
     public List<Imagen>? ImgsProducto { get; set; } = new List<Imagen>();
     public List<ProductoCategoria>? ProductoCategorias { get; set; } = new List<ProductoCategoria>();
     public List<Reseña>? Reseñas { get; set; } = new List<Reseña>();
+        public double CalificacionPromedio
+    {
+        get
+        {
+            if (Reseñas == null || Reseñas.Count == 0)
+            {
+                return 0.0;
+            }
+
+            double promedio = Reseñas.Average(r => r.Calificacion);
+            return promedio;
+        }
+    }
 
     // Relación con Biblioteca
     [JsonIgnore]

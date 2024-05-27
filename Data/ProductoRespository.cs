@@ -16,28 +16,28 @@ public class ProductoRepository : IProductoRepository
     //Read
     public List<Producto> GetAllProductos()
     {
-    var productos = _context.Productos.Include(img => img.ImgsProducto).Include(r => r.ProductoCategorias).ToList();
+        var productos = _context.Productos.Include(img => img.ImgsProducto).Include(r => r.ProductoCategorias).ToList();
 
-    var nuevosProductos = new List<Producto>();
+        var nuevosProductos = new List<Producto>();
 
-    foreach (var producto in productos)
-    {
-        var nuevoProducto = new Producto
+        foreach (var producto in productos)
         {
-            IdProducto = producto.IdProducto,
-            Nombre = producto.Nombre,
-            Descripcion = producto.Descripcion,
-            Fecha = producto.Fecha,
-            Precio = producto.Precio,
-            Estado = producto.Estado,
-            ImgsProducto = producto.ImgsProducto.Take(1).ToList(),
-            ProductoCategorias = producto.ProductoCategorias
-        };
+            var nuevoProducto = new Producto
+            {
+                IdProducto = producto.IdProducto,
+                Nombre = producto.Nombre,
+                Descripcion = producto.Descripcion,
+                Fecha = producto.Fecha,
+                Precio = producto.Precio,
+                Estado = producto.Estado,
+                ImgsProducto = producto.ImgsProducto.Take(1).ToList(),
+                ProductoCategorias = producto.ProductoCategorias
+            };
 
-        nuevosProductos.Add(nuevoProducto);
-    }
+            nuevosProductos.Add(nuevoProducto);
+        }
 
-    return nuevosProductos;
+        return nuevosProductos;
     }
     public List<Producto> GetProductoPaginados(int pageNumber, int pageSize)
     {
@@ -52,6 +52,7 @@ public class ProductoRepository : IProductoRepository
     public ProductoDTO GetIdProducto(int idProducto)
     {
         var producto = _context.Productos
+                        .Include(c => c.Reseñas)
                         .FirstOrDefault(r => r.IdProducto == idProducto);
 
         if (producto is null)
@@ -68,7 +69,8 @@ public class ProductoRepository : IProductoRepository
             Descripcion = producto.Descripcion,
             Fecha = producto.Fecha,
             Estado = producto.Estado,
-            Cantidad = producto.Cantidad
+            Cantidad = producto.Cantidad,
+            Reseñas = producto.Reseñas
         };
 
         return newProducto;
@@ -231,7 +233,7 @@ public class ProductoRepository : IProductoRepository
             query = query
                     .Where(j => j.ProductoCategorias
                     .Count(jc => categoriaIds
-                    .Contains(jc.CategoriaId))==categoriaIds.Count);
+                    .Contains(jc.CategoriaId)) == categoriaIds.Count);
         }
 
         var pagedProducto = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);

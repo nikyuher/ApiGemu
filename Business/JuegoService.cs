@@ -62,7 +62,7 @@ public class JuegoService : IJuegoService
     }
 
     //Update
-    public void UpdateJuego(Juego juego)
+    public void UpdateJuego(JuegoAddDTO juego)
     {
         _juegoRepository.UpdateJuego(juego);
     }

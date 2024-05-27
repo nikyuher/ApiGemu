@@ -251,7 +251,7 @@ public class JuegoController : ControllerBase
     //Update
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    public IActionResult UpdateJuego(int id, [FromBody] Juego juego)
+    public IActionResult UpdateJuego(int id, [FromBody] JuegoAddDTO juego)
     {
         try
         {

@@ -17,7 +17,7 @@ public interface IJuegoRepository
     void CreateJuego(JuegoAddDTO juego);
     void AsignarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira);
     //Update
-    void UpdateJuego(Juego juego);
+    void UpdateJuego(JuegoAddDTO juego);
     //Delte
     void DeleteJuego(int idJuego);
 }

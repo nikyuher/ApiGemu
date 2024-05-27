@@ -49,7 +49,7 @@ public class JuegoRepository : IJuegoRepository
 
     public JuegoDTO GetIdJuego(int idJuego)
     {
-        var juego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+        var juego = _context.Juegos.Include(c => c.Reseñas).FirstOrDefault(r => r.IdJuego == idJuego);
 
         if (juego is null)
         {
@@ -66,7 +66,7 @@ public class JuegoRepository : IJuegoRepository
             Descuento = juego.Descuento,
             CodigoJuego = juego.CodigoJuego,
             Reseñas = juego.Reseñas,
-            Fecha = juego.Fecha,
+            Fecha = juego.Fecha
         };
 
         return newJuego;
@@ -169,13 +169,19 @@ public class JuegoRepository : IJuegoRepository
     }
 
     //Update
-    public void UpdateJuego(Juego juego)
+    public void UpdateJuego(JuegoAddDTO juego)
     {
         var existingGame = _context.Juegos.Find(juego.IdJuego);
         if (existingGame == null)
         {
             throw new KeyNotFoundException("No se encontró el Juego a actualizar.");
         }
+
+            existingGame.Titulo = juego.Titulo;
+            existingGame.Descripcion = juego.Descripcion;
+            existingGame.Precio = juego.Precio;
+            existingGame.Descuento = juego.Descuento;
+            existingGame.Plataforma = juego.Plataforma;
 
         _context.Entry(existingGame).CurrentValues.SetValues(juego);
         SaveChanges();

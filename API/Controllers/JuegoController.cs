@@ -210,8 +210,8 @@ public class JuegoController : ControllerBase
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de juego.");
 
-            _juegoService.CreateJuego(juego);
-            return Ok(juego);
+          var newJuego =  _juegoService.CreateJuego(juego);
+            return Ok(newJuego);
         }
         catch (Exception ex)
         {
@@ -221,7 +221,7 @@ public class JuegoController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPost("{id}/asignar-categoria")]
+    [HttpPost("{id}/añadir-categorias")]
     public IActionResult AsignarCategoriasJuego(int id, [FromBody] List<int> ListaIdsCateogira)
     {
         try
@@ -250,7 +250,7 @@ public class JuegoController : ControllerBase
 
     //Update
     [Authorize(Roles = "Admin")]
-    [HttpPut("{id}")]
+    [HttpPut("{id}/datos")]
     public IActionResult UpdateJuego(int id, [FromBody] JuegoAddDTO juego)
     {
         try

@@ -52,9 +52,9 @@ public class JuegoService : IJuegoService
     }
 
     //Create
-    public void CreateJuego(JuegoAddDTO juego)
+    public Juego  CreateJuego(JuegoAddDTO juego)
     {
-        _juegoRepository.CreateJuego(juego);
+      return  _juegoRepository.CreateJuego(juego);
     }
     public void AsignarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira)
     {

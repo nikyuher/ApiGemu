@@ -116,7 +116,7 @@ public class JuegoRepository : IJuegoRepository
     }
 
     //Create
-    public void CreateJuego(JuegoAddDTO juego)
+    public Juego CreateJuego(JuegoAddDTO juego)
     {
 
         var newJuego = new Juego
@@ -127,11 +127,12 @@ public class JuegoRepository : IJuegoRepository
             Descripcion = juego.Descripcion,
             Plataforma = juego.Plataforma,
             CodigoJuego = GenerateGameCode(),
-            Fecha = DateTime.Today
         };
 
         _context.Juegos.Add(newJuego);
         SaveChanges();
+
+        return newJuego;
     }
 
     public void AsignarCategoriasJuego(int idJuego, List<int> ListaIdsCategoria)

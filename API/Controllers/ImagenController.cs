@@ -245,4 +245,23 @@ public class ImagenController : ControllerBase
             return StatusCode(500, new { message = ex.Message });
         }
     }
+
+    [HttpDelete("juego")]
+    public IActionResult DeleteImagenesJuego([FromBody] int idJuego)
+    {
+        try
+        {
+
+            _logger.LogInformation($"Se ha recibido una solicitud para eliminar imagenes del juego con ID: {idJuego}.");
+
+            _imagenService.DeleteImagenesJuego(idJuego);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar eliminar imagenes: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
 }

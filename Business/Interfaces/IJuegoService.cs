@@ -14,7 +14,7 @@ public interface IJuegoService
     public JuegoCategoriasDTO GetCategoriasJuego(int idJuego);
     public JuegoReseñaDTO GetReseñasJuego(int idJuego);
     //Create
-    void CreateJuego(JuegoAddDTO juego);
+    public Juego  CreateJuego(JuegoAddDTO juego);
     void AsignarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira);
     //Update
     void UpdateJuego(JuegoAddDTO juego);

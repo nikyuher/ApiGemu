@@ -131,7 +131,7 @@ public class ProductoRepository : IProductoRepository
             Descripcion = producto.Descripcion,
             Estado = producto.Estado,
             Cantidad = producto.Cantidad,
-            Fecha = DateTime.Today
+            Fecha = DateTime.Now
         };
 
         _context.Productos.Add(newProducto);

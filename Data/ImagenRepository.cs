@@ -170,10 +170,31 @@ public class ImagenRepository : IImagenRepository
 
         var imagenes = _context.Imagenes.Where(r => r.ProductoId == idProducto).ToList();
 
-        if (imagenes.Count == 0)
+        // if (imagenes.Count == 0)
+        // {
+        //     throw new Exception($"No existen imágenes asociadas al producto con ID: {idProducto}");
+        // }
+
+        _context.Imagenes.RemoveRange(imagenes);
+        SaveChanges();
+    }
+
+    public void DeleteImagenesJuego(int idJuego)
+    {
+
+        var juego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+
+        if (juego is null)
         {
-            throw new Exception($"No existen imágenes asociadas al producto con ID: {idProducto}");
+            throw new Exception($"No existen el juego con el id: {idJuego}");
         }
+
+        var imagenes = _context.Imagenes.Where(r => r.JuegoId == idJuego).ToList();
+
+        // if (imagenes.Count == 0)
+        // {
+        //     throw new Exception($"No existen imágenes asociadas al producto con ID: {idJuego}");
+        // }
 
         _context.Imagenes.RemoveRange(imagenes);
         SaveChanges();

@@ -58,4 +58,9 @@ public class ImagenService : IImagenService
     {
         _imagenRepository.DeleteImagenesProducto( idProducto);
     }
+
+     public void DeleteImagenesJuego(int idJuego)
+    {
+        _imagenRepository.DeleteImagenesJuego( idJuego);
+    }
 }

@@ -17,4 +17,5 @@ public interface IImagenRepository
     void UpdateImagenProducto(List<ImagenProductoDTO> Listaimagen);
     //Delete
     void DeleteImagenesProducto(int idProducto);
+    void DeleteImagenesJuego(int idJuego);
 }

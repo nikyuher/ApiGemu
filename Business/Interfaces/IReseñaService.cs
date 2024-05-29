@@ -5,6 +5,7 @@ public interface IReseñaService
 {
     //Read
     public List<Reseña> GetAllReseñas();
+    public List<Reseña> GetAllReseñasPendientes();
     public Reseña GetIdReseña(int idReseña);
     //Create
     void CreateReseñaProducto(ReseñaAddProducto reseña);

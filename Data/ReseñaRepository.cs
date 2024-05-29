@@ -17,6 +17,13 @@ public class ReseñaRepository : IReseñaRepository
         return reseñas;
     }
 
+    public List<Reseña> GetAllReseñasPendientes()
+    {
+        var reseñas = _context.Reseñas.Where(r=> r.Solicitud == "pendiente").ToList();
+
+        return reseñas;
+    }
+
     //Read
     public Reseña GetIdReseña(int idReseña)
     {
@@ -100,7 +107,7 @@ public class ReseñaRepository : IReseñaRepository
         }
 
         newReseña.Solicitud = reseña.Solicitud;
-        _context.Update(reseña);
+        _context.Update(newReseña);
         SaveChanges();
     }
 

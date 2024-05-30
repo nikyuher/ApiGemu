@@ -5,6 +5,7 @@ public interface IJuegoRepository
 {
     //Read
     public List<Juego> GetAllJuegos();
+    public Task<IEnumerable<JuegoSearchDTO>> JuegoSearch(string Titulo);
     public List<Juego> GetJuegosPaginados(int pageNumber, int pageSize);
     public List<Juego> GetJuegosPaginadosOfertas(int pageNumber, int pageSize);
     public List<Juego> GetJuegosPaginadosBaratos(int pageNumber, int pageSize, int precioBarato);

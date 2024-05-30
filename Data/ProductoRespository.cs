@@ -39,6 +39,24 @@ public class ProductoRepository : IProductoRepository
 
         return nuevosProductos;
     }
+
+
+    public async Task<IEnumerable<ProductoSearchDTO>> ProductoSearch(string Nombre)
+    {
+        var producto = await  _context.Productos.Include(j => j.ImgsProducto).Where(j => j.Nombre.Contains(Nombre)).ToListAsync();
+
+        var productoSearchList = producto.Select(j => new ProductoSearchDTO
+        {
+            IdProducto = j.IdProducto,
+            Nombre = j.Nombre,
+            Precio = j.Precio,
+            Estado = j.Estado,
+            ImgsProducto = j.ImgsProducto.Take(1).ToList()
+        }).ToList();
+
+        return  productoSearchList;    
+    }
+
     public List<Producto> GetProductoPaginados(int pageNumber, int pageSize)
     {
         return GetFilteredProductos(pageNumber, pageSize).ToList();

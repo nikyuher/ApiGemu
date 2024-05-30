@@ -17,6 +17,12 @@ public class JuegoService : IJuegoService
     {
         return _juegoRepository.GetAllJuegos();
     }
+
+    public async Task<IEnumerable<JuegoSearchDTO>> JuegoSearch(string Titulo)
+    {
+        return await _juegoRepository.JuegoSearch(Titulo);
+    }
+
     public List<Juego> GetJuegosPaginados(int pageNumber, int pageSize)
     {
         return _juegoRepository.GetJuegosPaginados(pageNumber, pageSize);
@@ -29,7 +35,7 @@ public class JuegoService : IJuegoService
     {
         return _juegoRepository.GetJuegosPaginadosBaratos(pageNumber, pageSize, precioBarato);
     }
-    public List<Juego>  GetJuegosPaginadosGratis(int pageNumber, int pageSize)
+    public List<Juego> GetJuegosPaginadosGratis(int pageNumber, int pageSize)
     {
         return _juegoRepository.GetJuegosPaginadosGratis(pageNumber, pageSize);
     }
@@ -52,9 +58,9 @@ public class JuegoService : IJuegoService
     }
 
     //Create
-    public Juego  CreateJuego(JuegoAddDTO juego)
+    public Juego CreateJuego(JuegoAddDTO juego)
     {
-      return  _juegoRepository.CreateJuego(juego);
+        return _juegoRepository.CreateJuego(juego);
     }
     public void AsignarCategoriasJuego(int idJuego, List<int> ListaIdsCateogira)
     {

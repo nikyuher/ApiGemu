@@ -22,6 +22,23 @@ public class JuegoRepository : IJuegoRepository
         return juegos;
     }
 
+    public async Task<IEnumerable<JuegoSearchDTO>> JuegoSearch(string Titulo)
+    {
+        var juego =  await _context.Juegos.Include(j => j.ImgsJuego).Where(j => j.Titulo.Contains(Titulo)).ToListAsync();
+
+        var juegoSearchList = juego.Select(j => new JuegoSearchDTO
+        {
+            IdJuego = j.IdJuego,
+            Titulo = j.Titulo,
+            Precio = j.Precio,
+            Plataforma = j.Plataforma,
+            Descuento = j.Descuento,
+            ImgsJuego = j.ImgsJuego.Take(1).ToList()
+        }).ToList();
+
+        return juegoSearchList;
+    }
+
     public List<Juego> GetJuegosPaginados(int pageNumber, int pageSize)
     {
         return GetFilteredJuegos(pageNumber, pageSize).ToList();
@@ -178,11 +195,11 @@ public class JuegoRepository : IJuegoRepository
             throw new KeyNotFoundException("No se encontró el Juego a actualizar.");
         }
 
-            existingGame.Titulo = juego.Titulo;
-            existingGame.Descripcion = juego.Descripcion;
-            existingGame.Precio = juego.Precio;
-            existingGame.Descuento = juego.Descuento;
-            existingGame.Plataforma = juego.Plataforma;
+        existingGame.Titulo = juego.Titulo;
+        existingGame.Descripcion = juego.Descripcion;
+        existingGame.Precio = juego.Precio;
+        existingGame.Descuento = juego.Descuento;
+        existingGame.Plataforma = juego.Plataforma;
 
         _context.Entry(existingGame).CurrentValues.SetValues(juego);
         SaveChanges();

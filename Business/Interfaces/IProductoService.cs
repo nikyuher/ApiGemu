@@ -5,6 +5,7 @@ public interface IProductoService
 {
     //Read
     public List<Producto> GetAllProductos();
+    public Task<IEnumerable<ProductoSearchDTO>> ProductoSearch(string Nombre);
     public List<Producto> GetProductoPaginados(int pageNumber, int pageSize);
     public List<Producto> GetProductoPaginadosCategoria(int pageNumber, int pageSize, List<int> categoriaIds);
     public ProductoDTO GetIdProducto(int idProducto);

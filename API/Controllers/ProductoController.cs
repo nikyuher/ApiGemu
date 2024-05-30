@@ -41,6 +41,7 @@ public class ProductoController : ControllerBase
         }
     }
 
+
     [AllowAnonymous]
     [HttpGet("paginados")]
     public ActionResult<List<Producto>> GetProductoPaginados(int pageNumber, int pageSize)

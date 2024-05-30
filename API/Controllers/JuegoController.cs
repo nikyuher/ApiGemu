@@ -210,7 +210,7 @@ public class JuegoController : ControllerBase
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de juego.");
 
-          var newJuego =  _juegoService.CreateJuego(juego);
+            var newJuego = _juegoService.CreateJuego(juego);
             return Ok(newJuego);
         }
         catch (Exception ex)

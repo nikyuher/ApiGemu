@@ -30,6 +30,9 @@ namespace Gemu.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdAnuncio"), 1L, 1);
 
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("IdProducto")
                         .HasColumnType("int");
 
@@ -65,6 +68,52 @@ namespace Gemu.Data.Migrations
                     b.ToTable("Bibliotecas");
                 });
 
+            modelBuilder.Entity("Gemu.Models.BibliotecaJuego", b =>
+                {
+                    b.Property<int>("BibliotecaJuegoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BibliotecaJuegoId"), 1L, 1);
+
+                    b.Property<int>("BibliotecaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JuegoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BibliotecaJuegoId");
+
+                    b.HasIndex("BibliotecaId");
+
+                    b.HasIndex("JuegoId");
+
+                    b.ToTable("BibliotecaJuegos");
+                });
+
+            modelBuilder.Entity("Gemu.Models.BibliotecaProducto", b =>
+                {
+                    b.Property<int>("BibliotecaProductoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BibliotecaProductoId"), 1L, 1);
+
+                    b.Property<int>("BibliotecaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BibliotecaProductoId");
+
+                    b.HasIndex("BibliotecaId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("BibliotecaProductos");
+                });
+
             modelBuilder.Entity("Gemu.Models.Carrito", b =>
                 {
                     b.Property<int>("IdCarrito")
@@ -84,6 +133,52 @@ namespace Gemu.Data.Migrations
                     b.ToTable("Carritos");
                 });
 
+            modelBuilder.Entity("Gemu.Models.CarritoJuego", b =>
+                {
+                    b.Property<int>("CarritoJuegoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarritoJuegoId"), 1L, 1);
+
+                    b.Property<int>("CarritoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JuegoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarritoJuegoId");
+
+                    b.HasIndex("CarritoId");
+
+                    b.HasIndex("JuegoId");
+
+                    b.ToTable("CarritoJuego");
+                });
+
+            modelBuilder.Entity("Gemu.Models.CarritoProducto", b =>
+                {
+                    b.Property<int>("CarritoProductoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarritoProductoId"), 1L, 1);
+
+                    b.Property<int>("CarritoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarritoProductoId");
+
+                    b.HasIndex("CarritoId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("CarritoProducto");
+                });
+
             modelBuilder.Entity("Gemu.Models.Categoria", b =>
                 {
                     b.Property<int>("IdCategoria")
@@ -92,21 +187,17 @@ namespace Gemu.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCategoria"), 1L, 1);
 
-                    b.Property<int?>("IdJuego")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdProducto")
-                        .HasColumnType("int");
+                    b.Property<string>("Icono")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Seccion")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IdCategoria");
-
-                    b.HasIndex("IdJuego");
-
-                    b.HasIndex("IdProducto");
 
                     b.ToTable("Categorias");
                 });
@@ -156,9 +247,6 @@ namespace Gemu.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdJuego"), 1L, 1);
 
-                    b.Property<int?>("CategoriaIdCategoria")
-                        .HasColumnType("int");
-
                     b.Property<string>("CodigoJuego")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -172,15 +260,6 @@ namespace Gemu.Data.Migrations
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("IdBiblioteca")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdCarrito")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdCategoria")
-                        .HasColumnType("int");
 
                     b.Property<int?>("IdImagen")
                         .HasColumnType("int");
@@ -204,15 +283,24 @@ namespace Gemu.Data.Migrations
 
                     b.HasKey("IdJuego");
 
-                    b.HasIndex("CategoriaIdCategoria");
-
-                    b.HasIndex("IdBiblioteca");
-
-                    b.HasIndex("IdCarrito");
-
                     b.HasIndex("ReseñaIdReseña");
 
                     b.ToTable("Juegos");
+                });
+
+            modelBuilder.Entity("Gemu.Models.JuegoCategoria", b =>
+                {
+                    b.Property<int>("JuegoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("JuegoId", "CategoriaId");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.ToTable("juegoCategorias");
                 });
 
             modelBuilder.Entity("Gemu.Models.Producto", b =>
@@ -224,9 +312,6 @@ namespace Gemu.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProducto"), 1L, 1);
 
                     b.Property<int>("Cantidad")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoriaIdCategoria")
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
@@ -241,15 +326,6 @@ namespace Gemu.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("IdAnuncio")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdBiblioteca")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdCarrito")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdCategoria")
                         .HasColumnType("int");
 
                     b.Property<int?>("IdReseña")
@@ -267,15 +343,24 @@ namespace Gemu.Data.Migrations
 
                     b.HasKey("IdProducto");
 
-                    b.HasIndex("CategoriaIdCategoria");
-
-                    b.HasIndex("IdBiblioteca");
-
-                    b.HasIndex("IdCarrito");
-
                     b.HasIndex("ReseñaIdReseña");
 
                     b.ToTable("Productos");
+                });
+
+            modelBuilder.Entity("Gemu.Models.ProductoCategoria", b =>
+                {
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductoId", "CategoriaId");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.ToTable("ProductoCategorias");
                 });
 
             modelBuilder.Entity("Gemu.Models.Reseña", b =>
@@ -293,6 +378,9 @@ namespace Gemu.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("IdJuego")
                         .HasColumnType("int");
 
@@ -301,6 +389,9 @@ namespace Gemu.Data.Migrations
 
                     b.Property<int>("IdUsuario")
                         .HasColumnType("int");
+
+                    b.Property<string>("NombreUsuario")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Solicitud")
                         .HasColumnType("nvarchar(max)");
@@ -459,6 +550,44 @@ namespace Gemu.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("Gemu.Models.BibliotecaJuego", b =>
+                {
+                    b.HasOne("Gemu.Models.Biblioteca", "Biblioteca")
+                        .WithMany("BibliotecaJuegos")
+                        .HasForeignKey("BibliotecaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gemu.Models.Juego", "Juego")
+                        .WithMany("BibliotecaJuegos")
+                        .HasForeignKey("JuegoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Biblioteca");
+
+                    b.Navigation("Juego");
+                });
+
+            modelBuilder.Entity("Gemu.Models.BibliotecaProducto", b =>
+                {
+                    b.HasOne("Gemu.Models.Biblioteca", "Biblioteca")
+                        .WithMany("BibliotecaProductos")
+                        .HasForeignKey("BibliotecaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gemu.Models.Producto", "Producto")
+                        .WithMany("BibliotecaProductos")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Biblioteca");
+
+                    b.Navigation("Producto");
+                });
+
             modelBuilder.Entity("Gemu.Models.Carrito", b =>
                 {
                     b.HasOne("Gemu.Models.Usuario", "Usuario")
@@ -470,17 +599,40 @@ namespace Gemu.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Gemu.Models.Categoria", b =>
+            modelBuilder.Entity("Gemu.Models.CarritoJuego", b =>
                 {
-                    b.HasOne("Gemu.Models.Juego", "Juego")
-                        .WithMany("Categorias")
-                        .HasForeignKey("IdJuego");
+                    b.HasOne("Gemu.Models.Carrito", "Carrito")
+                        .WithMany("CarritoJuegos")
+                        .HasForeignKey("CarritoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Gemu.Models.Producto", "Producto")
-                        .WithMany("Categorias")
-                        .HasForeignKey("IdProducto");
+                    b.HasOne("Gemu.Models.Juego", "Juego")
+                        .WithMany("CarritoJuegos")
+                        .HasForeignKey("JuegoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carrito");
 
                     b.Navigation("Juego");
+                });
+
+            modelBuilder.Entity("Gemu.Models.CarritoProducto", b =>
+                {
+                    b.HasOne("Gemu.Models.Carrito", "Carrito")
+                        .WithMany("CarritoProductos")
+                        .HasForeignKey("CarritoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gemu.Models.Producto", "Producto")
+                        .WithMany("CarritoProductos")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carrito");
 
                     b.Navigation("Producto");
                 });
@@ -489,7 +641,8 @@ namespace Gemu.Data.Migrations
                 {
                     b.HasOne("Gemu.Models.Juego", "Juego")
                         .WithMany("ImgsJuego")
-                        .HasForeignKey("JuegoId");
+                        .HasForeignKey("JuegoId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Gemu.Models.Juego", null)
                         .WithOne("Imagen")
@@ -497,7 +650,8 @@ namespace Gemu.Data.Migrations
 
                     b.HasOne("Gemu.Models.Producto", "Producto")
                         .WithMany("ImgsProducto")
-                        .HasForeignKey("ProductoId");
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Juego");
 
@@ -506,56 +660,58 @@ namespace Gemu.Data.Migrations
 
             modelBuilder.Entity("Gemu.Models.Juego", b =>
                 {
-                    b.HasOne("Gemu.Models.Categoria", "Categoria")
-                        .WithMany()
-                        .HasForeignKey("CategoriaIdCategoria");
-
-                    b.HasOne("Gemu.Models.Biblioteca", "Biblioteca")
-                        .WithMany("Juegos")
-                        .HasForeignKey("IdBiblioteca");
-
-                    b.HasOne("Gemu.Models.Carrito", "Carrito")
-                        .WithMany("Juegos")
-                        .HasForeignKey("IdCarrito");
-
                     b.HasOne("Gemu.Models.Reseña", "Reseña")
                         .WithMany()
                         .HasForeignKey("ReseñaIdReseña");
-
-                    b.Navigation("Biblioteca");
-
-                    b.Navigation("Carrito");
-
-                    b.Navigation("Categoria");
 
                     b.Navigation("Reseña");
                 });
 
-            modelBuilder.Entity("Gemu.Models.Producto", b =>
+            modelBuilder.Entity("Gemu.Models.JuegoCategoria", b =>
                 {
                     b.HasOne("Gemu.Models.Categoria", "Categoria")
-                        .WithMany()
-                        .HasForeignKey("CategoriaIdCategoria");
+                        .WithMany("JuegoCategorias")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Gemu.Models.Biblioteca", "Biblioteca")
-                        .WithMany("Productos")
-                        .HasForeignKey("IdBiblioteca");
+                    b.HasOne("Gemu.Models.Juego", "Juego")
+                        .WithMany("JuegoCategorias")
+                        .HasForeignKey("JuegoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Gemu.Models.Carrito", "Carrito")
-                        .WithMany("Productos")
-                        .HasForeignKey("IdCarrito");
+                    b.Navigation("Categoria");
 
+                    b.Navigation("Juego");
+                });
+
+            modelBuilder.Entity("Gemu.Models.Producto", b =>
+                {
                     b.HasOne("Gemu.Models.Reseña", "Reseña")
                         .WithMany()
                         .HasForeignKey("ReseñaIdReseña");
 
-                    b.Navigation("Biblioteca");
+                    b.Navigation("Reseña");
+                });
 
-                    b.Navigation("Carrito");
+            modelBuilder.Entity("Gemu.Models.ProductoCategoria", b =>
+                {
+                    b.HasOne("Gemu.Models.Categoria", "Categoria")
+                        .WithMany("ProductoCategorias")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gemu.Models.Producto", "Producto")
+                        .WithMany("ProductoCategorias")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Categoria");
 
-                    b.Navigation("Reseña");
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("Gemu.Models.Reseña", b =>
@@ -605,25 +761,36 @@ namespace Gemu.Data.Migrations
 
             modelBuilder.Entity("Gemu.Models.Biblioteca", b =>
                 {
-                    b.Navigation("Juegos");
+                    b.Navigation("BibliotecaJuegos");
 
-                    b.Navigation("Productos");
+                    b.Navigation("BibliotecaProductos");
                 });
 
             modelBuilder.Entity("Gemu.Models.Carrito", b =>
                 {
-                    b.Navigation("Juegos");
+                    b.Navigation("CarritoJuegos");
 
-                    b.Navigation("Productos");
+                    b.Navigation("CarritoProductos");
+                });
+
+            modelBuilder.Entity("Gemu.Models.Categoria", b =>
+                {
+                    b.Navigation("JuegoCategorias");
+
+                    b.Navigation("ProductoCategorias");
                 });
 
             modelBuilder.Entity("Gemu.Models.Juego", b =>
                 {
-                    b.Navigation("Categorias");
+                    b.Navigation("BibliotecaJuegos");
+
+                    b.Navigation("CarritoJuegos");
 
                     b.Navigation("Imagen");
 
                     b.Navigation("ImgsJuego");
+
+                    b.Navigation("JuegoCategorias");
 
                     b.Navigation("Reseñas");
                 });
@@ -632,9 +799,13 @@ namespace Gemu.Data.Migrations
                 {
                     b.Navigation("Anuncio");
 
-                    b.Navigation("Categorias");
+                    b.Navigation("BibliotecaProductos");
+
+                    b.Navigation("CarritoProductos");
 
                     b.Navigation("ImgsProducto");
+
+                    b.Navigation("ProductoCategorias");
 
                     b.Navigation("Reseñas");
                 });

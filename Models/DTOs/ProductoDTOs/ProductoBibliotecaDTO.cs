@@ -11,5 +11,5 @@ public class ProductoBibliotecaDTO
     [Required]
     public string? Estado { get; set; }
     public List<Imagen>? ImgsProducto { get; set; } = new List<Imagen>();
-    public List<Categoria>? Categorias { get; set; } = new List<Categoria>();
+    public List<ProductoCategoria>? ProductoCategorias { get; set; } = new List<ProductoCategoria>();
 }

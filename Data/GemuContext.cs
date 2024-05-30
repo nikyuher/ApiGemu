@@ -48,16 +48,32 @@ public class GemuContext : DbContext
             .HasForeignKey<Biblioteca>(b => b.IdUsuario);
 
         // Relación entre Juego y Biblioteca
-        modelBuilder.Entity<Juego>()
-            .HasOne(j => j.Biblioteca)
-            .WithMany(b => b.Juegos)
-            .HasForeignKey(j => j.IdBiblioteca);
+        modelBuilder.Entity<BibliotecaJuego>()
+            .HasKey(pc => pc.BibliotecaJuegoId);
+
+        modelBuilder.Entity<BibliotecaJuego>()
+            .HasOne(pc => pc.Biblioteca)
+            .WithMany(p => p.BibliotecaJuegos)
+            .HasForeignKey(pc => pc.BibliotecaId);
+
+        modelBuilder.Entity<BibliotecaJuego>()
+            .HasOne(pc => pc.Juego)
+            .WithMany(c => c.BibliotecaJuegos)
+            .HasForeignKey(pc => pc.JuegoId);
 
         // Relación entre Producto y Biblioteca
-        modelBuilder.Entity<Producto>()
-            .HasOne(p => p.Biblioteca)
-            .WithMany(b => b.Productos)
-            .HasForeignKey(p => p.IdBiblioteca);
+        modelBuilder.Entity<BibliotecaProducto>()
+            .HasKey(pc => pc.BibliotecaProductoId);
+
+        modelBuilder.Entity<BibliotecaProducto>()
+            .HasOne(pc => pc.Biblioteca)
+            .WithMany(p => p.BibliotecaProductos)
+            .HasForeignKey(pc => pc.BibliotecaId);
+
+        modelBuilder.Entity<BibliotecaProducto>()
+            .HasOne(pc => pc.Producto)
+            .WithMany(c => c.BibliotecaProductos)
+            .HasForeignKey(pc => pc.ProductoId);
 
         // Relación entre Producto y Anuncio
         modelBuilder.Entity<Producto>()
@@ -66,16 +82,32 @@ public class GemuContext : DbContext
             .HasForeignKey<Anuncio>(a => a.IdProducto);
 
         // Relación entre Producto y Carrito
-        modelBuilder.Entity<Producto>()
-            .HasOne(p => p.Carrito)
-            .WithMany(c => c.Productos)
-            .HasForeignKey(p => p.IdCarrito);
+        modelBuilder.Entity<CarritoProducto>()
+            .HasKey(pc => pc.CarritoProductoId);
 
-        // Relación entre Juego y Carrito
-        modelBuilder.Entity<Juego>()
-            .HasOne(j => j.Carrito)
-            .WithMany(c => c.Juegos)
-            .HasForeignKey(j => j.IdCarrito);
+        modelBuilder.Entity<CarritoProducto>()
+            .HasOne(pc => pc.Carrito)
+            .WithMany(p => p.CarritoProductos)
+            .HasForeignKey(pc => pc.CarritoId);
+
+        modelBuilder.Entity<CarritoProducto>()
+            .HasOne(pc => pc.Producto)
+            .WithMany(c => c.CarritoProductos)
+            .HasForeignKey(pc => pc.ProductoId);
+
+        // Relación entre Carrito y Juego
+        modelBuilder.Entity<CarritoJuego>()
+            .HasKey(cj => cj.CarritoJuegoId);
+
+        modelBuilder.Entity<CarritoJuego>()
+            .HasOne(cj => cj.Carrito)
+            .WithMany(c => c.CarritoJuegos)
+            .HasForeignKey(cj => cj.CarritoId);
+
+        modelBuilder.Entity<CarritoJuego>()
+            .HasOne(cj => cj.Juego)
+            .WithMany(j => j.CarritoJuegos)
+            .HasForeignKey(cj => cj.JuegoId);
 
         // Relación entre Producto y Reseña
         modelBuilder.Entity<Producto>()
@@ -90,36 +122,64 @@ public class GemuContext : DbContext
             .HasForeignKey(r => r.IdJuego);
 
         // Relación entre Producto y Categoria
-        modelBuilder.Entity<Producto>()
-            .HasMany(p => p.Categorias)
-            .WithOne(c => c.Producto)
-            .HasForeignKey(c => c.IdProducto);
+        modelBuilder.Entity<ProductoCategoria>()
+            .HasKey(pc => new { pc.ProductoId, pc.CategoriaId });
+
+        modelBuilder.Entity<ProductoCategoria>()
+            .HasOne(pc => pc.Producto)
+            .WithMany(p => p.ProductoCategorias)
+            .HasForeignKey(pc => pc.ProductoId);
+
+        modelBuilder.Entity<ProductoCategoria>()
+            .HasOne(pc => pc.Categoria)
+            .WithMany(c => c.ProductoCategorias)
+            .HasForeignKey(pc => pc.CategoriaId);
 
         // Relación entre Juego y Categoria
-        modelBuilder.Entity<Juego>()
-            .HasMany(j => j.Categorias)
-            .WithOne(c => c.Juego)
-            .HasForeignKey(c => c.IdJuego);
+        modelBuilder.Entity<JuegoCategoria>()
+            .HasKey(jc => new { jc.JuegoId, jc.CategoriaId });
 
-        // Relación entre Imagen y Juego
-        modelBuilder.Entity<Imagen>()
-            .HasOne(i => i.Juego)
-            .WithMany(j => j.ImgsJuego)
-            .HasForeignKey(i => i.JuegoId);
+        modelBuilder.Entity<JuegoCategoria>()
+            .HasOne(jc => jc.Juego)
+            .WithMany(j => j.JuegoCategorias)
+            .HasForeignKey(jc => jc.JuegoId);
+
+        modelBuilder.Entity<JuegoCategoria>()
+            .HasOne(jc => jc.Categoria)
+            .WithMany(c => c.JuegoCategorias)
+            .HasForeignKey(jc => jc.CategoriaId);
+
+        // Relacion entre juegos. producto e imagenes
+        modelBuilder.Entity<Juego>()
+                .HasMany(p => p.ImgsJuego)
+                .WithOne(i => i.Juego)
+                .HasForeignKey(i => i.JuegoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Producto>()
+            .HasMany(p => p.ImgsProducto)
+            .WithOne(i => i.Producto)
+            .HasForeignKey(i => i.ProductoId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // Relación entre Imagen y Producto
         modelBuilder.Entity<Imagen>()
             .HasOne(i => i.Producto)
             .WithMany(p => p.ImgsProducto)
             .HasForeignKey(i => i.ProductoId);
+        // Relación entre Imagen y Juego
+        modelBuilder.Entity<Imagen>()
+            .HasOne(i => i.Juego)
+            .WithMany(p => p.ImgsJuego)
+            .HasForeignKey(i => i.JuegoId);
 
         modelBuilder.Entity<Rol>().HasData(
         new Rol { IdRol = 1, Nombre = "Usuario" },
-        new Rol { IdRol = 2, Nombre = "Admin"}
+        new Rol { IdRol = 2, Nombre = "Admin" }
         );
-        
+
         modelBuilder.Entity<Usuario>().HasData(
-            new Usuario{ IdUsuario = 1, IdRol=2, Nombre= "Admin", Correo ="admin@gmail.com", Contraseña ="ADMINcontraseña123@"}
+            new Usuario { IdUsuario = 1, IdRol = 2, Nombre = "Admin", Correo = "admin@gmail.com", Contraseña = "ADMINcontraseña123@" }
         );
 
     }
@@ -135,4 +195,10 @@ public class GemuContext : DbContext
     public DbSet<Imagen> Imagenes { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
     public DbSet<Rol> Roles { get; set; }
+    public DbSet<BibliotecaProducto> BibliotecaProductos { get; set; }
+    public DbSet<BibliotecaJuego> BibliotecaJuegos { get; set; }
+    public DbSet<CarritoProducto> CarritoProducto { get; set; }
+    public DbSet<CarritoJuego> CarritoJuego { get; set; }
+    public DbSet<JuegoCategoria> juegoCategorias { get; set; }
+    public DbSet<ProductoCategoria> ProductoCategorias { get; set; }
 }

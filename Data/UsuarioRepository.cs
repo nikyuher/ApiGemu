@@ -19,6 +19,7 @@ public class UsuarioRepository : IUsuarioRepository
         {
             IdUsuario = u.IdUsuario,
             IdRol = u.IdRol,
+            Rol = u.Rol.Nombre,
             FotoPerfil = u.FotoPerfil,
             Nombre = u.Nombre,
             Correo = u.Correo,
@@ -33,7 +34,7 @@ public class UsuarioRepository : IUsuarioRepository
     //Read
     public UsuarioDTO GetIdUsuario(int idUsuario)
     {
-        var usuario = _context.Usuarios.FirstOrDefault(r => r.IdUsuario == idUsuario);
+        var usuario = _context.Usuarios.Include(u => u.Rol).Include(c => c.Carrito).Include(b => b.Biblioteca).FirstOrDefault(r => r.IdUsuario == idUsuario);
 
         if (usuario is null)
         {
@@ -44,12 +45,15 @@ public class UsuarioRepository : IUsuarioRepository
         {
             IdUsuario = usuario.IdUsuario,
             IdRol = usuario.IdRol,
+            Rol = usuario.Rol.Nombre,
             FotoPerfil = usuario.FotoPerfil,
             Nombre = usuario.Nombre,
             Correo = usuario.Correo,
             Direccion = usuario.Direccion,
             CodigoPostal = usuario.CodigoPostal,
-            SaldoActual = usuario.SaldoActual
+            SaldoActual = usuario.SaldoActual,
+            IdCarrito = usuario.Carrito.IdCarrito,
+            IdBiblioteca = usuario.Biblioteca.IdBiblioteca
         };
 
         return usuarioDTO;
@@ -82,11 +86,6 @@ public class UsuarioRepository : IUsuarioRepository
     public Usuario CreateUsuario(UsuarioCreateDTO usuario)
     {
 
-        if (_context.Usuarios.Any(u => u.Nombre == usuario.Nombre))
-        {
-            throw new ArgumentException("El nombre de usuario ya está en uso.");
-        }
-
         if (_context.Usuarios.Any(u => u.Correo == usuario.Correo))
         {
             throw new ArgumentException("El correo electrónico ya está en uso.");
@@ -103,11 +102,14 @@ public class UsuarioRepository : IUsuarioRepository
             Nombre = usuario.Nombre,
             Correo = usuario.Correo,
             Contraseña = usuario.Contraseña
+
         };
 
         var nombreRol = _context.Roles.FirstOrDefault(r => r.IdRol == newUsuario.IdRol);
 
         newUsuario.Rol = nombreRol;
+        newUsuario.Carrito = new Carrito { IdUsuario = newUsuario.IdUsuario };
+        newUsuario.Biblioteca = new Biblioteca { IdUsuario = newUsuario.IdUsuario };
 
         _context.Usuarios.Add(newUsuario);
         SaveChanges();
@@ -172,7 +174,13 @@ public class UsuarioRepository : IUsuarioRepository
             throw new KeyNotFoundException("No se encontró el Usuario a actualizar.");
         }
 
+        if (_context.Usuarios.Any(u => u.Correo == usuario.Correo && u.IdUsuario != usuario.IdUsuario))
+        {
+            throw new ArgumentException("El correo electrónico ya está en uso.");
+        }
+
         existingUser.Nombre = usuario.Nombre;
+        existingUser.Correo = usuario.Correo;
 
         _context.Usuarios.Update(existingUser);
         SaveChanges();

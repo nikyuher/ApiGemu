@@ -33,7 +33,7 @@ public class Juego
     public string? CodigoJuego { get; set; }
     public List<Imagen>? ImgsJuego { get; set; } = new List<Imagen>();
     public List<Reseña>? Reseñas { get; set; } = new List<Reseña>();
-    public List<Categoria>? Categorias = new List<Categoria>();
+    public List<JuegoCategoria>? JuegoCategorias { get; set; } = new List<JuegoCategoria>();
     public double CalificacionPromedio
     {
         get
@@ -50,14 +50,10 @@ public class Juego
 
     // Relación con Biblioteca
     [JsonIgnore]
-    public int? IdBiblioteca { get; set; }
-    [JsonIgnore]
-    public Biblioteca? Biblioteca { get; set; }
+    public List<BibliotecaJuego>? BibliotecaJuegos { get; set; } = new List<BibliotecaJuego>();
     // Relación con Carrito
     [JsonIgnore]
-    public int? IdCarrito { get; set; }
-    [JsonIgnore]
-    public Carrito? Carrito { get; set; }
+   public List<CarritoJuego>? CarritoJuegos { get; set; } = new List<CarritoJuego>();
     // Relación con Reseña
     [JsonIgnore]
     public int? IdReseña { get; set; }
@@ -68,10 +64,6 @@ public class Juego
     public int? IdImagen { get; set; }
     [JsonIgnore]
     public Imagen? Imagen { get; set; }
-    // Relación con Categoria
-    [JsonIgnore]
-    public int? IdCategoria { get; set; }
-    [JsonIgnore]
-    public Categoria? Categoria { get; set; }
+
 
 }

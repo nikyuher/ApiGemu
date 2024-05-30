@@ -8,6 +8,6 @@ public class JuegoCategoriasDTO
     [Required]
     public string? Titulo { get; set; }
 
-    public List<Categoria>? Categorias = new List<Categoria>();
+    public List<JuegoCategoria>? JuegoCategorias { get; set; } = new List<JuegoCategoria>();
 
 }

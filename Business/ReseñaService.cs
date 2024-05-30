@@ -11,9 +11,14 @@ public class ReseñaService : IReseñaService
         _reseñaRepository = repository;
     }
 
+    //Read
     public List<Reseña> GetAllReseñas()
     {
         return _reseñaRepository.GetAllReseñas();
+    }
+    public List<Reseña> GetAllReseñasPendientes()
+    {
+        return _reseñaRepository.GetAllReseñasPendientes();
     }
     public Reseña GetIdReseña(int idReseña)
     {

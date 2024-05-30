@@ -17,7 +17,20 @@ public class ProductoService : IProductoService
     {
         return _productoRepository.GetAllProductos();
     }
-    public Producto GetIdProducto(int idProducto)
+
+    public async Task<IEnumerable<ProductoSearchDTO>> ProductoSearch(string Nombre)
+    {
+        return await _productoRepository.ProductoSearch(Nombre);
+    }
+    public List<Producto> GetProductoPaginados(int pageNumber, int pageSize)
+    {
+        return _productoRepository.GetProductoPaginados(pageNumber, pageSize);
+    }
+    public List<Producto> GetProductoPaginadosCategoria(int pageNumber, int pageSize, List<int> categoriaIds)
+    {
+        return _productoRepository.GetProductoPaginadosCategoria(pageNumber, pageSize, categoriaIds);
+    }
+    public ProductoDTO GetIdProducto(int idProducto)
     {
         return _productoRepository.GetIdProducto(idProducto);
     }
@@ -30,9 +43,9 @@ public class ProductoService : IProductoService
         return _productoRepository.GetReseñasProducto(idProducto);
     }
     //Create
-    public void CreateProducto(ProductoAddDTO producto)
+    public Producto CreateProducto(ProductoAddDTO producto)
     {
-        _productoRepository.CreateProducto(producto);
+        return _productoRepository.CreateProducto(producto);
     }
     public void AsignarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira)
     {
@@ -43,20 +56,11 @@ public class ProductoService : IProductoService
     {
         _productoRepository.UpdateProducto(producto);
     }
-  
-    public void UpdateCategoriasProducto(int idProducto, List<Categoria> ListaCategoria)
-    {
-        _productoRepository.UpdateCategoriasProducto(idProducto, ListaCategoria);
-    }
 
     //Delete
     public void DeleteProducto(int idProducto)
     {
         _productoRepository.DeleteProducto(idProducto);
-    }
-    public void EliminarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira)
-    {
-        _productoRepository.EliminarCategoriasProducto(idProducto, ListaIdsCateogira);
     }
 
 }

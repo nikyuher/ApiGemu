@@ -16,5 +16,6 @@ public interface IImagenService
     void UpdateImagenJuego(List<ImagenJuegoDTO> Listaimagen);
     void UpdateImagenProducto(List<ImagenProductoDTO> Listaimagen);
     //Delete
-    void DeleteImagen(List<int> ListaId);
+    void DeleteImagenesProducto(int idProducto);
+    void DeleteImagenesJuego(int idJuego);
 }

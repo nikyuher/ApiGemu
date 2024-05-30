@@ -41,9 +41,44 @@ public class ProductoController : ControllerBase
         }
     }
 
+
+    [AllowAnonymous]
+    [HttpGet("paginados")]
+    public ActionResult<List<Producto>> GetProductoPaginados(int pageNumber, int pageSize)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener productos paginados.");
+            var productos = _productoService.GetProductoPaginados(pageNumber, pageSize);
+            return Ok(productos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos los productos: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("paginados/categorias")]
+    public ActionResult<List<Producto>> GetProductoPaginadosCategoria(int pageNumber, int pageSize, [FromQuery] List<int> categoriaIds)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener productos paginados.");
+            var productos = _productoService.GetProductoPaginadosCategoria(pageNumber, pageSize, categoriaIds);
+            return Ok(productos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos los productos: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
     [AllowAnonymous]
     [HttpGet("{id}")]
-    public ActionResult<Producto> GetProductoId(int id)
+    public ActionResult<ProductoDTO> GetProductoId(int id)
     {
         try
         {
@@ -124,8 +159,8 @@ public class ProductoController : ControllerBase
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de producto.");
 
-            _productoService.CreateProducto(producto);
-            return Ok(producto);
+            var newProducto = _productoService.CreateProducto(producto);
+            return Ok(newProducto);
         }
         catch (Exception ex)
         {
@@ -193,32 +228,6 @@ public class ProductoController : ControllerBase
         }
     }
 
-    [HttpPut("{id}/categorias")]
-    public IActionResult UpdateCategoriasProducto(int id, [FromBody] List<Categoria> ListaCategoria)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para actualizar las categorias");
-
-            var producto = _productoService.GetIdProducto(id);
-
-            if (producto is null)
-            {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
-                return NotFound();
-            }
-
-            _productoService.UpdateCategoriasProducto(id, ListaCategoria);
-
-            return Ok(producto);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar actualizar las categorias del producto con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
-
 
     //Delete
     [HttpDelete("{id}")]
@@ -243,32 +252,6 @@ public class ProductoController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar eliminar producto con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
-
-    [HttpDelete("{id}/categorias")]
-    public IActionResult EliminarCategoriasProducto(int id, [FromBody] List<int> ListaIdsCateogira)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para eliminar el producto con ID: {id}.");
-
-            var producto = _productoService.GetIdProducto(id);
-
-            if (producto is null)
-            {
-                _logger.LogWarning($"No se encontró ningún producto con ID: {id}.");
-                return NotFound();
-            }
-
-            _productoService.EliminarCategoriasProducto(id, ListaIdsCateogira);
-
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar eliminar las categorias : {ex.Message}");
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }

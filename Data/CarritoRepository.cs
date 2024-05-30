@@ -1,4 +1,5 @@
 using Gemu.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gemu.Data;
 public class CarritoRepository : ICarritoRepository
@@ -32,7 +33,14 @@ public class CarritoRepository : ICarritoRepository
 
     public CarritoListaDTO GetCarritoUsuario(int idUsuario)
     {
-        var carrito = _context.Carritos.FirstOrDefault(r => r.IdUsuario == idUsuario);
+        var carrito = _context.Carritos
+        .Include(p => p.CarritoProductos)
+        .ThenInclude(p => p.Producto)
+        .ThenInclude(p => p.ImgsProducto)
+        .Include(j => j.CarritoJuegos)
+        .ThenInclude(j => j.Juego)
+        .ThenInclude(j => j.ImgsJuego)
+        .FirstOrDefault(r => r.IdUsuario == idUsuario);
 
         if (carrito is null)
         {
@@ -42,24 +50,8 @@ public class CarritoRepository : ICarritoRepository
         var newCarrito = new CarritoListaDTO
         {
             IdUsuario = carrito.IdUsuario,
-            Productos = carrito.Productos.Select(u => new ProductoBibliotecaDTO
-            {
-                IdProducto = u.IdProducto,
-                Nombre = u.Nombre,
-                Precio = u.Precio,
-                Estado = u.Estado,
-                ImgsProducto = u.ImgsProducto,
-                Categorias = u.Categorias
-            }).ToList(),
-            Juegos = carrito.Juegos.Select(u => new JuegoBiliotecaDTO
-            {
-                IdJuego = u.IdJuego,
-                Titulo = u.Titulo,
-                Precio = u.Precio,
-                CodigoJuego = u.CodigoJuego,
-                ImgsJuego = u.ImgsJuego,
-                Categorias = u.Categorias
-            }).ToList(),
+            CarritoProductos = carrito.CarritoProductos.ToList(),
+            CarritoJuegos = carrito.CarritoJuegos.ToList(),
         };
 
         return newCarrito;
@@ -77,49 +69,57 @@ public class CarritoRepository : ICarritoRepository
         SaveChanges();
     }
 
-    public void AñadirJuegoCarrito(int idCarrito, List<int> ListaIdsJuego)
+    public void AñadirJuegoCarrito(int idCarrito, int idJuego)
     {
-        foreach (var juego in ListaIdsJuego)
+        var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+
+        if (existingJuego is null)
         {
-            var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == juego);
-
-            if (existingJuego is null)
-            {
-                throw new Exception($"No se encontro el juego  con el ID: {juego}");
-            }
-
-            var existingCarrito = _context.Carritos.FirstOrDefault(r => r.IdCarrito == idCarrito);
-
-            if (existingCarrito is null)
-            {
-                throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
-            }
-
-            existingCarrito.Juegos.Add(existingJuego);
+            throw new Exception($"No se encontro el juego  con el ID: {idJuego}");
         }
+
+        var existingCarrito = _context.Carritos.FirstOrDefault(r => r.IdCarrito == idCarrito);
+
+        if (existingCarrito is null)
+        {
+            throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
+        }
+
+        var newCarJuego = new CarritoJuego
+        {
+            CarritoId = existingCarrito.IdCarrito,
+            JuegoId = existingJuego.IdJuego
+
+        };
+
+        existingCarrito.CarritoJuegos.Add(newCarJuego);
         SaveChanges();
     }
 
-    public void AñadirProductoCarrito(int idCarrito, List<int> ListaIdsProducto)
+    public void AñadirProductoCarrito(int idCarrito, int idProducto)
     {
-        foreach (var producto in ListaIdsProducto)
+        var existingProducto = _context.Productos.FirstOrDefault(r => r.IdProducto == idProducto);
+
+        if (existingProducto is null)
         {
-            var existingProducto = _context.Productos.FirstOrDefault(r => r.IdProducto == producto);
-
-            if (existingProducto is null)
-            {
-                throw new Exception($"No se encontro el producto con el ID: {producto}");
-            }
-
-            var existingCarrito = _context.Carritos.FirstOrDefault(r => r.IdCarrito == idCarrito);
-
-            if (existingCarrito is null)
-            {
-                throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
-            }
-
-            existingCarrito.Productos.Add(existingProducto);
+            throw new Exception($"No se encontro el producto con el ID: {idProducto}");
         }
+
+        var existingCarrito = _context.Carritos.FirstOrDefault(r => r.IdCarrito == idCarrito);
+
+        if (existingCarrito is null)
+        {
+            throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
+        }
+
+        var newCarProduct = new CarritoProducto
+        {
+            CarritoId = existingCarrito.IdCarrito,
+            ProductoId = existingProducto.IdProducto
+
+        };
+
+        existingCarrito.CarritoProductos.Add(newCarProduct);
         SaveChanges();
     }
 
@@ -152,7 +152,7 @@ public class CarritoRepository : ICarritoRepository
 
     public void EliminarJuegoCarrito(int idCarrito, int idJuego)
     {
-        var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+        var existingJuego = _context.CarritoJuego.FirstOrDefault(r => r.CarritoJuegoId == idJuego);
 
         if (existingJuego is null)
         {
@@ -166,14 +166,14 @@ public class CarritoRepository : ICarritoRepository
             throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
         }
 
-        existingCarrito.Juegos.Remove(existingJuego);
+        existingCarrito.CarritoJuegos.Remove(existingJuego);
 
         SaveChanges();
     }
 
     public void EliminarProductoCarrito(int idCarrito, int idProducto)
     {
-        var existingProducto = _context.Productos.FirstOrDefault(r => r.IdProducto == idProducto);
+        var existingProducto = _context.CarritoProducto.FirstOrDefault(r => r.CarritoProductoId == idProducto);
 
         if (existingProducto is null)
         {
@@ -187,7 +187,8 @@ public class CarritoRepository : ICarritoRepository
             throw new Exception($"No se encontro la carrito  con el ID: {idCarrito}");
         }
 
-        existingCarrito.Productos.Remove(existingProducto);
+
+        existingCarrito.CarritoProductos.Remove(existingProducto);
 
         SaveChanges();
     }

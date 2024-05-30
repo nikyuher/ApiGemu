@@ -17,6 +17,13 @@ public class ReseñaRepository : IReseñaRepository
         return reseñas;
     }
 
+    public List<Reseña> GetAllReseñasPendientes()
+    {
+        var reseñas = _context.Reseñas.Where(r=> r.Solicitud == "pendiente").ToList();
+
+        return reseñas;
+    }
+
     //Read
     public Reseña GetIdReseña(int idReseña)
     {
@@ -33,10 +40,23 @@ public class ReseñaRepository : IReseñaRepository
     //Create
     public void CreateReseñaProducto(ReseñaAddProducto reseña)
     {
+        var existingUser = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == reseña.IdUsuario);
+        var existingProduct = _context.Productos.FirstOrDefault(u => u.IdProducto == reseña.IdProducto);
+
+        if (existingUser is null)
+        {
+            throw new Exception($"No se existe ningun usuario con el ID: {reseña.IdUsuario}.");
+        }
+        if (existingProduct is null)
+        {
+            throw new Exception($"No se existe ningun producto con el ID: {reseña.IdProducto}.");
+        }
+
         var newReseña = new Reseña
         {
             IdUsuario = reseña.IdUsuario,
             IdProducto = reseña.IdProducto,
+            NombreUsuario = existingUser.Nombre,
             Comentario = reseña.Comentario,
             Solicitud = "pendiente",
             Calificacion = reseña.Calificacion,
@@ -48,10 +68,25 @@ public class ReseñaRepository : IReseñaRepository
 
     public void CreateReseñaJuego(ReseñaAddJuego reseña)
     {
+        var existingUser = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == reseña.IdUsuario);
+        var existingJuego = _context.Juegos.FirstOrDefault(u => u.IdJuego == reseña.IdJuego);
+
+        if (existingUser is null)
+        {
+            throw new Exception($"No se existe ningun usuario con el ID: {reseña.IdUsuario}.");
+        }
+        if (existingJuego is null)
+        {
+            throw new Exception($"No se existe ningun producto con el ID: {reseña.IdJuego}.");
+        }
+
+
+
         var newReseña = new Reseña
         {
             IdUsuario = reseña.IdUsuario,
             IdJuego = reseña.IdJuego,
+            NombreUsuario = existingUser.Nombre,
             Comentario = reseña.Comentario,
             Solicitud = "pendiente",
             Calificacion = reseña.Calificacion,
@@ -72,7 +107,7 @@ public class ReseñaRepository : IReseñaRepository
         }
 
         newReseña.Solicitud = reseña.Solicitud;
-        _context.Update(reseña);
+        _context.Update(newReseña);
         SaveChanges();
     }
 

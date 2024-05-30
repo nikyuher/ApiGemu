@@ -41,6 +41,92 @@ public class JuegoController : ControllerBase
     }
 
     [AllowAnonymous]
+    [HttpGet("paginados")]
+    public ActionResult<List<Juego>> GetJuegosPaginados(int pageNumber, int pageSize)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados.");
+            var juegos = _juegoService.GetJuegosPaginados(pageNumber, pageSize);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener juegos paginados: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("paginados/ofertas")]
+    public ActionResult<List<Juego>> GetJuegosPaginadosOfertas(int pageNumber, int pageSize)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados con ofertas.");
+            var juegos = _juegoService.GetJuegosPaginadosOfertas(pageNumber, pageSize);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener juegos paginados con ofertas: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("paginados/baratos")]
+    public ActionResult<List<Juego>> GetJuegosPaginadosBaratos(int pageNumber, int pageSize, int precioBarato)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados baratos.");
+            var juegos = _juegoService.GetJuegosPaginadosBaratos(pageNumber, pageSize, precioBarato);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener juegos paginados baratos: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("paginados/gratis")]
+    public ActionResult<List<Juego>> GetJuegosPaginadosGratis(int pageNumber, int pageSize)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados gratis.");
+            var juegos = _juegoService.GetJuegosPaginadosGratis(pageNumber, pageSize);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener juegos paginados gratis: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+
+    [AllowAnonymous]
+    [HttpGet("paginados/categorias")]
+    public ActionResult<List<Juego>> GetJuegosPaginadosCategoria(int pageNumber, int pageSize, [FromQuery] List<int> categoriaIds)
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener juegos paginados.");
+            var juegos = _juegoService.GetJuegosPaginadosCategoria(pageNumber, pageSize, categoriaIds);
+            return Ok(juegos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos los juegos: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public ActionResult<JuegoDTO> GetJuegoId(int id)
     {
@@ -124,8 +210,8 @@ public class JuegoController : ControllerBase
         {
             _logger.LogInformation("Se ha recibido una solicitud de creación de juego.");
 
-            _juegoService.CreateJuego(juego);
-            return Ok(juego);
+            var newJuego = _juegoService.CreateJuego(juego);
+            return Ok(newJuego);
         }
         catch (Exception ex)
         {
@@ -135,7 +221,7 @@ public class JuegoController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPost("{id}/asignar-categoria")]
+    [HttpPost("{id}/añadir-categorias")]
     public IActionResult AsignarCategoriasJuego(int id, [FromBody] List<int> ListaIdsCateogira)
     {
         try
@@ -164,8 +250,8 @@ public class JuegoController : ControllerBase
 
     //Update
     [Authorize(Roles = "Admin")]
-    [HttpPut("{id}")]
-    public IActionResult UpdateJuego(int id, [FromBody] Juego juego)
+    [HttpPut("{id}/datos")]
+    public IActionResult UpdateJuego(int id, [FromBody] JuegoAddDTO juego)
     {
         try
         {
@@ -196,34 +282,6 @@ public class JuegoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpPut("{id}/categorias")]
-    public IActionResult UpdateCategoriasJuego(int id, [FromBody] List<Categoria> ListaCategoria)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud de actualización las categorias del juego con ID: {id}.");
-
-            var juego = _juegoService.GetIdJuego(id);
-
-            if (juego is null)
-            {
-                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
-                return NotFound();
-            }
-
-            _juegoService.UpdateCategoriasJuego(id, ListaCategoria);
-
-            return Ok(juego);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar actualizar las categorias del juego con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
-
-
     //Delete
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
@@ -251,33 +309,5 @@ public class JuegoController : ControllerBase
             return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
         }
     }
-
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}/categorias")]
-    public IActionResult EliminarCategoriasJuego(int id, [FromBody] List<int> ListaIdsCateogira)
-    {
-        try
-        {
-            _logger.LogInformation($"Se ha recibido una solicitud para eliminar categorias del juego con ID: {id}.");
-
-            var juego = _juegoService.GetIdJuego(id);
-
-            if (juego is null)
-            {
-                _logger.LogWarning($"No se encontró ningún juego con ID: {id}.");
-                return NotFound();
-            }
-
-            _juegoService.EliminarCategoriasJuego(id, ListaIdsCateogira);
-
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al intentar eliminar categorias del juego con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
-        }
-    }
-
 
 }

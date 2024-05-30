@@ -1,20 +1,20 @@
 using Gemu.Models;
-
 namespace Gemu.Data;
 public interface IProductoRepository
 {
     //Read
     public List<Producto> GetAllProductos();
-    public Producto GetIdProducto(int idProducto);
+    public Task<IEnumerable<ProductoSearchDTO>> ProductoSearch(string Nombre);
+    public List<Producto> GetProductoPaginados(int pageNumber, int pageSize);
+    public List<Producto> GetProductoPaginadosCategoria(int pageNumber, int pageSize, List<int> categoriaIds);
+    public ProductoDTO GetIdProducto(int idProducto);
     public ProductoCategoriasDTO GetCategoriasProduct(int idProducto);
     public ProductoReseñaDTO GetReseñasProducto(int idProducto);
     //Create
-    void CreateProducto(ProductoAddDTO producto);
+    public Producto CreateProducto(ProductoAddDTO producto);
     void AsignarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);
     //Update
     void UpdateProducto(ProductoDTO producto);
-    void UpdateCategoriasProducto(int idProducto, List<Categoria> ListaCategoria);
     //Delete
     void DeleteProducto(int idProducto);
-    void EliminarCategoriasProducto(int idProducto, List<int> ListaIdsCateogira);
-}   
+}

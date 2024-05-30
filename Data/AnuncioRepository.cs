@@ -1,4 +1,5 @@
 using Gemu.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gemu.Data;
 public class AnuncioRepository : IAnuncioRepository
@@ -33,7 +34,7 @@ public class AnuncioRepository : IAnuncioRepository
 
     public List<AnuncioDTO> GetAnunciosUsuario(int idUsuario)
     {
-        var anuncios = _context.Anuncios.Where(r => r.IdUsuario == idUsuario).ToList();
+        var anuncios = _context.Anuncios.Include( r  => r.Producto).ThenInclude(r => r.ProductoCategorias).Include( r  => r.Producto).ThenInclude(r => r.ImgsProducto).Where(r => r.IdUsuario == idUsuario).ToList();
 
         if (anuncios is null)
         {
@@ -42,25 +43,35 @@ public class AnuncioRepository : IAnuncioRepository
 
         var newAnuncio = anuncios.Select(r => new AnuncioDTO
         {
+            IdAnuncio = r.IdAnuncio,
             IdUsuario = r.IdUsuario,
-            Producto = new ProductoBibliotecaDTO
+            Fecha = r.Fecha,
+            Producto =  new ProductoBibliotecaDTO
             {
+                IdProducto = r.IdProducto,
                 Nombre = r.Producto.Nombre,
                 Precio = r.Producto.Precio,
                 Estado = r.Producto.Estado,
                 ImgsProducto = r.Producto.ImgsProducto,
-                Categorias = r.Producto.Categorias
+                ProductoCategorias = r.Producto.ProductoCategorias
             }
-
         }).ToList();
 
         return newAnuncio;
     }
 
     //Create
-    public void CreateAnuncio(Anuncio anuncio)
+    public void CreateAnuncio(AnuncioAddDTO anuncio)
     {
-        _context.Anuncios.Add(anuncio);
+
+        var newAnuncio = new Anuncio
+        {
+            IdUsuario = anuncio.IdUsuario,
+            IdProducto = anuncio.IdProducto,
+            Fecha = DateTime.Today
+        };
+
+        _context.Anuncios.Add(newAnuncio);
         SaveChanges();
     }
 
@@ -80,7 +91,7 @@ public class AnuncioRepository : IAnuncioRepository
     //Delete
     public void DeleteAnuncio(int idAnuncio)
     {
-        var anuncio = GetIdAnuncio(idAnuncio);
+        var anuncio = _context.Anuncios.FirstOrDefault(r => r.IdAnuncio == idAnuncio);
 
         if (anuncio is null)
         {

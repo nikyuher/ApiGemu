@@ -30,14 +30,14 @@ public class CarritoService : ICarritoService
         _carritoRepository.CreateCarritoUsuario(carrito);
     }
 
-    public void AñadirProductoCarrito(int idBiblioteca, List<int> ListaIdsProducto)
+    public void AñadirProductoCarrito(int idBiblioteca, int idProducto)
     {
-        _carritoRepository.AñadirProductoCarrito(idBiblioteca, ListaIdsProducto);
+        _carritoRepository.AñadirProductoCarrito(idBiblioteca, idProducto);
     }
 
-    public void AñadirJuegoCarrito(int idBiblioteca, List<int> ListaIdsJuego)
+    public void AñadirJuegoCarrito(int idBiblioteca, int idJuego)
     {
-        _carritoRepository.AñadirJuegoCarrito(idBiblioteca, ListaIdsJuego);
+        _carritoRepository.AñadirJuegoCarrito(idBiblioteca, idJuego);
     }
 
     //Update

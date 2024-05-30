@@ -64,12 +64,11 @@ public class TransaccionRepository : ITransaccionRepository
 
         if (transaccion.Cantidad <= 0)
         {
-            throw new Exception("No se pueden añadir fondos negativos");
+            throw new Exception("No se pueden añadir numeros negativos");
         }
 
         transaccion.Total = usuario.SaldoActual;
         usuario.SaldoActual += transaccion.Cantidad;
-
 
         _context.Transacciones.Add(transaccion);
         SaveChanges();
@@ -84,16 +83,20 @@ public class TransaccionRepository : ITransaccionRepository
             throw new KeyNotFoundException("No se encontró el usuario asociado con la transacción.");
         }
 
+        if (transaccion.Cantidad < 0)
+        {
+            throw new Exception("No se permiten numeros negativos");
+        }
+
         if ((usuario.SaldoActual - transaccion.Cantidad) < 0)
         {
-            throw new Exception("Se supero el Saldo de tu cuenta");
+            throw new Exception("Ha superado el saldo de su cuenta");
         }
 
         transaccion.Total = usuario.SaldoActual;
         transaccion.Cantidad = -transaccion.Cantidad;
 
         usuario.SaldoActual += transaccion.Cantidad;
-
 
         _context.Transacciones.Add(transaccion);
         SaveChanges();

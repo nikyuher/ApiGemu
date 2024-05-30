@@ -101,7 +101,7 @@ public class TransaccionController : ControllerBase
     }
 
 
-    [HttpPost("añadir-fondos", Name = "AñadirFondos")]
+    [HttpPost("anadir-fondos", Name = "AñadirFondos")]
     public IActionResult AñadirCantidadTransaccion([FromBody] Transaccion transaccion)
     {
         try

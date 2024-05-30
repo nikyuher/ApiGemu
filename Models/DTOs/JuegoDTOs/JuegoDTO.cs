@@ -30,9 +30,7 @@ public class JuegoDTO
     
     [Required]
     public string? CodigoJuego { get; set; }
-    public List<Imagen>? ImgsJuego { get; set; } = new List<Imagen>();
     public List<Reseña>? Reseñas { get; set; } = new List<Reseña>();
-    public List<Categoria>? Categorias = new List<Categoria>();
     public double CalificacionPromedio
     {
         get

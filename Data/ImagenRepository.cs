@@ -40,7 +40,8 @@ public class ImagenRepository : IImagenRepository
             throw new Exception($"No se encontro el juego con el ID: {id}");
         }
 
-        var newImagen = imagen.Select(u => new ImagenJuegoDTO{
+        var newImagen = imagen.Select(u => new ImagenJuegoDTO
+        {
 
             Id = u.Id,
             JuegoId = u.JuegoId,
@@ -60,7 +61,8 @@ public class ImagenRepository : IImagenRepository
             throw new Exception($"No se encontro el producto con el ID: {id}");
         }
 
-        var newImagen = imagen.Select(u => new ImagenProductoDTO{
+        var newImagen = imagen.Select(u => new ImagenProductoDTO
+        {
 
             Id = u.Id,
             ProductoId = u.ProductoId,
@@ -156,19 +158,45 @@ public class ImagenRepository : IImagenRepository
     }
 
     //Delete
-    public void DeleteImagen(List<int> ListaId)
+    public void DeleteImagenesProducto(int idProducto)
     {
-        foreach (var img in ListaId)
+
+        var producto = _context.Productos.FirstOrDefault(r => r.IdProducto == idProducto);
+
+        if (producto is null)
         {
-            var imagen = GetIdImagen(img);
-
-            if (imagen is null)
-            {
-                throw new Exception($"No se encontro el Imagen con el ID: {img}");
-            }
-
-            _context.Imagenes.Remove(imagen);
+            throw new Exception($"No existen el producto con el id: {idProducto}");
         }
+
+        var imagenes = _context.Imagenes.Where(r => r.ProductoId == idProducto).ToList();
+
+        // if (imagenes.Count == 0)
+        // {
+        //     throw new Exception($"No existen imágenes asociadas al producto con ID: {idProducto}");
+        // }
+
+        _context.Imagenes.RemoveRange(imagenes);
+        SaveChanges();
+    }
+
+    public void DeleteImagenesJuego(int idJuego)
+    {
+
+        var juego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+
+        if (juego is null)
+        {
+            throw new Exception($"No existen el juego con el id: {idJuego}");
+        }
+
+        var imagenes = _context.Imagenes.Where(r => r.JuegoId == idJuego).ToList();
+
+        // if (imagenes.Count == 0)
+        // {
+        //     throw new Exception($"No existen imágenes asociadas al producto con ID: {idJuego}");
+        // }
+
+        _context.Imagenes.RemoveRange(imagenes);
         SaveChanges();
     }
 

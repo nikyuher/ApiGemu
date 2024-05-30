@@ -7,8 +7,8 @@ public class CarritoListaDTO
     public int IdCarrito { get; set; }
     [Required]
     public int IdUsuario { get; set; }
-    public List<ProductoBibliotecaDTO>? Productos { get; set; } = new List<ProductoBibliotecaDTO>();
-    public List<JuegoBiliotecaDTO>? Juegos { get; set; } = new List<JuegoBiliotecaDTO>();
+    public List<CarritoProducto>? CarritoProductos { get; set; } = new List<CarritoProducto>();
+    public List<CarritoJuego>? CarritoJuegos { get; set; } = new List<CarritoJuego>();
 
 
 }

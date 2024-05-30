@@ -39,6 +39,22 @@ public class ReseñaController : ControllerBase
         }
     }
 
+  [Authorize(Roles = "Admin")]
+    [HttpGet("pendientes")]
+    public ActionResult<List<Reseña>> GetAllReseñasPendientes()
+    {
+        try
+        {
+            _logger.LogInformation("Se ha solicitado obtener todos las reseñas pendientes.");
+            return _reseñaService.GetAllReseñasPendientes();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al intentar obtener todos las reseñas pendientes: {ex.Message}");
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
     [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public ActionResult<Reseña> GetReseñaId(int id)

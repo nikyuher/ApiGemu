@@ -17,19 +17,28 @@ public class Producto
     [Required]
     public int Cantidad { get; set; }
     public List<Imagen>? ImgsProducto { get; set; } = new List<Imagen>();
-    public List<Categoria>? Categorias { get; set; } = new List<Categoria>();
+    public List<ProductoCategoria>? ProductoCategorias { get; set; } = new List<ProductoCategoria>();
     public List<Reseña>? Reseñas { get; set; } = new List<Reseña>();
+        public double CalificacionPromedio
+    {
+        get
+        {
+            if (Reseñas == null || Reseñas.Count == 0)
+            {
+                return 0.0;
+            }
+
+            double promedio = Reseñas.Average(r => r.Calificacion);
+            return promedio;
+        }
+    }
 
     // Relación con Biblioteca
     [JsonIgnore]
-    public int? IdBiblioteca { get; set; }
-    [JsonIgnore]
-    public Biblioteca? Biblioteca { get; set; }
+    public List<BibliotecaProducto>? BibliotecaProductos { get; set; } = new List<BibliotecaProducto>();
     // Relación con Carrito
     [JsonIgnore]
-    public int? IdCarrito { get; set; }
-    [JsonIgnore]
-    public Carrito? Carrito { get; set; }
+    public List<CarritoProducto>? CarritoProductos { get; set; } = new List<CarritoProducto>();
     // Relación con Reseña
     [JsonIgnore]
     public int? IdReseña { get; set; }
@@ -40,9 +49,6 @@ public class Producto
     public int? IdAnuncio { get; set; }
     [JsonIgnore]
     public Anuncio? Anuncio { get; set; }
-    // Relación con Categoria
-    [JsonIgnore]
-    public int? IdCategoria { get; set; }
-    [JsonIgnore]
-    public Categoria? Categoria { get; set; }
+
+
 }

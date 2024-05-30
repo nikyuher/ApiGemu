@@ -8,7 +8,7 @@ public interface IAnuncioService
     public Anuncio GetIdAnuncio(int idAnuncio);
     public List<AnuncioDTO> GetAnunciosUsuario(int idUsuario);
     //Create
-    void CreateAnuncio(Anuncio anuncio);
+    void CreateAnuncio(AnuncioAddDTO anuncio);
     //Update
     void UpdateAnuncio(Anuncio anuncio);
     //Delete

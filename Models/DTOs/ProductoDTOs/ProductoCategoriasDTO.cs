@@ -7,5 +7,5 @@ public class ProductoCategoriasDTO
     [Required]
     public string? Nombre { get; set; }
 
-    public List<Categoria>? Categorias { get; set; } = new List<Categoria>();
+    public List<ProductoCategoria>? ProductoCategorias { get; set; } = new List<ProductoCategoria>();
 }

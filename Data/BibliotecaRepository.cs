@@ -12,27 +12,16 @@ public class BibliotecaRepository : IBibliotecaRepository
     }
     public List<BibliotecaListaDTO> GetAllBibliotecas()
     {
-        var biblioteca = _context.Bibliotecas.Include(r => r.Juegos).Include(r => r.Productos).ToList();
+        var biblioteca = _context.Bibliotecas
+                        .Include(r => r.BibliotecaJuegos)
+                        .Include(r => r.BibliotecaProductos)
+                        .ToList();
 
         var newBiblioteca = biblioteca.Select(u => new BibliotecaListaDTO
         {
             IdUsuario = u.IdBiblioteca,
-            Productos = u.Productos.Select(p => new ProductoBibliotecaDTO
-            {
-                Nombre = p.Nombre,
-                Precio = p.Precio,
-                Estado = p.Estado,
-                ImgsProducto = p.ImgsProducto,
-                Categorias = p.Categorias
-            }).ToList(),
-            Juegos = u.Juegos.Select(p => new JuegoBiliotecaDTO
-            {
-                Titulo = p.Titulo,
-                Precio = p.Precio,
-                CodigoJuego = p.CodigoJuego,
-                ImgsJuego = p.ImgsJuego,
-                Categorias = p.Categorias
-            }).ToList()
+            BibliotecaProductos = u.BibliotecaProductos.ToList(),
+            BibliotecaJuegos = u.BibliotecaJuegos.ToList()
         }).ToList();
 
         return newBiblioteca;
@@ -41,7 +30,12 @@ public class BibliotecaRepository : IBibliotecaRepository
     //Read
     public BibliotecaListaDTO GetIdBiblioteca(int idBiblioteca)
     {
-        var biblioteca = _context.Bibliotecas.FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
+        var biblioteca = _context.Bibliotecas
+                        .Include(r => r.BibliotecaJuegos)
+                        .ThenInclude(j => j.Juego)
+                        .Include(r => r.BibliotecaProductos)
+                        .ThenInclude(p => p.Producto)
+                        .FirstOrDefault(r => r.IdBiblioteca == idBiblioteca);
 
         if (biblioteca is null)
         {
@@ -51,59 +45,36 @@ public class BibliotecaRepository : IBibliotecaRepository
         var newBiblioteca = new BibliotecaListaDTO
         {
             IdUsuario = biblioteca.IdUsuario,
-            Productos = biblioteca.Productos.Select(u => new ProductoBibliotecaDTO
-            {
-                IdProducto = u.IdProducto,
-                Nombre = u.Nombre,
-                Precio = u.Precio,
-                Estado = u.Estado,
-                ImgsProducto = u.ImgsProducto,
-                Categorias = u.Categorias
-            }).ToList(),
-            Juegos = biblioteca.Juegos.Select(u => new JuegoBiliotecaDTO
-            {
-                IdJuego = u.IdJuego,
-                Titulo = u.Titulo,
-                Precio = u.Precio,
-                CodigoJuego = u.CodigoJuego,
-                ImgsJuego = u.ImgsJuego,
-                Categorias = u.Categorias
-            }).ToList(),
+            BibliotecaProductos = biblioteca.BibliotecaProductos.ToList(),
+            BibliotecaJuegos = biblioteca.BibliotecaJuegos.ToList()
         };
+
 
         return newBiblioteca;
     }
 
     public BibliotecaListaDTO GetBibliotecaUsuario(int idUsuario)
     {
-        var biblioteca = _context.Bibliotecas.Include(r => r.Juegos).Include(r => r.Productos).FirstOrDefault(r => r.IdUsuario == idUsuario);
+        var biblioteca = _context.Bibliotecas
+                            .Include(r => r.BibliotecaJuegos)
+                            .ThenInclude(j => j.Juego)
+                            .ThenInclude(j => j.ImgsJuego)
+                            .Include(r => r.BibliotecaProductos)
+                            .ThenInclude(p => p.Producto)
+                            .ThenInclude(p => p.ImgsProducto)
+                            .FirstOrDefault(r => r.IdUsuario == idUsuario);
 
         if (biblioteca is null)
         {
-            throw new Exception($"No se encontro el Biblioteca del usuario con el ID: {idUsuario}");
+            throw new Exception($"No se encontro la Biblioteca del usuario con el ID: {idUsuario}");
         }
 
         var newBiblioteca = new BibliotecaListaDTO
         {
+            IdBiblioteca = biblioteca.IdBiblioteca,
             IdUsuario = biblioteca.IdUsuario,
-            Productos = biblioteca.Productos.Select(u => new ProductoBibliotecaDTO
-            {
-                IdProducto = u.IdProducto,
-                Nombre = u.Nombre,
-                Precio = u.Precio,
-                Estado = u.Estado,
-                ImgsProducto = u.ImgsProducto,
-                Categorias = u.Categorias
-            }).ToList(),
-            Juegos = biblioteca.Juegos.Select(u => new JuegoBiliotecaDTO
-            {
-                IdJuego = u.IdJuego,
-                Titulo = u.Titulo,
-                Precio = u.Precio,
-                CodigoJuego = u.CodigoJuego,
-                ImgsJuego = u.ImgsJuego,
-                Categorias = u.Categorias
-            }).ToList(),
+            BibliotecaProductos = biblioteca.BibliotecaProductos.ToList(),
+            BibliotecaJuegos = biblioteca.BibliotecaJuegos.ToList()
         };
 
         return newBiblioteca;
@@ -138,7 +109,13 @@ public class BibliotecaRepository : IBibliotecaRepository
                 throw new Exception($"No se encontro la biblioeca  con el ID: {idBiblioteca}");
             }
 
-            existingBiblioteca.Juegos.Add(existingJuego);
+            var newjuego = new BibliotecaJuego
+            {
+                BibliotecaId = existingBiblioteca.IdBiblioteca,
+                JuegoId = existingJuego.IdJuego
+            };
+
+            existingBiblioteca.BibliotecaJuegos.Add(newjuego);
         }
         SaveChanges();
     }
@@ -161,7 +138,13 @@ public class BibliotecaRepository : IBibliotecaRepository
                 throw new Exception($"No se encontro la biblioeca  con el ID: {idBiblioteca}");
             }
 
-            existingBiblioteca.Productos.Add(existingProducto);
+            var newProducto = new BibliotecaProducto
+            {
+                BibliotecaId = existingBiblioteca.IdBiblioteca,
+                ProductoId = existingProducto.IdProducto
+            };
+
+            existingBiblioteca.BibliotecaProductos.Add(newProducto);
         }
         SaveChanges();
     }
@@ -196,7 +179,7 @@ public class BibliotecaRepository : IBibliotecaRepository
     public void EliminarProductoBiblioteca(int idBiblioteca, int idProducto)
     {
 
-        var existingProducto = _context.Productos.FirstOrDefault(r => r.IdProducto == idProducto);
+        var existingProducto = _context.BibliotecaProductos.FirstOrDefault(r => r.BibliotecaProductoId == idProducto);
 
         if (existingProducto is null)
         {
@@ -210,14 +193,14 @@ public class BibliotecaRepository : IBibliotecaRepository
             throw new Exception($"No se encontro la biblioeca  con el ID: {idBiblioteca}");
         }
 
-        existingBiblioteca.Productos.Remove(existingProducto);
+        existingBiblioteca.BibliotecaProductos.Remove(existingProducto);
 
         SaveChanges();
     }
 
     public void EliminarJuegoBiblioteca(int idBiblioteca, int idJuego)
     {
-        var existingJuego = _context.Juegos.FirstOrDefault(r => r.IdJuego == idJuego);
+        var existingJuego = _context.BibliotecaJuegos.FirstOrDefault(r => r.BibliotecaJuegoId == idJuego);
 
         if (existingJuego is null)
         {
@@ -231,7 +214,7 @@ public class BibliotecaRepository : IBibliotecaRepository
             throw new Exception($"No se encontro la biblioeca  con el ID: {idBiblioteca}");
         }
 
-        existingBiblioteca.Juegos.Remove(existingJuego);
+        existingBiblioteca.BibliotecaJuegos.Remove(existingJuego);
         SaveChanges();
     }
 

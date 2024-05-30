@@ -7,6 +7,7 @@ public class Anuncio
     public int IdAnuncio { get; set; }
     [Required]
     public int IdUsuario { get; set; }
+    public DateTime Fecha { get; set; }
     //Navegacion Usuario
     [JsonIgnore]
     public Usuario? Usuario { get; set; }

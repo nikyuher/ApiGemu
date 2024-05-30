@@ -7,6 +7,7 @@ public class Reseña
     public int IdReseña { get; set; }
     [Required]
     public int IdUsuario { get; set; }
+    public string? NombreUsuario { get; set; }
     public string? Solicitud { get; set; }
     [Required]
     public string? Comentario { get; set; }

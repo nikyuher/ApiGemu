@@ -37,13 +37,22 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpGet("{id}", Name = "GetUsuario")]
     public ActionResult<UsuarioDTO> GetUsuarioId(int id)
     {
         try
         {
             _logger.LogInformation($"Se ha solicitado obtener el usuario con ID: {id}.");
+
+            // Obtener el usuario autenticado
+            var currentUser = HttpContext.User;
+
+            // Verificar si el usuario tiene acceso al recurso
+            if (!_authService.HasAccessToResource(currentUser, id))
+            {
+                _logger.LogWarning($"El usuario con ID: {currentUser.FindFirst(JwtRegisteredClaimNames.NameId)?.Value} no tiene acceso para llamar al usuario con ID: {id}.");
+                return Forbid();
+            }
 
             var user = _usuarioService.GetIdUsuario(id);
 
@@ -58,7 +67,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar obtener el usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -193,7 +202,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar el rol del usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -235,11 +244,11 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar la direccion del usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
-    [HttpPut("{id}/nombre", Name = "PutNombreUsuario")]
+    [HttpPut("{id}/datos", Name = "PutDatosUsuario")]
     public IActionResult UpdateInfoUsuario(int id, [FromBody] UsuarioInfoDTO user)
     {
         try
@@ -277,7 +286,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar la informacion del usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -320,7 +329,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar actualizar la foto del usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -356,7 +365,7 @@ public class UsuarioController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error al intentar eliminar usuario con ID {id}: {ex.Message}");
-            return StatusCode(500, new { message = "Ocurrió un error interno en el servidor." });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 }

@@ -178,8 +178,15 @@ public class GemuContext : DbContext
         new Rol { IdRol = 2, Nombre = "Admin" }
         );
 
+
         modelBuilder.Entity<Usuario>().HasData(
             new Usuario { IdUsuario = 1, IdRol = 2, Nombre = "Admin", Correo = "admin@gmail.com", Contraseña = "ADMINcontraseña123@" }
+        );
+        modelBuilder.Entity<Biblioteca>().HasData(
+            new Biblioteca { IdBiblioteca = 1, IdUsuario = 1 }
+        );
+        modelBuilder.Entity<Carrito>().HasData(
+            new Carrito { IdCarrito = 1, IdUsuario = 1 }
         );
 
     }

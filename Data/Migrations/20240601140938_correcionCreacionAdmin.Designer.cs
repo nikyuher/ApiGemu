@@ -4,6 +4,7 @@ using Gemu.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gemu.Data.Migrations
 {
     [DbContext(typeof(GemuContext))]
-    partial class GemuContextModelSnapshot : ModelSnapshot
+    [Migration("20240601140938_correcionCreacionAdmin")]
+    partial class correcionCreacionAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,143 +216,6 @@ namespace Gemu.Data.Migrations
                     b.HasKey("IdCategoria");
 
                     b.ToTable("Categorias");
-
-                    b.HasData(
-                        new
-                        {
-                            IdCategoria = 1,
-                            Icono = "mdi-ghost",
-                            Nombre = "Terror",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 2,
-                            Icono = "mdi-sword",
-                            Nombre = "Aventura",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 3,
-                            Icono = "mdi-pistol",
-                            Nombre = "FPS",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 4,
-                            Icono = "mdi-karate",
-                            Nombre = "Accion",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 5,
-                            Icono = "mdi-island-variant",
-                            Nombre = "Mundo Abierto",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 6,
-                            Icono = "mdi-car-sports",
-                            Nombre = "Carrera",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 7,
-                            Icono = "mdi-chess-pawn",
-                            Nombre = "Estrategia",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 8,
-                            Icono = "mdi-microsoft-xbox-controller",
-                            Nombre = "Multijugador",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 9,
-                            Icono = "mdi-account",
-                            Nombre = "Un jugador",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 10,
-                            Icono = "mdi-castle",
-                            Nombre = "RPG",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 11,
-                            Icono = "mdi-kabaddi",
-                            Nombre = "Lucha",
-                            Seccion = "juegos"
-                        },
-                        new
-                        {
-                            IdCategoria = 12,
-                            Nombre = "Juegos de Consola",
-                            Seccion = "marketplace"
-                        },
-                        new
-                        {
-                            IdCategoria = 13,
-                            Nombre = "Consolas",
-                            Seccion = "marketplace"
-                        },
-                        new
-                        {
-                            IdCategoria = 14,
-                            Nombre = "Accesorio",
-                            Seccion = "marketplace"
-                        },
-                        new
-                        {
-                            IdCategoria = 15,
-                            Nombre = "Componentes",
-                            Seccion = "marketplace"
-                        },
-                        new
-                        {
-                            IdCategoria = 16,
-                            Nombre = "Portatiles",
-                            Seccion = "marketplace"
-                        },
-                        new
-                        {
-                            IdCategoria = 17,
-                            Icono = "mdi-monitor",
-                            Nombre = "PC",
-                            Seccion = "plataforma"
-                        },
-                        new
-                        {
-                            IdCategoria = 18,
-                            Icono = "mdi-sony-playstation",
-                            Nombre = "Ps5",
-                            Seccion = "plataforma"
-                        },
-                        new
-                        {
-                            IdCategoria = 19,
-                            Icono = "mdi-microsoft-xbox",
-                            Nombre = "Xbox",
-                            Seccion = "plataforma"
-                        },
-                        new
-                        {
-                            IdCategoria = 20,
-                            Icono = "mdi-nintendo-switch",
-                            Nombre = "Nintendo",
-                            Seccion = "plataforma"
-                        });
                 });
 
             modelBuilder.Entity("Gemu.Models.Imagen", b =>

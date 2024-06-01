@@ -183,10 +183,74 @@ public class GemuContext : DbContext
             new Usuario { IdUsuario = 1, IdRol = 2, Nombre = "Admin", Correo = "admin@gmail.com", Contraseña = "ADMINcontraseña123@" }
         );
         modelBuilder.Entity<Biblioteca>().HasData(
-            new Biblioteca { IdBiblioteca = 1, IdUsuario = 1 }
+            new Biblioteca { IdBiblioteca = 1, IdUsuario = 1,  }
         );
         modelBuilder.Entity<Carrito>().HasData(
             new Carrito { IdCarrito = 1, IdUsuario = 1 }
+        );
+
+        //CAategorias
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=1, Nombre = "Terror", Icono = "mdi-ghost", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=2,Nombre = "Aventura", Icono = "mdi-sword", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=3,Nombre = "FPS", Icono = "mdi-pistol", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=4,Nombre = "Accion", Icono = "mdi-karate", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=5,Nombre = "Mundo Abierto", Icono = "mdi-island-variant", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=6,Nombre = "Carrera", Icono = "mdi-car-sports", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=7,Nombre = "Estrategia", Icono = "mdi-chess-pawn", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=8,Nombre = "Multijugador", Icono = "mdi-microsoft-xbox-controller", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=9,Nombre = "Un jugador", Icono = "mdi-account", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=10,Nombre = "RPG", Icono = "mdi-castle", Seccion="juegos" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=11,Nombre = "Lucha", Icono = "mdi-kabaddi", Seccion="juegos"}
+        );
+
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=12,Nombre = "Juegos de Consola", Seccion="marketplace" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=13,Nombre = "Consolas", Seccion="marketplace" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=14,Nombre = "Accesorio", Seccion="marketplace"}
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=15,Nombre = "Componentes", Seccion="marketplace" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=16,Nombre = "Portatiles", Seccion="marketplace" }
+        );
+
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=17,Nombre = "PC", Icono = "mdi-monitor", Seccion="plataforma" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=18,Nombre = "Ps5", Icono = "mdi-sony-playstation", Seccion="plataforma" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=19,Nombre = "Xbox", Icono = "mdi-microsoft-xbox", Seccion="plataforma" }
+        );
+        modelBuilder.Entity<Categoria>().HasData(
+            new Categoria { IdCategoria=20,Nombre = "Nintendo", Icono = "mdi-nintendo-switch", Seccion="plataforma" }
         );
 
     }

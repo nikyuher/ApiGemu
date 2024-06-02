@@ -1,3 +1,8 @@
+using Serilog;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Gemu.Data;
 using Gemu.Business;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +11,17 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configurar Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+// Usar Serilog
+builder.Host.UseSerilog();
 
 // Configuración de autenticación con JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -137,7 +153,7 @@ using (var scope = app.Services.CreateScope())
   }
   catch (Exception ex)
   {
-    throw new Exception("Error durante la migración de la base de datos.", ex);
+    Log.Fatal(ex, "Error durante la migración de la base de datos.");
   }
 }
 

@@ -24,5 +24,6 @@ public class JuegoSearchDTO
     public string? Plataforma { get; set; }
     public int? Descuento { get; set; }
     public List<Imagen>? ImgsJuego { get; set; } = new List<Imagen>();
+    public DateTime Fecha { get; set; }
 
 }

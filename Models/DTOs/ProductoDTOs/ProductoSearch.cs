@@ -11,6 +11,7 @@ public class ProductoSearchDTO
     [Required]
     public string? Estado { get; set; }
     public List<Imagen>? ImgsProducto { get; set; } = new List<Imagen>();
+    public DateTime Fecha { get; set; }
 
 
 }

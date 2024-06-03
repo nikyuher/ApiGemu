@@ -33,7 +33,8 @@ public class JuegoRepository : IJuegoRepository
             Precio = j.Precio,
             Plataforma = j.Plataforma,
             Descuento = j.Descuento,
-            ImgsJuego = j.ImgsJuego.Take(1).ToList()
+            ImgsJuego = j.ImgsJuego.Take(1).ToList(),
+            Fecha = j.Fecha
         }).ToList();
 
         return juegoSearchList;
@@ -144,6 +145,7 @@ public class JuegoRepository : IJuegoRepository
             Descripcion = juego.Descripcion,
             Plataforma = juego.Plataforma,
             CodigoJuego = GenerateGameCode(),
+            Fecha = DateTime.Now
         };
 
         _context.Juegos.Add(newJuego);
@@ -279,6 +281,7 @@ public class JuegoRepository : IJuegoRepository
             Precio = j.Precio,
             Plataforma = j.Plataforma,
             Descuento = j.Descuento,
+            Fecha = j.Fecha,
             ImgsJuego = j.ImgsJuego.Take(1).ToList(),
             JuegoCategorias = j.JuegoCategorias
         });

@@ -60,7 +60,7 @@ public class ReseñaRepository : IReseñaRepository
             Comentario = reseña.Comentario,
             Solicitud = "pendiente",
             Calificacion = reseña.Calificacion,
-            Fecha = DateTime.Today
+            Fecha = DateTime.Now
         };
         _context.Reseñas.Add(newReseña);
         SaveChanges();

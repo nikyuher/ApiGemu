@@ -68,7 +68,7 @@ public class AnuncioRepository : IAnuncioRepository
         {
             IdUsuario = anuncio.IdUsuario,
             IdProducto = anuncio.IdProducto,
-            Fecha = DateTime.Today
+            Fecha = DateTime.Now
         };
 
         _context.Anuncios.Add(newAnuncio);

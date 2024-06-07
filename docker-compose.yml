@@ -20,7 +20,6 @@ services:
         environment:
             - ACCEPT_EULA=Y
             - MSSQL_SA_PASSWORD=<YourStrong@Passw0rd>
-            - SecretKey=MyPass@word2MyPass@word2MyPass@word2
     api:
         container_name: apiContainer
         image: apidb-gemu:1.0
@@ -35,3 +34,4 @@ services:
             - db
         environment:
             - Environment=Docker
+            - JWT_ValidIssuer=https://localhost:8001
